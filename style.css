@@ -1,3 +1,68 @@
+/* User Personas Section */
+/* User Personas Section */
+.personas {
+  text-align: center;
+}
+
+.persona-detailed {
+  display: flex;
+  align-items: flex-start;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  gap: 2rem;
+}
+
+.persona-detailed img {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.persona-info h3 {
+  color: #0891b2;
+  margin-bottom: 0.5rem;
+}
+
+.persona-info p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.persona-story {
+  margin: 1rem 0;
+  font-style: italic;
+  color: #4a5568;
+}
+
+.persona-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.persona-details h4 {
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.persona-details ul {
+  list-style: disc inside;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .persona-detailed {
+    flex-direction: column;
+    text-align: left;
+  }
+  .persona-detailed img {
+    margin: 0 auto;
+  }
+}
 /* Check and Cross styles for competitor tables */
 .competitor-table td {
     font-weight: 500;
@@ -271,30 +336,24 @@ section:nth-child(even) {
     text-align: left !important;
 }
 
-/* Category border glow styles */
-.category-direct {
-    font-weight: 600;
-    color: #2563eb;
+/* Category border glow styles - highlight full row for competitor table */
+.competitor-table tr.category-direct {
     border-left: 6px solid #2563eb;
     box-shadow: 0 0 0 2px #2563eb22, 0 0 8px 0 #2563eb33;
     background: #eaf3ff;
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px;
 }
-.category-secondary {
-    font-weight: 600;
-    color: #059669;
+.competitor-table tr.category-secondary {
     border-left: 6px solid #059669;
     box-shadow: 0 0 0 2px #05966922, 0 0 8px 0 #05966933;
     background: #ebfaf3;
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px;
 }
-.category-indirect {
-    font-weight: 600;
-    color: #ea7c1a;
+.competitor-table tr.category-indirect {
     border-left: 6px solid #ea7c1a;
     box-shadow: 0 0 0 2px #ea7c1a22, 0 0 8px 0 #ea7c1a33;
     background: #fff7ed;
-    border-radius: 8px 0 0 8px;
+    border-radius: 8px;
 }
 
 /* Design Process Timeline */
@@ -322,6 +381,18 @@ section:nth-child(even) {
 .process-step h3 {
     color: #0891b2;
     margin-bottom: 1rem;
+}
+
+.empathy-map {
+  text-align: center;
+}
+
+.empathy-map img {
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
 }
 
 /* Insights */

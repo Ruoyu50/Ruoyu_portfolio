@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="overview-image">
-                    <img src="assets/thumb_persona.jpg" alt="User persona research thumbnail" />
+                    <img src="assets/thumb_persona.png" alt="User persona research thumbnail" />
                 </div>
             </div>
         </div>
@@ -106,131 +106,159 @@
     </section>
 
     <!-- Competitor Analysis -->
-    <!-- Competitor Analysis -->
-<section class="competitors">
-  <div class="container">
-    <h2>Competitor Analysis</h2>
-
-    <!-- Overview Table -->
-    <div class="competitor-table-wrapper">
-      <table class="competitor-table">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Product</th>
-            <th>Strengths</th>
-            <th>Weaknesses</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="category">Direct</td>
-            <td>Spatial</td>
-            <td>Immersive 3D environments, real-time collaboration</td>
-            <td>Not designed for structured note-taking</td>
-          </tr>
-          <tr>
-            <td class="category">Direct</td>
-            <td>ShapesXR</td>
-            <td>Prototyping and storyboarding in XR</td>
-            <td>Focused on design teams, not personal notes</td>
-          </tr>
-          <tr>
-            <td class="category">Secondary</td>
-            <td>Notion</td>
-            <td>Powerful databases, linking, collaboration</td>
-            <td>Linear 2D interface, can be overwhelming</td>
-          </tr>
-          <tr>
-            <td class="category">Secondary</td>
-            <td>Obsidian</td>
-            <td>Graph view, markdown-based, extensible plugins</td>
-            <td>Still 2D, graph is visual but not embodied</td>
-          </tr>
-          <tr>
-            <td class="category">Secondary</td>
-            <td>Miro</td>
-            <td>Infinite 2D canvas, strong collaboration templates</td>
-            <td>Cluttered with complex projects, 2D only</td>
-          </tr>
-          <tr>
-            <td class="category">Indirect</td>
-            <td>MindManager</td>
-            <td>Established mind mapping, hierarchical branching</td>
-            <td>Rigid tree structure, lacks embodied interaction</td>
-          </tr>
-          <tr>
-            <td class="category">Indirect</td>
-            <td>Gravity Sketch</td>
-            <td>Natural 3D sketching in VR, embodied interaction</td>
-            <td>No knowledge management or note features</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Feature Matrix -->
-    <h3 style="margin-top:3rem;">Feature Comparison</h3>
-    <div class="competitor-table-wrapper">
-      <table class="competitor-table">
-        <thead>
-          <tr>
-            <th>Feature ↓ / Product →</th>
-            <th>Spatial</th>
-            <th>ShapesXR</th>
-            <th>Notion</th>
-            <th>Obsidian</th>
-            <th>Miro</th>
-            <th>MindManager</th>
-            <th>Gravity Sketch</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Text Notes</td>
-            <td>✖</td><td>✖</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✖</td>
-          </tr>
-          <tr>
-            <td>Rich Media Support</td>
-            <td>✔</td><td>✔</td><td>✔</td><td>Plugins</td><td>✔</td><td>Limited</td><td>✔</td>
-          </tr>
-          <tr>
-            <td>Linking / Graph View</td>
-            <td>✖</td><td>✖</td><td>Limited</td><td>✔</td><td>Limited</td><td>✔</td><td>✖</td>
-          </tr>
-          <tr>
-            <td>Spatial / 3D Environment</td>
-            <td>✔</td><td>✔</td><td>✖</td><td>✖</td><td>✖</td><td>✖</td><td>✔</td>
-          </tr>
-          <tr>
-            <td>Collaboration</td>
-            <td>✔</td><td>✔</td><td>✔</td><td>Limited</td><td>✔</td><td>Limited</td><td>✔</td>
-          </tr>
-          <tr>
-            <td>Cross-Platform</td>
-            <td>✔ (XR/web)</td><td>✔ (XR)</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✔ (XR)</td>
-          </tr>
-          <tr>
-            <td>Search</td>
-            <td>Limited</td><td>✖</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✖</td>
-          </tr>
-          <tr>
-            <td>Templates</td>
-            <td>Limited</td><td>✔</td><td>✔</td><td>Plugins</td><td>✔</td><td>✔</td><td>✖</td>
-          </tr>
-          <tr>
-            <td>Export</td>
-            <td>Limited</td><td>✔ (3D)</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✔ (3D models)</td>
-          </tr>
-          <tr>
-            <td>Gesture / Embodied Interaction</td>
-            <td>✔</td><td>✔</td><td>✖</td><td>✖</td><td>✖</td><td>✖</td><td>✔</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
+    <section class="competitors">
+      <div class="container">
+        <h2>Competitor Analysis</h2>
+        <div class="competitor-table-wrapper">
+          <table class="competitor-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Spatial</th>
+                <th>ShapesXR</th>
+                <th>Notion</th>
+                <th>Obsidian</th>
+                <th>Miro</th>
+                <th>MindManager</th>
+                <th>Gravity Sketch</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="category-direct">
+                <td>Category</td>
+                <td>Direct</td>
+                <td>Direct</td>
+                <td>Secondary</td>
+                <td>Secondary</td>
+                <td>Secondary</td>
+                <td>Indirect</td>
+                <td>Indirect</td>
+              </tr>
+              <tr class="category-direct">
+                <td>Strengths</td>
+                <td>Immersive 3D environments, real-time collaboration</td>
+                <td>Prototyping and storyboarding in XR</td>
+                <td>Powerful databases, linking, collaboration</td>
+                <td>Graph view, markdown-based, extensible plugins</td>
+                <td>Infinite 2D canvas, strong collaboration templates</td>
+                <td>Established mind mapping, hierarchical branching</td>
+                <td>Natural 3D sketching in VR, embodied interaction</td>
+              </tr>
+              <tr class="category-direct">
+                <td>Weaknesses</td>
+                <td>Not designed for structured note-taking</td>
+                <td>Focused on design teams, not personal notes</td>
+                <td>Linear 2D interface, can be overwhelming</td>
+                <td>Still 2D, graph is visual but not embodied</td>
+                <td>Cluttered with complex projects, 2D only</td>
+                <td>Rigid tree structure, lacks embodied interaction</td>
+                <td>No knowledge management or note features</td>
+              </tr>
+              <tr>
+                <td>Text Notes</td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="cross">✖</span></td>
+              </tr>
+              <tr>
+                <td>Rich Media Support</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td>Plugins</td>
+                <td><span class="check">✔</span></td>
+                <td>Limited</td>
+                <td><span class="check">✔</span></td>
+              </tr>
+              <tr>
+                <td>Linking/Graph View</td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td>Limited</td>
+                <td><span class="check">✔</span></td>
+                <td>Limited</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="cross">✖</span></td>
+              </tr>
+              <tr>
+                <td>Spatial/3D Environment</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="check">✔</span></td>
+              </tr>
+              <tr>
+                <td>Collaboration</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td>Limited</td>
+                <td><span class="check">✔</span></td>
+                <td>Limited</td>
+                <td><span class="check">✔</span></td>
+              </tr>
+              <tr>
+                <td>Cross-Platform</td>
+                <td><span class="check">✔</span> (XR/web)</td>
+                <td><span class="check">✔</span> (XR)</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span> (XR)</td>
+              </tr>
+              <tr>
+                <td>Search</td>
+                <td>Limited</td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="cross">✖</span></td>
+              </tr>
+              <tr>
+                <td>Templates</td>
+                <td>Limited</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td>Plugins</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="cross">✖</span></td>
+              </tr>
+              <tr>
+                <td>Export</td>
+                <td>Limited</td>
+                <td><span class="check">✔</span> (3D)</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span> (3D models)</td>
+              </tr>
+              <tr>
+                <td>Gesture/Embodied Interaction</td>
+                <td><span class="check">✔</span></td>
+                <td><span class="check">✔</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="cross">✖</span></td>
+                <td><span class="check">✔</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
     <!-- Design Process -->
     <section class="design-process">
@@ -269,7 +297,7 @@
         </div>
     </section>
 
-    <!-- Who What Why -->
+    <!-- Who What Why
     <section class="who-what-why">
         <div class="container">
             <h2>Who / What / Why</h2>
@@ -288,6 +316,60 @@
                 </div>
             </div>
         </div>
+    </section> -->
+
+        <!-- User Empathy Map -->
+    <section class="empathy-map">
+    <div class="container">
+        <h2>User Empathy Map</h2>
+        <p>To better understand user needs and pain points, I created an empathy map that captures what users say, think, do, and feel when taking notes with current tools.</p>
+        <div class="empathy-image">
+        <img src="assets/emphathy_map.jpg" alt="User empathy map with says, thinks, does, and feels quadrants" />
+        </div>
+    </div>
+    </section>
+
+    <!-- User Personas -->
+    <section class="personas">
+      <div class="container">
+        <h2>User Personas</h2>
+        <div>
+          <div class="persona-detailed category-student">
+            <img src="assets/persona_woman.svg" alt="Persona: Graduate Student" />
+            <div class="persona-info">
+              <h3>Emily Chen</h3>
+              <p><strong>Age:</strong> 25</p>
+              <p><strong>Location:</strong> New York, USA</p>
+              <p><strong>Education:</strong> Master’s in Architecture</p>
+              <p><strong>Industry/Position:</strong> Graduate Student, Researcher</p>
+              <p class="persona-story"><strong>Story:</strong> Emily is pursuing her Master’s degree while working as a research assistant. She juggles multiple projects and spends hours synthesizing academic papers. Her notes are scattered across Notion, PDFs, and sticky notes, making recall frustrating.</p>
+              <div class="persona-details">
+                <div><h4>Goals</h4><ul><li>Organize thesis research</li><li>Build a long-term knowledge system</li><li>Retain more from readings</li></ul></div>
+                <div><h4>Needs</h4><ul><li>Visually connect references</li><li>Reduce time searching notes</li><li>Seamless workflow integration</li></ul></div>
+                <div><h4>Wants</h4><ul><li>Cross-device sync (XR + laptop)</li><li>Exportable summaries</li><li>Clarity navigating research</li></ul></div>
+                <div><h4>Feels</h4><ul><li>Overwhelmed by scattered info</li><li>Curious about new tools</li><li>Motivated by visual mapping</li></ul></div>
+              </div>
+            </div>
+          </div>
+          <div class="persona-detailed category-professional">
+            <img src="assets/persona_man.svg" alt="Persona: Creative Professional" />
+            <div class="persona-info">
+              <h3>Daniel Lopez</h3>
+              <p><strong>Age:</strong> 32</p>
+              <p><strong>Location:</strong> Los Angeles, USA</p>
+              <p><strong>Education:</strong> Bachelor’s in Digital Media Design</p>
+              <p><strong>Industry/Position:</strong> Freelance Creative Director</p>
+              <p class="persona-story"><strong>Story:</strong> Daniel works on advertising campaigns and interactive media projects. He constantly brainstorms, sketches, and pitches ideas. His workflow is spread across Miro, Adobe tools, and notebooks. He enjoys XR but finds tools either too flat or too technical.</p>
+              <div class="persona-details">
+                <div><h4>Goals</h4><ul><li>Deliver innovative concepts quickly</li><li>Maintain creative flow</li><li>Reuse and remix past ideas</li></ul></div>
+                <div><h4>Needs</h4><ul><li>Dynamic idea workspace</li><li>Collaboration in XR</li><li>Easy 2D export from XR</li></ul></div>
+                <div><h4>Wants</h4><ul><li>Gesture-based brainstorming</li><li>Integration with existing tools</li><li>Inspiring creative process</li></ul></div>
+                <div><h4>Feels</h4><ul><li>Excited by immersive design</li><li>Frustrated with rigid files</li><li>Energized when tools enhance creativity</li></ul></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Research Insights -->
