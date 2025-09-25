@@ -106,43 +106,131 @@
     </section>
 
     <!-- Competitor Analysis -->
-    <section class="competitors">
-        <div class="container">
-            <h2>Competitor Analysis</h2>
-            <div class="competitor-table-wrapper">
-                <table class="competitor-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Products</th>
-                            <th>Strengths</th>
-                            <th>Limitations</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="category">Direct</td>
-                            <td>Spatial, Microsoft Mesh</td>
-                            <td>XR environments, collaboration</td>
-                            <td>Limited note-taking features</td>
-                        </tr>
-                        <tr>
-                            <td class="category">Secondary</td>
-                            <td>Notion, Obsidian, Evernote</td>
-                            <td>Rich text, organization</td>
-                            <td>2D interface, linear structure</td>
-                        </tr>
-                        <tr>
-                            <td class="category">Indirect</td>
-                            <td>Miro, Tilt Brush, Paper notebooks</td>
-                            <td>Visual thinking, tactile experience</td>
-                            <td>Not immersive, limited 3D capability</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+    <!-- Competitor Analysis -->
+<section class="competitors">
+  <div class="container">
+    <h2>Competitor Analysis</h2>
+
+    <!-- Overview Table -->
+    <div class="competitor-table-wrapper">
+      <table class="competitor-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Product</th>
+            <th>Strengths</th>
+            <th>Weaknesses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="category">Direct</td>
+            <td>Spatial</td>
+            <td>Immersive 3D environments, real-time collaboration</td>
+            <td>Not designed for structured note-taking</td>
+          </tr>
+          <tr>
+            <td class="category">Direct</td>
+            <td>ShapesXR</td>
+            <td>Prototyping and storyboarding in XR</td>
+            <td>Focused on design teams, not personal notes</td>
+          </tr>
+          <tr>
+            <td class="category">Secondary</td>
+            <td>Notion</td>
+            <td>Powerful databases, linking, collaboration</td>
+            <td>Linear 2D interface, can be overwhelming</td>
+          </tr>
+          <tr>
+            <td class="category">Secondary</td>
+            <td>Obsidian</td>
+            <td>Graph view, markdown-based, extensible plugins</td>
+            <td>Still 2D, graph is visual but not embodied</td>
+          </tr>
+          <tr>
+            <td class="category">Secondary</td>
+            <td>Miro</td>
+            <td>Infinite 2D canvas, strong collaboration templates</td>
+            <td>Cluttered with complex projects, 2D only</td>
+          </tr>
+          <tr>
+            <td class="category">Indirect</td>
+            <td>MindManager</td>
+            <td>Established mind mapping, hierarchical branching</td>
+            <td>Rigid tree structure, lacks embodied interaction</td>
+          </tr>
+          <tr>
+            <td class="category">Indirect</td>
+            <td>Gravity Sketch</td>
+            <td>Natural 3D sketching in VR, embodied interaction</td>
+            <td>No knowledge management or note features</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Feature Matrix -->
+    <h3 style="margin-top:3rem;">Feature Comparison</h3>
+    <div class="competitor-table-wrapper">
+      <table class="competitor-table">
+        <thead>
+          <tr>
+            <th>Feature ↓ / Product →</th>
+            <th>Spatial</th>
+            <th>ShapesXR</th>
+            <th>Notion</th>
+            <th>Obsidian</th>
+            <th>Miro</th>
+            <th>MindManager</th>
+            <th>Gravity Sketch</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Text Notes</td>
+            <td>✖</td><td>✖</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✖</td>
+          </tr>
+          <tr>
+            <td>Rich Media Support</td>
+            <td>✔</td><td>✔</td><td>✔</td><td>Plugins</td><td>✔</td><td>Limited</td><td>✔</td>
+          </tr>
+          <tr>
+            <td>Linking / Graph View</td>
+            <td>✖</td><td>✖</td><td>Limited</td><td>✔</td><td>Limited</td><td>✔</td><td>✖</td>
+          </tr>
+          <tr>
+            <td>Spatial / 3D Environment</td>
+            <td>✔</td><td>✔</td><td>✖</td><td>✖</td><td>✖</td><td>✖</td><td>✔</td>
+          </tr>
+          <tr>
+            <td>Collaboration</td>
+            <td>✔</td><td>✔</td><td>✔</td><td>Limited</td><td>✔</td><td>Limited</td><td>✔</td>
+          </tr>
+          <tr>
+            <td>Cross-Platform</td>
+            <td>✔ (XR/web)</td><td>✔ (XR)</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✔ (XR)</td>
+          </tr>
+          <tr>
+            <td>Search</td>
+            <td>Limited</td><td>✖</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✖</td>
+          </tr>
+          <tr>
+            <td>Templates</td>
+            <td>Limited</td><td>✔</td><td>✔</td><td>Plugins</td><td>✔</td><td>✔</td><td>✖</td>
+          </tr>
+          <tr>
+            <td>Export</td>
+            <td>Limited</td><td>✔ (3D)</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✔ (3D models)</td>
+          </tr>
+          <tr>
+            <td>Gesture / Embodied Interaction</td>
+            <td>✔</td><td>✔</td><td>✖</td><td>✖</td><td>✖</td><td>✖</td><td>✔</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
     <!-- Design Process -->
     <section class="design-process">
