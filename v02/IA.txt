@@ -1,0 +1,43 @@
+Launch / Auth
+└── Quick Access / Login / Register
+
+Home / Dashboard
+├── Recent Word Sets / Note Sets
+├── New Word Set / Note Set
+└── Settings
+    ├── Theme & Notifications
+    ├── Account Info
+    └── Optional Advanced Features
+
+Workspace / Word Set
+├── Add Word Card
+│   ├── Word
+│   ├── Pronunciation (Audio)
+│   ├── Part of Speech
+│   ├── Definition / Translation
+│   ├── Example Sentence
+│   ├── Notes (Personal)
+│   ├── Tags / Categories
+│   └── Relations
+│       ├── Synonyms
+│       ├── Antonyms
+│       ├── Word Family / Prefix / Suffix
+│       └── Related Notes
+├── Batch Import (CSV / Excel / Shared Lists)
+├── Review
+│   ├── SRS Queue
+│   ├── Weak Words Review
+│   └── Progress Stats
+├── Notes Integration
+│   ├── Link Card to Note
+│   ├── Add Freeform Notes
+│   └── View Note + Related Cards
+├── Help
+│   ├── Tutorial / Quick Start
+│   ├── Tips & Tricks
+│   └── Feedback Form
+└── Advanced / Optional Modules
+    ├── Semantic Network / Knowledge Map
+    ├── 3D / XR Visualization
+    ├── Export / Share / Community Word Sets
+    └── Custom Plugins / Extensions
