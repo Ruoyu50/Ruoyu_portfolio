@@ -2,117 +2,292 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>意识光点 - 基础空间</title>
+    <title>智慧空间 - The Wisdom String</title>
     <style>
-        /* 移除所有边距，背景设为纯黑，代表闭眼后的深邃空间 */
-        body { margin: 0; overflow: hidden; background-color: #050505; }
+        body { margin: 0; overflow: hidden; background-color: #000; }
         canvas { display: block; }
+        #ui {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: 'Courier New', sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            pointer-events: none;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
 
-<!-- 引入 Three.js 核心库 -->
+<div id="ui">
+    [ 意识居中 ]<br>
+    鼠标向右：加速结合 · 上下微动：拨动心弦 · 长按：提问(螺旋)
+</div>
+
+<!-- 引入 Three.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-    // 1. 初始化场景 (The Space)
+    // --- 场景初始化 ---
     const scene = new THREE.Scene();
-    // 添加一点极其微弱的环境雾，增加空间的深度感，不让黑色显得死板
-    scene.fog = new THREE.FogExp2(0x050505, 0.02);
+    // 极简的黑，象征深层的智慧空间
+    scene.background = new THREE.Color(0x000000);
+    // 远处迷雾，隐藏线的尽头
+    scene.fog = new THREE.Fog(0x000000, 20, 50);
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    // 摄像机向后拉一点，让我们能看到全貌
-    camera.position.z = 50;
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 30);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio); // 适配高清屏
+    renderer.setPixelRatio(window.devicePixelRatio); // 保证线条清晰度
     document.body.appendChild(renderer.domElement);
 
-    // 2. 制作“光点”材质 (The Light Texture)
-    // 为了让光点柔和，我们不加载图片，而是用代码画一个发光的圆
-    function getTexture() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 32;
-        canvas.height = 32;
-        const context = canvas.getContext('2d');
-        // 径向渐变：中心亮，边缘透明
-        const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)'); // 中心纯白核心
-        gradient.addColorStop(0.2, 'rgba(0, 255, 255, 1)'); // 中层青色光晕
-        gradient.addColorStop(0.5, 'rgba(0, 100, 200, 0.2)'); // 外层淡蓝
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // 边缘完全透明
-
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, 32, 32);
-
-        const texture = new THREE.CanvasTexture(canvas);
-        return texture;
-    }
-
-    // 3. 创建粒子系统 (The Consciousness Particles)
-    const particleCount = 8000; // 粒子数量
-    const geometry = new THREE.BufferGeometry();
-    const positions = [];
-    const sizes = [];
-
-    for (let i = 0; i < particleCount; i++) {
-        // 随机分布在一个宽阔的空间里
-        // 这是一个横向较宽的椭圆体空间
-        const x = (Math.random() - 0.5) * 100;
-        const y = (Math.random() - 0.5) * 60;
-        const z = (Math.random() - 0.5) * 40;
-        positions.push(x, y, z);
-
-        // 粒子大小随机，模拟意识的强弱
-        sizes.push(Math.random() * 1.5); 
-    }
-
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-
-    const material = new THREE.PointsMaterial({
-        size: 0.5, // 基础大小
-        map: getTexture(), // 使用我们画的光晕
+    // --- 核心物体：智慧弦 (The Ribbon Line) ---
+    // 为了有“厚度”，我们不能用Line，要用PlaneGeometry构成的长条
+    const SEGMENTS = 300; // 线的细腻程度
+    const HALF_WIDTH = 60; // 线的一半长度
+    
+    // 创建一个长条几何体 (Width, Height, SegmentsW, SegmentsH)
+    // 这里的 Height 其实是线的“厚度”
+    const THICKNESS = 0.15; // 线条厚度（心电图基线感）
+    const geometry = new THREE.PlaneGeometry(HALF_WIDTH * 2, THICKNESS, SEGMENTS, 1);
+    
+    // 材质：自发光，纯白
+    const material = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff, 
+        side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.9,
-        blending: THREE.AdditiveBlending, // 【关键】光叠加混合，重叠处会变亮
-        depthWrite: false, // 粒子之间不相互遮挡
-        vertexColors: false // 暂时全用统一的光色
+        opacity: 0.9 
     });
+    
+    const ribbon = new THREE.Mesh(geometry, material);
+    scene.add(ribbon);
 
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
+    // --- 核心物体：意识光点 (The Focus Point) ---
+    const focusGeo = new THREE.SphereGeometry(0.3, 32, 32);
+    const focusMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const focusPoint = new THREE.Mesh(focusGeo, focusMat);
+    scene.add(focusPoint);
 
-    // 4. 让它们“活着” (Base Animation)
-    // 暂时还没有复杂的流动，只是轻微的起伏，像呼吸
+    // 添加光晕
+    const textureLoader = new THREE.TextureLoader();
+    const canvas = document.createElement('canvas');
+    canvas.width = 64; canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    const grd = ctx.createRadialGradient(32,32,0, 32,32,32);
+    grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    grd.addColorStop(0.4, 'rgba(100, 200, 255, 0.2)');
+    grd.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0,0,64,64);
+    const glowMap = new THREE.CanvasTexture(canvas);
+    const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({ 
+        map: glowMap, 
+        color: 0xffffff, 
+        blending: THREE.AdditiveBlending 
+    }));
+    glowSprite.scale.set(8, 8, 1);
+    focusPoint.add(glowSprite);
+
+    // --- 物理模拟数据 ---
+    // 我们手动控制顶点，所以需要保存状态
+    const positionAttribute = geometry.attributes.position;
+    const vertexPositions = []; // 原始引用
+    
+    // 物理数组：y轴偏移量
+    const yOffsets = new Float32Array(SEGMENTS + 1);
+    const yVelocities = new Float32Array(SEGMENTS + 1);
+    
+    // 螺旋状态的目标位置数组
+    const spiralTargets = new Float32Array((SEGMENTS + 1) * 3);
+
+    // 初始化
+    for (let i = 0; i <= SEGMENTS; i++) {
+        yOffsets[i] = 0;
+        yVelocities[i] = 0;
+    }
+
+    // --- 交互状态 ---
+    let mouse = new THREE.Vector2();
+    let isMouseDown = false;
+    let flowSpeed = 0; // 向右结合的速度
+    let time = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+    document.addEventListener('mousedown', () => isMouseDown = true);
+    document.addEventListener('mouseup', () => isMouseDown = false);
+
+
+    // --- 动画循环 ---
     function animate() {
         requestAnimationFrame(animate);
+        time += 0.01;
+
+        // 1. 状态计算
+        // 只有当鼠标在右侧时，才增加流动感
+        let targetSpeed = 0;
+        if (!isMouseDown && mouse.x > 0.1) {
+            targetSpeed = mouse.x * 0.8; // 越往右流速越快
+        }
+        // 平滑过渡速度
+        flowSpeed += (targetSpeed - flowSpeed) * 0.05;
+
+        // 2. 意识光点位置 (The Wisdom Point)
+        // 它基本保持在中心，只会微微上下浮动跟随鼠标（拨动琴弦）
+        let targetY = mouse.y * 5; 
+        if(isMouseDown) targetY = 0; // 提问时归位
         
-        const time = Date.now() * 0.0005;
+        // 光点本身的位置平滑跟随
+        focusPoint.position.y += (targetY - focusPoint.position.y) * 0.1;
+        // 光点稍微有一点点左右滞后感，但不跑远
+        focusPoint.position.x = mouse.x * 2; 
 
-        // 让整个粒子云缓慢旋转，增加空间感
-        particles.rotation.y = time * 0.05;
-        particles.rotation.z = time * 0.01;
-
-        // 模拟轻微的波动（意识的基态）
-        const positions = particles.geometry.attributes.position.array;
-        for(let i = 0; i < particleCount; i++) {
-            // 这里我们暂时不做复杂的物理计算
-            // 只是让它们保持在视野中
+        // 3. 弦的物理模拟 (Wave Physics)
+        // 找到光点对应在线上的索引 (中心点)
+        const centerIndex = Math.floor(SEGMENTS / 2);
+        
+        // 施加力：光点把弦拉起来
+        // 这是一个弹性力：弦想回到0，光点想把弦拉到 focusPoint.y
+        if (!isMouseDown) {
+            yOffsets[centerIndex] += (focusPoint.position.y - yOffsets[centerIndex]) * 0.2;
         }
 
+        // 波动传播 (简单的 1D 波动方程 + 阻尼)
+        for (let i = 1; i < SEGMENTS; i++) {
+            // 拉力：被邻居拉动
+            let force = (yOffsets[i - 1] + yOffsets[i + 1]) * 0.5 - yOffsets[i];
+            yVelocities[i] += force * 0.5; // 弹力系数
+            yVelocities[i] *= 0.95; // 阻尼，让震动慢慢停下
+            yOffsets[i] += yVelocities[i];
+        }
+
+        // 4. 计算顶点位置
+        // 这里的逻辑分两种模式：直线模式(含流动) 和 螺旋模式
+        
+        // 螺旋插值因子 (0 = 直线, 1 = 螺旋)
+        let spiralFactor = isMouseDown ? 1 : 0;
+        // 实际上我们需要平滑过渡，不然会瞬变
+        // 这里用一个全局变量 lerp
+        if (!window.spiralLerp) window.spiralLerp = 0;
+        window.spiralLerp += (spiralFactor - window.spiralLerp) * 0.05;
+
+        // 遍历所有顶点更新 Mesh
+        // PlaneGeometry 的顶点排列是：每列两个点（上边缘，下边缘）
+        // 所以循环次数是 SEGMENTS + 1，每次处理两个点
+        for (let i = 0; i <= SEGMENTS; i++) {
+            // 当前点在直线上的原始 X 坐标 (-60 到 60)
+            let xBase = (i / SEGMENTS - 0.5) * 2 * HALF_WIDTH;
+            
+            // --- A. 直线形态计算 ---
+            // 加上波动 yOffsets[i]
+            // 加上“流动感” (Flow Effect)
+            // 如果 flowSpeed > 0，我们要让波纹向左偏移，产生向右流动的错觉
+            // 我们利用噪声来模拟这种自然的水流起伏
+            let flowOffset = 0;
+            if (flowSpeed > 0.01 || window.spiralLerp < 0.99) {
+                // 离中心越远，滞后越明显
+                let distFromCenter = Math.abs(xBase);
+                // 正弦波+流动时间
+                flowOffset = Math.sin(xBase * 0.2 + time * 5 * flowSpeed) * 0.3 * flowSpeed; 
+                // 边缘颤动
+                flowOffset += Math.sin(xBase * 1.5 - time * 10) * 0.1 * flowSpeed;
+            }
+
+            let lineY = yOffsets[i] + flowOffset;
+            let lineZ = 0;
+            let lineX = xBase;
+
+            // --- B. 螺旋形态计算 (The Spiral Sphere) ---
+            // 目标：光点在中心，线盘绕成球
+            // 你的描述：离我近(Z+)朝上，离我远(Z-)朝下，右视顺时针
+            // 这是一个围绕 X 轴的螺旋
+            
+            // 我们把整条长线“卷”起来
+            // 映射关系：线性距离 -> 角度
+            let angle = (i - centerIndex) * 0.1; // 角度随索引变化
+            let radius = 8; // 球半径
+            // 为了形成球体，半径需要随两端衰减 (cos形状)
+            // 归一化索引 -1 到 1
+            let normI = (i / SEGMENTS) * 2 - 1; 
+            // 球体形状因子：中间胖，两头尖
+            let sphereShape = Math.sqrt(1 - normI * normI);
+            if (isNaN(sphereShape)) sphereShape = 0;
+
+            // 螺旋公式
+            // x 依然稍微分布在左右，但压缩了
+            let spiralX = xBase * 0.1; 
+            // 绕 X 轴旋转：Y 和 Z 变化
+            // 顺时针逻辑检查：
+            // Angle 增加 -> Y, Z 变化
+            let spiralY = Math.sin(angle + time * 2) * radius * sphereShape;
+            let spiralZ = Math.cos(angle + time * 2) * radius * sphereShape; 
+            
+            // 修正方向以匹配“近上远下”：
+            // 当 Z > 0 (Cos > 0), 我们希望 Y 正在增加 (Sin 导数 > 0)。
+            // 这是一个标准的旋转。
+            
+            // --- C. 混合 (Lerp) ---
+            let finalX = lineX + (spiralX - lineX) * window.spiralLerp;
+            let finalY = lineY + (spiralY - lineY) * window.spiralLerp;
+            let finalZ = lineZ + (spiralZ - lineZ) * window.spiralLerp;
+
+            // 更新 PlaneGeometry 的两个顶点 (上边缘和下边缘)
+            // 索引计算：第 i 列
+            // PlaneGeometry 构造顺序：(0, 1), (2, 3)... 对应 (Top, Bottom)
+            // 实际上 ThreeJS PlaneGeo 默认是按行还是按列？
+            // 默认是一行一行铺的。所以对于 SEGMENTSx1 的网格：
+            // 0..SEGMENTS 是第一行(Top)，SEGMENTS+1..END 是第二行(Bottom)
+            
+            let topIndex = i;
+            let bottomIndex = i + (SEGMENTS + 1);
+
+            // 设置位置
+            positionAttribute.setXYZ(topIndex, finalX, finalY + THICKNESS/2, finalZ);
+            positionAttribute.setXYZ(bottomIndex, finalX, finalY - THICKNESS/2, finalZ);
+        }
+
+        positionAttribute.needsUpdate = true;
+
+        // 颜色变化：
+        // 焦急（快速晃动鼠标）-> 红色
+        // 智慧（螺旋）-> 金色/青色
+        // 平常 -> 白色
+        let targetColor = new THREE.Color(0xffffff);
+        if (window.spiralLerp > 0.5) {
+            targetColor.setHex(0x4deeea); // 螺旋态：青色
+            // 如果描述里需要金色： targetColor.setHex(0xffd700);
+        } else if (flowSpeed > 0.5) {
+            targetColor.setHex(0xe0f7fa); // 结合态：微蓝白
+        }
+
+        // 简单的颜色插值
+        material.color.lerp(targetColor, 0.05);
+        
+        // 只有提问时，光点才跟随进入螺旋中心
+        if (window.spiralLerp > 0.1) {
+             focusPoint.position.lerp(new THREE.Vector3(0,0,0), 0.1);
+        }
+        
+        // 渲染
         renderer.render(scene, camera);
     }
 
-    // 窗口调整适配
+    animate();
+
+    // Resize
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    animate();
 </script>
 </body>
 </html>
