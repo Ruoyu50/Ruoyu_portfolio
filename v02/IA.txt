@@ -1,43 +1,70 @@
-Launch / Auth
-└── Quick Access / Login / Register
+1. Home
+   ├─ Today’s Review (SRS)
+   ├─ Quick Add Word
+   └─ Weak Words (suggested practice)
 
-Home / Dashboard
-├── Recent Word Sets / Note Sets
-├── New Word Set / Note Set
-└── Settings
-    ├── Theme & Notifications
-    ├── Account Info
-    └── Optional Advanced Features
+2. Vocab Sets
+   ├─ Exam Set
+   │     ├─ Word List
+   │     │     └─ Word Detail Page
+   │     │            ├─ Definition
+   │     │            ├─ Example Sentence
+   │     │            ├─ Audio
+   │     │            ├─ Relations
+   │     │            │      ├─ Synonyms
+   │     │            │      ├─ Antonyms
+   │     │            │      ├─ Word Family
+   │     │            │      └─ Related Notes / Context
+   │     │            ├─ User Notes
+   │     │            └─ Add to Other Sets
+   │     └─ Import / Export
+   │
+   ├─ Daily Set
+   │     ├─ Word List
+   │     └─ Word Detail Page (same structure)
+   │
+   └─ Custom Sets
+         ├─ Create New Set
+         ├─ Word List
+         └─ Word Detail Page
 
-Workspace / Word Set
-├── Add Word Card
-│   ├── Word
-│   ├── Pronunciation (Audio)
-│   ├── Part of Speech
-│   ├── Definition / Translation
-│   ├── Example Sentence
-│   ├── Notes (Personal)
-│   ├── Tags / Categories
-│   └── Relations
-│       ├── Synonyms
-│       ├── Antonyms
-│       ├── Word Family / Prefix / Suffix
-│       └── Related Notes
-├── Batch Import (CSV / Excel / Shared Lists)
-├── Review
-│   ├── SRS Queue
-│   ├── Weak Words Review
-│   └── Progress Stats
-├── Notes Integration
-│   ├── Link Card to Note
-│   ├── Add Freeform Notes
-│   └── View Note + Related Cards
-├── Help
-│   ├── Tutorial / Quick Start
-│   ├── Tips & Tricks
-│   └── Feedback Form
-└── Advanced / Optional Modules
-    ├── Semantic Network / Knowledge Map
-    ├── 3D / XR Visualization
-    ├── Export / Share / Community Word Sets
-    └── Custom Plugins / Extensions
+3. Add Word
+   ├─ Basic Info
+   │     ├─ Word
+   │     ├─ Meaning
+   │     ├─ Example Sentence
+   │     ├─ Audio (Auto / Upload)
+   │
+   ├─ Categorization
+   │     ├─ Exam
+   │     ├─ Daily
+   │     └─ Choose Existing Custom Set
+   │
+   └─ Optional Metadata
+         ├─ Synonyms / Antonyms
+         ├─ Word Family
+         ├─ Personal Notes
+         └─ Add to Multiple Sets
+
+4. Review
+   ├─ SRS Queue
+   ├─ Flip Mode（卡片翻面）
+   ├─ Typing Mode（输入）
+   ├─ Example-based Review
+   └─ Review Summary (score / next review date)
+
+5. Stats & Progress
+   ├─ Total Words
+   ├─ Review Streak
+   ├─ Mastered / Learning / Weak
+   └─ Set-by-set performance
+
+6. Optional Enhancements
+   ├─ Media Attachments (images, custom examples)
+   ├─ Share / Export Set
+   └─ Backup / Sync
+
+7. Future Vision (not built yet, used for narrative)
+   ├─ Semantic Map View（关系图）
+   ├─ Knowledge Graph（词汇 + 笔记）
+   └─ XR Spatial Notes (未来 3D 扩展)

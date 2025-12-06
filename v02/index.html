@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>意识光点 - 基础空间</title>
+    <style>
+        /* 移除所有边距，背景设为纯黑，代表闭眼后的深邃空间 */
+        body { margin: 0; overflow: hidden; background-color: #050505; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- 引入 Three.js 核心库 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+    // 1. 初始化场景 (The Space)
+    const scene = new THREE.Scene();
+    // 添加一点极其微弱的环境雾，增加空间的深度感，不让黑色显得死板
+    scene.fog = new THREE.FogExp2(0x050505, 0.02);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // 摄像机向后拉一点，让我们能看到全貌
+    camera.position.z = 50;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio); // 适配高清屏
+    document.body.appendChild(renderer.domElement);
+
+    // 2. 制作“光点”材质 (The Light Texture)
+    // 为了让光点柔和，我们不加载图片，而是用代码画一个发光的圆
+    function getTexture() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const context = canvas.getContext('2d');
+        // 径向渐变：中心亮，边缘透明
+        const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)'); // 中心纯白核心
+        gradient.addColorStop(0.2, 'rgba(0, 255, 255, 1)'); // 中层青色光晕
+        gradient.addColorStop(0.5, 'rgba(0, 100, 200, 0.2)'); // 外层淡蓝
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // 边缘完全透明
+
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, 32, 32);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        return texture;
+    }
+
+    // 3. 创建粒子系统 (The Consciousness Particles)
+    const particleCount = 8000; // 粒子数量
+    const geometry = new THREE.BufferGeometry();
+    const positions = [];
+    const sizes = [];
+
+    for (let i = 0; i < particleCount; i++) {
+        // 随机分布在一个宽阔的空间里
+        // 这是一个横向较宽的椭圆体空间
+        const x = (Math.random() - 0.5) * 100;
+        const y = (Math.random() - 0.5) * 60;
+        const z = (Math.random() - 0.5) * 40;
+        positions.push(x, y, z);
+
+        // 粒子大小随机，模拟意识的强弱
+        sizes.push(Math.random() * 1.5); 
+    }
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+    const material = new THREE.PointsMaterial({
+        size: 0.5, // 基础大小
+        map: getTexture(), // 使用我们画的光晕
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending, // 【关键】光叠加混合，重叠处会变亮
+        depthWrite: false, // 粒子之间不相互遮挡
+        vertexColors: false // 暂时全用统一的光色
+    });
+
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+
+    // 4. 让它们“活着” (Base Animation)
+    // 暂时还没有复杂的流动，只是轻微的起伏，像呼吸
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        const time = Date.now() * 0.0005;
+
+        // 让整个粒子云缓慢旋转，增加空间感
+        particles.rotation.y = time * 0.05;
+        particles.rotation.z = time * 0.01;
+
+        // 模拟轻微的波动（意识的基态）
+        const positions = particles.geometry.attributes.position.array;
+        for(let i = 0; i < particleCount; i++) {
+            // 这里我们暂时不做复杂的物理计算
+            // 只是让它们保持在视野中
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    // 窗口调整适配
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    animate();
+</script>
+</body>
+</html>
