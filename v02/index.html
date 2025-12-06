@@ -2,17 +2,17 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>意识光流 - 彗星常态</title>
+    <title>轨道意识 - The Track</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #000; }
         canvas { display: block; }
         #ui {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             width: 100%;
             text-align: center;
             color: rgba(255, 255, 255, 0.4);
-            font-family: 'Arial', sans-serif;
+            font-family: sans-serif;
             font-size: 12px;
             letter-spacing: 2px;
             pointer-events: none;
@@ -22,85 +22,92 @@
 <body>
 
 <div id="ui">
-    [ 意识常态 ] <br>
-    当前：稳定流速 · 鼠标向右：加速结合
+    [ 意识锚定于线 ]<br>
+    自然微动 · 鼠标向右：加速结合流
 </div>
 
 <!-- 引入 Three.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-    // --- 1. 场景基础 ---
+    // --- 场景初始化 ---
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000); // 纯黑深空
+    scene.background = new THREE.Color(0x000000); // 纯黑
+    // 添加一点极其微弱的雾，让线的两端柔和消失
+    scene.fog = new THREE.Fog(0x000000, 10, 40);
 
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 20); // 相机距离适中
+    camera.position.set(0, 0, 25);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
-    // --- 2. 核心：彗星头 (The Head) ---
-    // 这是你的意识焦点，永远保持清晰
-    const headGeo = new THREE.SphereGeometry(0.15, 32, 32); // 核心很小，像针尖
-    const headMat = new THREE.MeshBasicMaterial({ 
-        color: 0xffffff,
+    // --- 1. 轨道 (The White Line / Track) ---
+    // 这是一根贯穿屏幕的长线
+    const railLength = 100;
+    const railThickness = 0.12; // 线的粗细 (类似心电图基线)
+    
+    const railGeo = new THREE.PlaneGeometry(railLength, railThickness);
+    const railMat = new THREE.MeshBasicMaterial({ 
+        color: 0x444444, // 轨道本身是暗淡的灰白色，不抢戏
         transparent: true,
-        opacity: 1.0 
+        opacity: 0.5,
+        side: THREE.DoubleSide
     });
-    const head = new THREE.Mesh(headGeo, headMat);
-    scene.add(head);
+    const rail = new THREE.Mesh(railGeo, railMat);
+    scene.add(rail);
 
-    // 给头加一个大的辉光 (Glow Sprite)
-    const textureLoader = new THREE.TextureLoader();
-    const canvas = document.createElement('canvas');
-    canvas.width = 128; canvas.height = 128;
-    const ctx = canvas.getContext('2d');
-    // 绘制一个柔和的亮斑
-    const grd = ctx.createRadialGradient(64,64,0, 64,64,64);
-    grd.addColorStop(0, 'rgba(255, 255, 255, 1)');     // 核心白
-    grd.addColorStop(0.2, 'rgba(200, 230, 255, 0.4)'); // 外圈微蓝
-    grd.addColorStop(0.5, 'rgba(100, 150, 255, 0.1)'); // 边缘淡化
+    // --- 2. 意识光点 (The Consciousness Point) ---
+    // 一个附着在线上的发光球体
+    const headGroup = new THREE.Group(); // 用于整体控制光点和拖尾
+    scene.add(headGroup);
+
+    // 实体核心
+    const coreGeo = new THREE.SphereGeometry(0.15, 32, 32);
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const core = new THREE.Mesh(coreGeo, coreMat);
+    headGroup.add(core);
+
+    // 辉光 (Glow Sprite)
+    const txLoader = new THREE.TextureLoader();
+    const cvs = document.createElement('canvas');
+    cvs.width = 64; cvs.height = 64;
+    const ctx = cvs.getContext('2d');
+    const grd = ctx.createRadialGradient(32,32,0, 32,32,32);
+    grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    grd.addColorStop(0.3, 'rgba(200, 240, 255, 0.3)');
     grd.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = grd;
-    ctx.fillRect(0,0,128,128);
-    
-    const spriteMap = new THREE.CanvasTexture(canvas);
-    const spriteMat = new THREE.SpriteMaterial({ 
-        map: spriteMap, 
+    ctx.fillRect(0,0,64,64);
+    const glowMat = new THREE.SpriteMaterial({ 
+        map: new THREE.CanvasTexture(cvs), 
         color: 0xffffff, 
         blending: THREE.AdditiveBlending,
-        transparent: true,
         opacity: 0.8
     });
-    const glowSprite = new THREE.Sprite(spriteMat);
-    glowSprite.scale.set(3, 3, 1); // 辉光大小
-    head.add(glowSprite);
+    const glow = new THREE.Sprite(glowMat);
+    glow.scale.set(4, 4, 1);
+    headGroup.add(glow);
 
+    // --- 3. 拖尾 (The Comet Trail ON THE LINE) ---
+    // 这个拖尾必须看起来像是覆盖在轨道上的高亮区域
+    const trailLength = 12;
+    const trailGeo = new THREE.PlaneGeometry(trailLength, railThickness * 1.5); // 比轨道稍微宽一点点，产生光晕感
+    // 几何体偏移，让原点在右侧，尾巴向左延伸
+    trailGeo.translate(-trailLength / 2, 0, 0.01); // z=0.01 防止与轨道重叠闪烁
 
-    // --- 3. 核心：光流拖尾 (The Comet Tail / Track) ---
-    // 这是一个长条形的平面，位于头部的左侧
-    // 我们用 ShaderMaterial 来控制它的样子，保证它绝对平滑、不散架
-    
-    const tailLength = 15; // 拖尾长度
-    const tailGeo = new THREE.PlaneGeometry(tailLength, 2, 64, 1); // 宽15，高2 (用于辉光空间)
-    // 将几何体向左平移，使得原点(0,0)在平面的右端（连接头部）
-    tailGeo.translate(-tailLength / 2, 0, 0);
-
-    // 自定义着色器
-    const tailUniforms = {
+    // 拖尾着色器：头部亮，尾部渐隐，中间有流动的噪波
+    const trailUniforms = {
         uTime: { value: 0 },
-        uSpeed: { value: 1.0 }, // 流动速度
-        uColor: { value: new THREE.Color(0xffffff) },
-        uThickness: { value: 0.08 } // 线条核心厚度 (0.05 - 0.1 比较像粗一点的心电图线)
+        uSpeed: { value: 0 }
     };
-
-    const tailMat = new THREE.ShaderMaterial({
-        uniforms: tailUniforms,
+    
+    const trailMat = new THREE.ShaderMaterial({
+        uniforms: trailUniforms,
         transparent: true,
-        blending: THREE.AdditiveBlending, // 叠加发光模式
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
         vertexShader: `
             varying vec2 vUv;
@@ -112,87 +119,83 @@
         fragmentShader: `
             uniform float uTime;
             uniform float uSpeed;
-            uniform float uThickness;
-            uniform vec3 uColor;
             varying vec2 vUv;
 
-            // 简单的伪随机函数
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
-            }
-
             void main() {
-                // vUv.x: 0 (左侧/尾巴) -> 1 (右侧/头部)
-                // vUv.y: 0 (下) -> 1 (上)
+                // vUv.x 从 0(左/尾) 到 1(右/头)
+                
+                // 1. 基础渐变：越靠近头越亮
+                float strength = smoothstep(0.0, 1.0, vUv.x);
+                // 指数级衰减，让尾巴更长更柔和
+                strength = pow(strength, 3.0); 
 
-                // 1. 核心线条形状 (The Line Shape)
-                // 使用 smoothstep 做一个软边缘的线，保持中间最亮
-                float distFromCenter = abs(vUv.y - 0.5);
-                // 线的强度：距离中心越近越亮
-                float lineIntensity = 1.0 - smoothstep(0.0, uThickness, distFromCenter);
-                
-                // 2. 拖尾渐变 (Fade Out)
-                // 越往左(x接近0)越透明，越往右(x接近1)越亮
-                float fade = smoothstep(0.0, 0.4, vUv.x); // 尾部渐隐
-                
-                // 3. 流动纹理 (The Flow)
-                // 我们让噪波从右向左跑 (vUv.x + time)
-                // 这是一个单纯的视觉纹理，让线看起来在“动”
-                float flowX = vUv.x * 10.0 + uTime * uSpeed * 5.0;
-                float noise = sin(flowX) * 0.5 + 0.5; // 0到1的正弦波
-                noise = mix(0.7, 1.0, noise); // 让波动不要太剧烈，保持在0.7-1.0之间亮度变化
+                // 2. 流动纹理 (Flow)
+                // 模拟光子向后流动的视觉残留
+                // 速度越快，纹理拉得越长
+                float flow = sin(vUv.x * 20.0 + uTime * 5.0) * 0.5 + 0.5;
+                // 混合：头部主要靠纯白，尾部才显现出流动的纹理
+                float alpha = strength * mix(0.5 + 0.5 * flow, 1.0, vUv.x);
 
-                // 4. 结合所有因子
-                float alpha = lineIntensity * fade * noise;
-                
-                // 增加一点辉光宽度的微弱光晕
-                float glow = (1.0 - smoothstep(0.0, 0.5, distFromCenter)) * 0.2 * fade;
-                
-                gl_FragColor = vec4(uColor, alpha + glow);
+                // 3. 边缘柔化 (上下边缘)
+                float beam = 1.0 - abs(vUv.y - 0.5) * 2.0;
+                beam = smoothstep(0.0, 0.5, beam);
+
+                gl_FragColor = vec4(1.0, 1.0, 1.0, alpha * beam);
             }
         `
     });
 
-    const tail = new THREE.Mesh(tailGeo, tailMat);
-    scene.add(tail);
+    const trail = new THREE.Mesh(trailGeo, trailMat);
+    headGroup.add(trail); // 将拖尾绑定到头部组，跟随移动
 
-    // --- 4. 交互与动画 ---
+
+    // --- 4. 动画逻辑 ---
     let time = 0;
-    let targetSpeed = 0.5; // 基础流速
-    let currentSpeed = 0.5;
+    let speed = 0; // 虚拟流速
     
-    // 鼠标交互只控制“流速感”，不改变位置
-    // 鼠标越往右，感觉飞得越快
+    // 模拟呼吸般的前后微动参数
+    let driftOffset = 0;
+    
+    // 鼠标交互
+    let mouseX = 0;
     document.addEventListener('mousemove', (e) => {
-        let x = (e.clientX / window.innerWidth); // 0 到 1
-        // x=0.5是常态，x>0.5加速
-        if (x > 0.5) {
-            targetSpeed = 0.5 + (x - 0.5) * 4.0; // 最大速度增加
-        } else {
-            targetSpeed = 0.5; // 保持基础速度
-        }
+        // 归一化 0 ~ 1
+        mouseX = e.clientX / window.innerWidth;
     });
 
     function animate() {
         requestAnimationFrame(animate);
-        
-        // 平滑速度变化
-        currentSpeed += (targetSpeed - currentSpeed) * 0.05;
-        
-        // 更新 Shader 时间变量
         time += 0.01;
-        tailMat.uniforms.uTime.value = time;
-        tailMat.uniforms.uSpeed.value = currentSpeed;
 
-        // 微妙的呼吸感 (Head Breathing)
-        // 意识点不是死的，它在轻轻呼吸
-        let breathe = 1.0 + Math.sin(time * 2) * 0.05;
-        glowSprite.scale.set(3 * breathe, 3 * breathe, 1);
+        // 1. 计算结合状态 (鼠标越右，结合越深)
+        // 结合越深 = 虚拟流速越快 + 拖尾越明显 + 光点越稳定
+        let targetSpeed = 0.5; // 基础流速
+        if (mouseX > 0.5) {
+            targetSpeed += (mouseX - 0.5) * 8.0; // 加速
+        }
+        speed += (targetSpeed - speed) * 0.05; // 缓动
 
-        // 头部微动 (Micro-movement)
-        // 模拟手持摄像机或意识的轻微浮动，非常微小
-        head.position.y = Math.sin(time * 0.5) * 0.05;
-        tail.position.y = head.position.y; // 尾巴紧紧跟随头部
+        // 2. 模拟“不完全匀速”的微动 (The Micro-movements)
+        // 这是一个叠加的正弦波，模拟漂浮感
+        // 当结合度高(速度快)时，抖动会变小，变得更专注
+        let driftIntensity = (1.0 - Math.min(speed / 4, 0.8)) * 0.8; 
+        
+        // Perlin-like 随机漂移
+        let drift = Math.sin(time * 0.8) * 0.5 + Math.sin(time * 2.3) * 0.2;
+        driftOffset = drift * driftIntensity;
+
+        // 更新位置：
+        // 光点始终在轨道上 (y=0, z=0)
+        // x 轴根据漂移在中心附近摆动
+        headGroup.position.x = driftOffset;
+
+        // 3. 更新拖尾效果
+        // 传递时间，模拟光流向后退
+        trailMat.uniforms.uTime.value = time * speed; 
+        
+        // 轨道微动：为了增加相对运动的错觉，我们可以让轨道纹理(如果有的话)反向移动
+        // 这里简单处理：让摄像机极微小地跟随光点，产生视差
+        camera.position.x = driftOffset * 0.2;
 
         renderer.render(scene, camera);
     }
