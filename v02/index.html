@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>轨道意识 - The Track</title>
+    <title>意识彗星与智慧轨道</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #000; }
         canvas { display: block; }
@@ -13,28 +13,29 @@
             text-align: center;
             color: rgba(255, 255, 255, 0.4);
             font-family: sans-serif;
-            font-size: 12px;
+            font-size: 13px;
             letter-spacing: 2px;
             pointer-events: none;
+            user-select: none;
         }
     </style>
 </head>
 <body>
 
 <div id="ui">
-    [ 意识锚定于线 ]<br>
-    自然微动 · 鼠标向右：加速结合流
+    [ 意识彗星 ]<br>
+    自然游动 · 鼠标向右：加速拖尾 · 长按：螺旋结构
 </div>
 
 <!-- 引入 Three.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-    // --- 场景初始化 ---
+    // --- 场景设置 ---
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000); // 纯黑
-    // 添加一点极其微弱的雾，让线的两端柔和消失
-    scene.fog = new THREE.Fog(0x000000, 10, 40);
+    scene.background = new THREE.Color(0x000000);
+    // 雾气让一切深邃，隐藏边界
+    scene.fog = new THREE.Fog(0x000000, 15, 50);
 
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 25);
@@ -44,163 +45,292 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
-    // --- 1. 轨道 (The White Line / Track) ---
-    // 这是一根贯穿屏幕的长线
-    const railLength = 100;
-    const railThickness = 0.12; // 线的粗细 (类似心电图基线)
+    // --- 全局状态 ---
+    const STATE = {
+        speed: 0,       // 0 ~ 1
+        spiral: 0,      // 0 ~ 1 (螺旋程度)
+        anxiety: 0,     // 0 ~ 1 (红色疗愈)
+        time: 0
+    };
+
+    // ==========================================
+    // 1. 轨道 (The Rail / Wisdom String)
+    // ==========================================
+    // 这是一根很长的、会变形成球体的白线
+    const railSegments = 500;
+    const railGeo = new THREE.PlaneGeometry(100, 0.15, railSegments, 1);
     
-    const railGeo = new THREE.PlaneGeometry(railLength, railThickness);
-    const railMat = new THREE.MeshBasicMaterial({ 
-        color: 0x444444, // 轨道本身是暗淡的灰白色，不抢戏
+    // 添加索引属性用于Shader计算变形
+    const rIndices = new Float32Array(railGeo.attributes.position.count);
+    for(let i=0; i<rIndices.length; i++) rIndices[i] = i / rIndices.length;
+    railGeo.setAttribute('vIndex', new THREE.BufferAttribute(rIndices, 1));
+
+    const railMat = new THREE.ShaderMaterial({
+        uniforms: {
+            uTime: { value: 0 },
+            uSpiral: { value: 0 },
+            uAnxiety: { value: 0 },
+            uColor: { value: new THREE.Color(0xffffff) }, // 白线
+            uHealColor: { value: new THREE.Color(0xff0055) } // 绯红
+        },
         transparent: true,
-        opacity: 0.5,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        vertexShader: `
+            uniform float uTime;
+            uniform float uSpiral;
+            attribute float vIndex;
+            varying vec2 vUv;
+            
+            void main() {
+                vUv = uv;
+                vec3 pos = position;
+
+                // --- 螺旋变形逻辑 (The Spiral Logic) ---
+                // 目标：将长直线卷绕成一个球体
+                // 规则：近处(z+)向上流，远处(z-)向下流，右视顺时针
+                
+                float angle = pos.x * 0.4; // 卷绕密度
+                float radius = 7.0;
+                
+                // 包络线：让它变成球体而不是圆柱体
+                // x范围约 -50 到 50，映射到 -PI/2 到 PI/2
+                float shape = cos(clamp(pos.x * 0.03, -1.57, 1.57));
+                shape = pow(shape, 0.8); // 调整球体丰满度
+
+                vec3 spiralPos;
+                spiralPos.x = pos.x * 0.05; // 压缩长度
+                spiralPos.y = sin(angle + uTime) * radius * shape;
+                spiralPos.z = cos(angle + uTime) * radius * shape;
+
+                // 混合
+                vec3 finalPos = mix(pos, spiralPos, uSpiral);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(finalPos, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform float uTime;
+            uniform float uAnxiety;
+            uniform vec3 uColor;
+            uniform vec3 uHealColor;
+            varying vec2 vUv;
+
+            void main() {
+                // 轨道的基本纹理：柔和的白光
+                float strength = 1.0 - abs(vUv.y - 0.5) * 2.0; // 边缘虚化
+                strength = smoothstep(0.0, 0.8, strength);
+                
+                // 焦虑时的红色斑驳
+                float noise = sin(vUv.x * 30.0 + uTime * 10.0);
+                vec3 finalColor = mix(uColor, uHealColor, uAnxiety * step(0.5, noise));
+
+                // 螺旋时轨道稍微变亮
+                gl_FragColor = vec4(finalColor, strength * 0.4);
+            }
+        `
     });
     const rail = new THREE.Mesh(railGeo, railMat);
     scene.add(rail);
 
-    // --- 2. 意识光点 (The Consciousness Point) ---
-    // 一个附着在线上的发光球体
-    const headGroup = new THREE.Group(); // 用于整体控制光点和拖尾
-    scene.add(headGroup);
+    // ==========================================
+    // 2. 意识彗星 (The Comet Head & Tail)
+    // ==========================================
+    const cometGroup = new THREE.Group();
+    scene.add(cometGroup);
 
-    // 实体核心
-    const coreGeo = new THREE.SphereGeometry(0.15, 32, 32);
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const core = new THREE.Mesh(coreGeo, coreMat);
-    headGroup.add(core);
+    // A. 头部 (Head)
+    // ----------------
+    const headGeo = new THREE.SphereGeometry(0.2, 32, 32);
+    const headMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const head = new THREE.Mesh(headGeo, headMat);
+    cometGroup.add(head);
 
-    // 辉光 (Glow Sprite)
-    const txLoader = new THREE.TextureLoader();
-    const cvs = document.createElement('canvas');
-    cvs.width = 64; cvs.height = 64;
-    const ctx = cvs.getContext('2d');
-    const grd = ctx.createRadialGradient(32,32,0, 32,32,32);
-    grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    grd.addColorStop(0.3, 'rgba(200, 240, 255, 0.3)');
-    grd.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = grd;
-    ctx.fillRect(0,0,64,64);
-    const glowMat = new THREE.SpriteMaterial({ 
-        map: new THREE.CanvasTexture(cvs), 
-        color: 0xffffff, 
+    // 头部辉光
+    const spriteMat = new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(generateGlowTexture()),
+        color: 0xffffff,
         blending: THREE.AdditiveBlending,
         opacity: 0.8
     });
-    const glow = new THREE.Sprite(glowMat);
-    glow.scale.set(4, 4, 1);
-    headGroup.add(glow);
+    const headGlow = new THREE.Sprite(spriteMat);
+    headGlow.scale.set(4, 4, 1);
+    cometGroup.add(headGlow);
 
-    // --- 3. 拖尾 (The Comet Trail ON THE LINE) ---
-    // 这个拖尾必须看起来像是覆盖在轨道上的高亮区域
-    const trailLength = 12;
-    const trailGeo = new THREE.PlaneGeometry(trailLength, railThickness * 1.5); // 比轨道稍微宽一点点，产生光晕感
-    // 几何体偏移，让原点在右侧，尾巴向左延伸
-    trailGeo.translate(-trailLength / 2, 0, 0.01); // z=0.01 防止与轨道重叠闪烁
+    // B. 拖尾 (The Missing Trail!)
+    // ----------------
+    // 这是一个位于头部左侧的平面，用 Shader 渲染出流动的光束
+    const tailLen = 12; 
+    const tailGeo = new THREE.PlaneGeometry(tailLen, 1.2, 32, 1);
+    tailGeo.translate(-tailLen/2, 0, 0); // 锚点设在最右侧，连接头部
 
-    // 拖尾着色器：头部亮，尾部渐隐，中间有流动的噪波
-    const trailUniforms = {
-        uTime: { value: 0 },
-        uSpeed: { value: 0 }
-    };
-    
-    const trailMat = new THREE.ShaderMaterial({
-        uniforms: trailUniforms,
+    const tailMat = new THREE.ShaderMaterial({
+        uniforms: {
+            uTime: { value: 0 },
+            uSpeed: { value: 0 },
+            uAnxiety: { value: 0 },
+            uColor: { value: new THREE.Color(0xffffff) },
+            uHealColor: { value: new THREE.Color(0xff0055) }
+        },
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         vertexShader: `
             varying vec2 vUv;
+            uniform float uSpeed;
             void main() {
                 vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                vec3 pos = position;
+                
+                // 动态拖尾形状：速度越快，尾巴越细长
+                // y轴收缩
+                float taper = smoothstep(0.0, 1.0, uv.x); // 左窄右宽
+                pos.y *= (0.2 + 0.8 * taper); 
+                
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
             }
         `,
         fragmentShader: `
             uniform float uTime;
             uniform float uSpeed;
+            uniform float uAnxiety;
+            uniform vec3 uColor;
+            uniform vec3 uHealColor;
             varying vec2 vUv;
 
             void main() {
-                // vUv.x 从 0(左/尾) 到 1(右/头)
+                // vUv.x: 0(尾) -> 1(头)
                 
-                // 1. 基础渐变：越靠近头越亮
-                float strength = smoothstep(0.0, 1.0, vUv.x);
-                // 指数级衰减，让尾巴更长更柔和
-                strength = pow(strength, 3.0); 
+                // 1. 强度渐变
+                float alpha = smoothstep(0.0, 0.8, vUv.x); // 尾部渐隐
+                alpha = pow(alpha, 2.0); // 指数衰减，更自然
 
-                // 2. 流动纹理 (Flow)
-                // 模拟光子向后流动的视觉残留
-                // 速度越快，纹理拉得越长
-                float flow = sin(vUv.x * 20.0 + uTime * 5.0) * 0.5 + 0.5;
-                // 混合：头部主要靠纯白，尾部才显现出流动的纹理
-                float alpha = strength * mix(0.5 + 0.5 * flow, 1.0, vUv.x);
+                // 2. 流动纹理 (Comet Flow)
+                // 纹理向左流 (x - time)
+                float flow = sin(vUv.x * 15.0 + uTime * (3.0 + uSpeed * 5.0));
+                // 速度快时，纹理拉丝感更强
+                float detail = smoothstep(0.2, 0.8, flow); 
+                alpha *= (0.5 + 0.5 * detail);
 
-                // 3. 边缘柔化 (上下边缘)
-                float beam = 1.0 - abs(vUv.y - 0.5) * 2.0;
-                beam = smoothstep(0.0, 0.5, beam);
+                // 3. 核心亮线
+                float core = 1.0 - abs(vUv.y - 0.5) * 2.0;
+                core = smoothstep(0.0, 0.5, core);
+                alpha *= core;
 
-                gl_FragColor = vec4(1.0, 1.0, 1.0, alpha * beam);
+                // 4. 颜色
+                vec3 col = mix(uColor, uHealColor, uAnxiety);
+
+                // 结合态(高速)时，拖尾更亮
+                float brightness = 0.6 + uSpeed * 0.4;
+
+                gl_FragColor = vec4(col, alpha * brightness);
             }
         `
     });
+    const tail = new THREE.Mesh(tailGeo, tailMat);
+    // 稍微向后一点点，防止挡住头
+    tail.position.z = -0.01; 
+    cometGroup.add(tail);
 
-    const trail = new THREE.Mesh(trailGeo, trailMat);
-    headGroup.add(trail); // 将拖尾绑定到头部组，跟随移动
 
-
-    // --- 4. 动画逻辑 ---
-    let time = 0;
-    let speed = 0; // 虚拟流速
+    // ==========================================
+    // 交互与动画
+    // ==========================================
     
-    // 模拟呼吸般的前后微动参数
-    let driftOffset = 0;
-    
-    // 鼠标交互
-    let mouseX = 0;
-    document.addEventListener('mousemove', (e) => {
-        // 归一化 0 ~ 1
-        mouseX = e.clientX / window.innerWidth;
+    // 辅助函数：生成光晕图
+    function generateGlowTexture() {
+        const c = document.createElement('canvas');
+        c.width = 64; c.height = 64;
+        const ctx = c.getContext('2d');
+        const g = ctx.createRadialGradient(32,32,0, 32,32,32);
+        g.addColorStop(0, 'rgba(255,255,255,1)');
+        g.addColorStop(0.4, 'rgba(200,240,255,0.2)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,64,64);
+        return c;
+    }
+
+    // 鼠标状态
+    const mouse = new THREE.Vector2();
+    let isMouseDown = false;
+    let lastMousePos = new THREE.Vector2();
+    let mouseSpeed = 0;
+
+    document.addEventListener('mousemove', e => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        
+        // 计算瞬时速度用于“焦急”检测
+        const currentPos = new THREE.Vector2(mouse.x, mouse.y);
+        mouseSpeed = currentPos.distanceTo(lastMousePos) * 10;
+        lastMousePos.copy(currentPos);
     });
+    document.addEventListener('mousedown', () => isMouseDown = true);
+    document.addEventListener('mouseup', () => isMouseDown = false);
+    document.addEventListener('touchstart', () => isMouseDown = true);
+    document.addEventListener('touchend', () => isMouseDown = false);
 
     function animate() {
         requestAnimationFrame(animate);
-        time += 0.01;
+        STATE.time += 0.015;
 
-        // 1. 计算结合状态 (鼠标越右，结合越深)
-        // 结合越深 = 虚拟流速越快 + 拖尾越明显 + 光点越稳定
-        let targetSpeed = 0.5; // 基础流速
-        if (mouseX > 0.5) {
-            targetSpeed += (mouseX - 0.5) * 8.0; // 加速
+        // --- 逻辑更新 ---
+        
+        // 1. 速度/结合度 (Speed)
+        // 鼠标越右，速度越快 (拖尾越长)
+        let targetSpeed = 0;
+        if (!isMouseDown && mouse.x > -0.5) {
+            targetSpeed = (mouse.x + 0.5) * 0.8; 
+            if (targetSpeed < 0) targetSpeed = 0;
         }
-        speed += (targetSpeed - speed) * 0.05; // 缓动
+        STATE.speed += (targetSpeed - STATE.speed) * 0.05;
 
-        // 2. 模拟“不完全匀速”的微动 (The Micro-movements)
-        // 这是一个叠加的正弦波，模拟漂浮感
-        // 当结合度高(速度快)时，抖动会变小，变得更专注
-        let driftIntensity = (1.0 - Math.min(speed / 4, 0.8)) * 0.8; 
+        // 2. 螺旋度 (Spiral)
+        let targetSpiral = isMouseDown ? 1.0 : 0.0;
+        STATE.spiral += (targetSpiral - STATE.spiral) * 0.04;
+
+        // 3. 焦虑度 (Anxiety)
+        let targetAnxiety = (mouseSpeed > 0.8) ? 1.0 : 0.0;
+        STATE.anxiety += (targetAnxiety - STATE.anxiety) * 0.05;
+
+        // --- 视觉更新 ---
+
+        // A. 更新 Uniforms
+        railMat.uniforms.uTime.value = STATE.time;
+        railMat.uniforms.uSpiral.value = STATE.spiral;
+        railMat.uniforms.uAnxiety.value = STATE.anxiety;
+
+        tailMat.uniforms.uTime.value = STATE.time;
+        tailMat.uniforms.uSpeed.value = STATE.speed;
+        tailMat.uniforms.uAnxiety.value = STATE.anxiety;
+
+        // B. 彗星微动 (Hovering)
+        // 模拟不完全匀速：正弦波叠加
+        let hoverX = Math.sin(STATE.time * 0.8) * 0.3 + Math.cos(STATE.time * 2.1) * 0.1;
+        let hoverY = Math.cos(STATE.time * 0.5) * 0.1;
         
-        // Perlin-like 随机漂移
-        let drift = Math.sin(time * 0.8) * 0.5 + Math.sin(time * 2.3) * 0.2;
-        driftOffset = drift * driftIntensity;
+        // 当进入螺旋时，光点回归绝对中心
+        if (STATE.spiral > 0.1) {
+            hoverX *= (1.0 - STATE.spiral);
+            hoverY *= (1.0 - STATE.spiral);
+            
+            // 螺旋时，彗星稍微缩小一点
+            let scale = 1.0 - STATE.spiral * 0.2;
+            cometGroup.scale.set(scale, scale, scale);
+        }
 
-        // 更新位置：
-        // 光点始终在轨道上 (y=0, z=0)
-        // x 轴根据漂移在中心附近摆动
-        headGroup.position.x = driftOffset;
+        // 当向右结合加速时，光点会稍微“顶”到前面一点，且微动减少(更稳)
+        if (STATE.speed > 0.1) {
+            hoverX += STATE.speed * 2.0; // 向右平移
+            hoverY *= (1.0 - STATE.speed * 0.5); // 上下抖动减小
+        }
 
-        // 3. 更新拖尾效果
-        // 传递时间，模拟光流向后退
-        trailMat.uniforms.uTime.value = time * speed; 
-        
-        // 轨道微动：为了增加相对运动的错觉，我们可以让轨道纹理(如果有的话)反向移动
-        // 这里简单处理：让摄像机极微小地跟随光点，产生视差
-        camera.position.x = driftOffset * 0.2;
+        cometGroup.position.set(hoverX, hoverY, 0);
 
         renderer.render(scene, camera);
     }
 
-    // 窗口适配
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -208,7 +338,6 @@
     });
 
     animate();
-
 </script>
 </body>
 </html>
