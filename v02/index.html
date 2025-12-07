@@ -2,91 +2,125 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>纯CSS意识流</title>
+    <title>智慧空间 - 纯净感受</title>
     <style>
-        /* 1. 舞台设置 */
+        /* 1. 空间基调：深邃、寂静 */
         body {
             margin: 0;
             height: 100vh;
-            background-color: #000; /* 深空黑 */
+            background-color: #000;
             display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center;     /* 垂直居中 */
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
 
-        /* 2. 容器：用来统一控制整体的呼吸运动 */
-        .consciousness-container {
+        /* 2. 意识载体 (容器)
+           包含了光点和拖尾，作为一个整体进行律动。
+           这种律动是整体的，像呼吸一样自然。
+        */
+        .consciousness-vessel {
             position: relative;
             width: 100%;
             height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 呼吸动画：让整个光点在轨道上微动 */
-            animation: breathe 4s ease-in-out infinite alternate;
+            /* 这种缓动 (ease-in-out) 是模拟生物感的关键 */
+            animation: drift 5s ease-in-out infinite alternate;
         }
 
-        /* 3. 轨道线 (The Line) */
-        .line {
+        /* 3. 智慧之线 (The Rail)
+           它是背景，必须克制。
+           使用 opacity: 0.3 让它退后，不抢主体的风头。
+        */
+        .rail {
             position: absolute;
-            width: 100%; /* 贯穿屏幕 */
-            height: 2px; /* 线的粗细 */
-            background: #fff; /* 纯白 */
-            
-            /* 模拟 Fog (迷雾) 效果：
-               使用渐变遮罩，让线在左右两端变透明，中间实心。
-               无需复杂的 3D 计算，这就是一张简单的渐变图。 */
-            mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-            
-            opacity: 0.5; /* 稍微淡一点，不要抢了光点的戏 */
+            width: 100%;
+            height: 1px; /* 极细，像一根弦 */
+            background: #fff;
+            opacity: 0.3;
+            /* 两端渐隐，制造无限延伸的感受 */
+            mask-image: linear-gradient(to right, transparent, black 30%, black 70%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 30%, black 70%, transparent);
         }
 
-        /* 4. 意识光点 (The Ball) */
-        .ball {
-            position: relative; /* 相对容器居中 */
-            width: 12px;  /* 核心大小 */
-            height: 12px;
-            background-color: #fff; /* 纯白实心核心 */
-            border-radius: 50%; /* 变成圆 */
-            z-index: 10; /* 保证在最上层 */
+        /* 4. 意识光点 (The Core)
+           绝对的实心白，象征确定的智慧。
+        */
+        .head {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            z-index: 10; /* 永远最前 */
             
-            /* 光晕效果：利用 box-shadow 制造发光感 */
-            /* 参数：x偏移 y偏移 模糊半径 扩展半径 颜色 */
-            box-shadow: 
-                0 0 10px 2px rgba(255, 255, 255, 0.8), /* 内层强光 */
-                0 0 30px 10px rgba(255, 255, 255, 0.2); /* 外层柔光 */
+            /* 只有一层柔和的光晕，不再多层叠加，保持干净 */
+            box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.6);
         }
 
-        /* 5. 动画定义：呼吸微动 */
-        @keyframes breathe {
-            from { transform: translateX(-20px); } /* 向左漂 */
-            to   { transform: translateX(20px); }  /* 向右漂 */
+        /* 5. 拖尾 (The Trail)
+           这就是你要求的拖尾。
+           它不是粒子，是一束光的残留。
+        */
+        .trail {
+            position: absolute;
+            /* 位于头的左侧 */
+            right: 50%; 
+            /* 长度：决定了余韵的长短 */
+            width: 150px; 
+            height: 2px; /* 稍微比轨道粗一点点，或者一样粗 */
+            
+            /* 关键：拖尾的材质
+               从右(头)到左(尾)的渐变：
+               纯白 -> 透明。
+            */
+            background: linear-gradient(to left, rgba(255,255,255,0.8), transparent);
+            
+            /* 稍微做一点圆角，让连接处不生硬 */
+            border-radius: 100px;
+            
+            /* 这里的偏移是为了让拖尾紧贴在球的屁股后面 */
+            margin-right: 4px; 
+            
+            z-index: 5;
         }
 
-        /* UI 文字 (仅作提示) */
+        /* 6. 律动动画
+           模拟意识在维度间的轻微漂移
+        */
+        @keyframes drift {
+            from { transform: translateX(-15px); }
+            to   { transform: translateX(15px); }
+        }
+
+        /* 极简UI */
         .ui {
             position: absolute;
             bottom: 40px;
-            color: #444;
+            color: #333; /* 非常暗的字，不打扰视觉 */
             font-family: sans-serif;
             font-size: 12px;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <!-- 整个意识体 -->
-    <div class="consciousness-container">
-        <!-- 轨道 -->
-        <div class="line"></div>
-        <!-- 光点 -->
-        <div class="ball"></div>
+    <div class="consciousness-vessel">
+        <!-- 轨道：静止的参照系 -->
+        <div class="rail"></div>
+        
+        <!-- 拖尾：过去的余韵 -->
+        <div class="trail"></div>
+        
+        <!-- 头部：当下的聚焦 -->
+        <div class="head"></div>
     </div>
 
-    <div class="ui">纯 CSS 实现 · 零 JS</div>
+    <div class="ui">Wisdom Space</div>
 
 </body>
 </html>
