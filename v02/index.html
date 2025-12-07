@@ -2,6 +2,8 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <title>智慧空间 - 无暇版</title>
     <style>
         /* 0. 空间基调 */
@@ -88,8 +90,9 @@
                transparent(看不见) -> black(看得见)
                这样，尾部最左端的那个 vertex 光圈会被直接切掉，不再闭合。
             */
-            mask-image: linear-gradient(to right, transparent 0%, black 40%);
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
+            mask-image: linear-gradient(to right, transparent 0%, black 40%);
+
 
             animation: tail-sway 3s ease-in-out infinite alternate;
             will-change: transform, opacity;
