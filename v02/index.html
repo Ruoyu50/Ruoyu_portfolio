@@ -2,211 +2,91 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Pure Consciousness Flow</title>
+    <title>纯CSS意识流</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #000; }
-        canvas { display: block; }
-        #ui {
-            position: absolute;
-            bottom: 30px;
+        /* 1. 舞台设置 */
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #000; /* 深空黑 */
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center;     /* 垂直居中 */
+            overflow: hidden;
+        }
+
+        /* 2. 容器：用来统一控制整体的呼吸运动 */
+        .consciousness-container {
+            position: relative;
             width: 100%;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.3);
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 呼吸动画：让整个光点在轨道上微动 */
+            animation: breathe 4s ease-in-out infinite alternate;
+        }
+
+        /* 3. 轨道线 (The Line) */
+        .line {
+            position: absolute;
+            width: 100%; /* 贯穿屏幕 */
+            height: 2px; /* 线的粗细 */
+            background: #fff; /* 纯白 */
+            
+            /* 模拟 Fog (迷雾) 效果：
+               使用渐变遮罩，让线在左右两端变透明，中间实心。
+               无需复杂的 3D 计算，这就是一张简单的渐变图。 */
+            mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+            
+            opacity: 0.5; /* 稍微淡一点，不要抢了光点的戏 */
+        }
+
+        /* 4. 意识光点 (The Ball) */
+        .ball {
+            position: relative; /* 相对容器居中 */
+            width: 12px;  /* 核心大小 */
+            height: 12px;
+            background-color: #fff; /* 纯白实心核心 */
+            border-radius: 50%; /* 变成圆 */
+            z-index: 10; /* 保证在最上层 */
+            
+            /* 光晕效果：利用 box-shadow 制造发光感 */
+            /* 参数：x偏移 y偏移 模糊半径 扩展半径 颜色 */
+            box-shadow: 
+                0 0 10px 2px rgba(255, 255, 255, 0.8), /* 内层强光 */
+                0 0 30px 10px rgba(255, 255, 255, 0.2); /* 外层柔光 */
+        }
+
+        /* 5. 动画定义：呼吸微动 */
+        @keyframes breathe {
+            from { transform: translateX(-20px); } /* 向左漂 */
+            to   { transform: translateX(20px); }  /* 向右漂 */
+        }
+
+        /* UI 文字 (仅作提示) */
+        .ui {
+            position: absolute;
+            bottom: 40px;
+            color: #444;
             font-family: sans-serif;
             font-size: 12px;
             letter-spacing: 2px;
-            pointer-events: none;
-            user-select: none;
         }
     </style>
 </head>
 <body>
 
-<div id="ui">
-    [ 意识流 ]<br>
-    自然 · 恒常
-</div>
+    <!-- 整个意识体 -->
+    <div class="consciousness-container">
+        <!-- 轨道 -->
+        <div class="line"></div>
+        <!-- 光点 -->
+        <div class="ball"></div>
+    </div>
 
-<!-- 引入 Three.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <div class="ui">纯 CSS 实现 · 零 JS</div>
 
-<script>
-    // --- 1. 场景基础 ---
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000); 
-    // 极深的雾，让一切隐入虚无
-    scene.fog = new THREE.FogExp2(0x000000, 0.03);
-
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 18); // 稍微拉近一点，观察细节
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    document.body.appendChild(renderer.domElement);
-
-    // --- 2. 轨道 (The Track) ---
-    // 极简的一条细线，作为参考系
-    const trackGeo = new THREE.PlaneGeometry(200, 0.05); // 极细
-    const trackMat = new THREE.MeshBasicMaterial({ 
-        color: 0x444444, 
-        transparent: true, 
-        opacity: 0.3,
-        blending: THREE.AdditiveBlending
-    });
-    const track = new THREE.Mesh(trackGeo, trackMat);
-    scene.add(track);
-
-
-    // --- 3. 意识彗星 (The Comet) ---
-    const cometGroup = new THREE.Group();
-    scene.add(cometGroup);
-
-    // A. 头部核心 (Head)
-    const headGeo = new THREE.SphereGeometry(0.12, 32, 32);
-    const headMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const head = new THREE.Mesh(headGeo, headMat);
-    cometGroup.add(head);
-
-    // B. 头部光晕 (Glow Sprite) - 增加朦胧感
-    const canvas = document.createElement('canvas');
-    canvas.width = 64; canvas.height = 64;
-    const ctx = canvas.getContext('2d');
-    const grd = ctx.createRadialGradient(32,32,0, 32,32,32);
-    grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    grd.addColorStop(0.4, 'rgba(200, 220, 255, 0.2)');
-    grd.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = grd;
-    ctx.fillRect(0,0,64,64);
-    
-    const spriteMat = new THREE.SpriteMaterial({ 
-        map: new THREE.CanvasTexture(canvas), 
-        color: 0xffffff, 
-        blending: THREE.AdditiveBlending,
-        opacity: 0.8
-    });
-    const glow = new THREE.Sprite(spriteMat);
-    glow.scale.set(2.5, 2.5, 1);
-    cometGroup.add(glow);
-
-    // C. 自然拖尾 (Natural Trail)
-    // 关键在于 Shader
-    const trailLength = 15;
-    const trailGeo = new THREE.PlaneGeometry(trailLength, 0.8, 64, 1);
-    trailGeo.translate(-trailLength / 2, 0, 0); // 锚点设在最右侧
-
-    const trailUniforms = {
-        uTime: { value: 0 },
-        uColor: { value: new THREE.Color(0xffffff) }
-    };
-
-    const trailMat = new THREE.ShaderMaterial({
-        uniforms: trailUniforms,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-        vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                vec3 pos = position;
-                // 形状控制：头部宽，尾部自然收窄
-                // 使用 smoothstep 让连接处平滑过渡，不像三角形那么生硬
-                float taper = smoothstep(0.0, 0.8, uv.x); 
-                // 稍微增加一点尾部的随机摆动感(极微小)
-                pos.y *= (0.1 + 0.9 * taper); 
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-            }
-        `,
-        fragmentShader: `
-            uniform float uTime;
-            uniform vec3 uColor;
-            varying vec2 vUv;
-
-            // 简单的伪随机噪声函数
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
-            }
-            
-            // 值噪声 (Value Noise) - 产生柔和的云雾感
-            float noise(vec2 st) {
-                vec2 i = floor(st);
-                vec2 f = fract(st);
-                float a = random(i);
-                float b = random(i + vec2(1.0, 0.0));
-                float c = random(i + vec2(0.0, 1.0));
-                float d = random(i + vec2(1.0, 1.0));
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-            }
-
-            void main() {
-                // vUv.x: 0(尾) -> 1(头)
-
-                // 1. 核心光束 (Horizontal Beam)
-                float beam = 1.0 - abs(vUv.y - 0.5) * 2.0;
-                beam = smoothstep(0.0, 1.0, beam); 
-                beam = pow(beam, 3.0); // 让中心非常亮，边缘非常柔
-
-                // 2. 流动纹理 (Flowing Texture)
-                // 纹理向左飞逝
-                float flowOffset = uTime * 2.5; 
-                // 叠加两层噪声，产生细节
-                float n1 = noise(vec2(vUv.x * 5.0 + flowOffset, vUv.y * 2.0));
-                float n2 = noise(vec2(vUv.x * 10.0 + flowOffset * 1.5, vUv.y * 5.0));
-                float cloud = n1 * 0.6 + n2 * 0.4; // 混合
-
-                // 3. 纵向渐变 (Fade Out)
-                // 越往左越透明
-                float fade = smoothstep(0.0, 0.6, vUv.x);
-                fade = pow(fade, 1.5);
-
-                // 4. 组合
-                // 头部很实，尾部很虚且带有纹理
-                float alpha = beam * fade * (0.6 + 0.6 * cloud);
-                
-                gl_FragColor = vec4(uColor, alpha);
-            }
-        `
-    });
-
-    const trail = new THREE.Mesh(trailGeo, trailMat);
-    cometGroup.add(trail);
-
-
-    // --- 4. 动画循环 ---
-    let time = 0;
-    
-    // 模拟自然的微动 (Breathing/Hovering)
-    // 不是机械的匀速，而是多个正弦波叠加
-    
-    function animate() {
-        requestAnimationFrame(animate);
-        time += 0.01;
-
-        // 更新 Shader 时间
-        trailMat.uniforms.uTime.value = time;
-
-        // 彗星微动逻辑
-        // 主要在 X 轴(前后)轻微漂移
-        let driftX = Math.sin(time * 0.7) * 0.4 + Math.sin(time * 1.3) * 0.1;
-        // 在 Y 轴(上下)极轻微浮动，保持在线上
-        let driftY = Math.cos(time * 0.5) * 0.05;
-
-        cometGroup.position.set(driftX, driftY, 0);
-
-        renderer.render(scene, camera);
-    }
-
-    // 窗口适配
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    animate();
-</script>
 </body>
 </html>
