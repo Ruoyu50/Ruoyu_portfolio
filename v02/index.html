@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>智慧空间 - 丝滑融合版</title>
+    <title>智慧空间 - 无暇版</title>
     <style>
         /* 0. 空间基调 */
         body {
@@ -13,11 +13,10 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* 开启硬件加速基底 */
-            transform: translateZ(0);
+            transform: translateZ(0); /* 开启硬件加速 */
         }
 
-        /* 1. 意识载体 (The Vessel) */
+        /* 1. 意识载体 */
         .consciousness-vessel {
             position: relative;
             width: 100%;
@@ -25,88 +24,78 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 使用 GPU 友好的 transform 动画 */
             animation: 
                 drift-x 6s ease-in-out infinite alternate, 
                 drift-y 4s ease-in-out infinite alternate;
             will-change: transform;
         }
 
-        /* 2. 背景轨道 (The Rail) */
+        /* 2. 背景轨道 */
         .rail {
             position: absolute;
             width: 100%;
             height: 1px;
-            background: rgba(255, 255, 255, 0.15);
-            /* 使用简单的渐变替代昂贵的 mask 动画 */
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 30%, rgba(255,255,255,0.2) 70%, transparent 100%);
+            /* 降低不透明度，让它更隐蔽 */
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent 100%);
         }
 
-        /* 3. 意识核心 (The Head) */
+        /* 3. 意识核心 */
         .head {
             position: relative;
             width: 10px; 
             height: 10px; 
-            background-color: #fff; /* 纯白核心 */
+            background-color: #fff;
             border-radius: 50%;
-            z-index: 10; /* 关键：在拖尾之上 */
+            z-index: 10;
             
-            /* 
-               光晕优化：
-               使用静态的强大光晕，通过 scale 动画模拟呼吸，
-               避免频繁重绘 box-shadow 属性。
-            */
-            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.4);
+            /* 核心光晕 */
+            box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.5);
             animation: pulse-scale 3s ease-in-out infinite alternate;
             will-change: transform;
         }
 
-        /* 4. 融合拖尾 (The Seamless Trail) */
+        /* 4. 融合拖尾 (The Flawless Trail) */
         .trail {
             position: absolute;
-            right: 50%; /* 从中心开始 */
-            
-            /* 
-               尺寸调整：
-               高度设为 6px (略小于球体 10px)，
-               这样插入球体时会被球体完美包裹，不会露边。
-            */
+            right: 50%; 
             height: 6px; 
             width: 140px; 
+            margin-right: -5px; /* 插入球体 */
 
             /* 
-               位置调整（关键）：
-               向右偏移 6px (margin-right)，
-               这意味着它实际上插进了球体中心，
-               从视觉上完全消除了缝隙。
+               【关键修复 1】：颜色逻辑
+               不要渐变到 transparent (透明)，那样容易发灰。
+               要渐变到 black (纯黑)，在混合模式下黑即是无。
+               但因为我们用了 mask，这里保持纯白到透明即可，交给 mask 去切。
             */
-            margin-right: -5px; 
-
-            /* 
-               颜色融合优化：
-               起始颜色必须是 #FFF (不透明纯白)，
-               这样才能和球体无缝融合。
-               向左渐变到透明。
-            */
-            background: linear-gradient(to left, #fff 10%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(to left, #fff 20%, rgba(255,255,255,0) 100%);
             
             /* 
-               柔光模拟：
-               不用 filter:blur (太卡)。
-               改用 box-shadow 制造柔边。
+               【关键修复 2】：光晕逻辑
+               不再给左边留影子。
             */
-            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.3);
             
-            border-radius: 100px; /* 圆润头部 */
-            z-index: 5; /* 在球体之下 */
+            border-radius: 100px; 
+            z-index: 5; 
+            transform-origin: right center; 
+            
+            /* 
+               【核心大招】：CSS 遮罩 (Mask)
+               这是消除“破绽”的终极手段。
+               它像一个滤网，强制把拖尾的左侧（尾部）给“抹除”掉。
+               to right: 从左(0%)到右(100%)
+               transparent(看不见) -> black(看得见)
+               这样，尾部最左端的那个 vertex 光圈会被直接切掉，不再闭合。
+            */
+            mask-image: linear-gradient(to right, transparent 0%, black 40%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
 
-            transform-origin: right center; /* 以连接处为轴摆动 */
-            
             animation: tail-sway 3s ease-in-out infinite alternate;
             will-change: transform, opacity;
         }
 
-        /* === 动画剧本 === */
+        /* === 动画 === */
 
         @keyframes drift-x {
             from { transform: translateX(-25px); }
@@ -118,27 +107,19 @@
             to   { transform: translateY(4px); }
         }
 
-        /* 
-           缩放呼吸：
-           比改变 shadow 性能更好，且视觉上一样。
-        */
         @keyframes pulse-scale {
             0%   { transform: scale(0.95); opacity: 0.9; }
             100% { transform: scale(1.05); opacity: 1.0; }
         }
 
-        /* 
-           尾部摆动：
-           只用 transform (GPU加速)，不触发布局重排。
-        */
         @keyframes tail-sway {
             0% {
                 transform: rotate(1.5deg) scaleX(0.95);
-                opacity: 0.7;
+                opacity: 0.8;
             }
             100% {
                 transform: rotate(-1.5deg) scaleX(1.05);
-                opacity: 0.9;
+                opacity: 1.0;
             }
         }
 
@@ -148,7 +129,6 @@
 
     <div class="consciousness-vessel">
         <div class="rail"></div>
-        <!-- 注意：拖尾在球体下层 -->
         <div class="trail"></div>
         <div class="head"></div>
     </div>
