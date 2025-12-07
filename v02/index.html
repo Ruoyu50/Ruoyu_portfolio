@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>智慧空间 - 灵动残影版</title>
+    <title>智慧空间 - 丝滑融合版</title>
     <style>
         /* 0. 空间基调 */
         body {
@@ -13,6 +13,8 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            /* 开启硬件加速基底 */
+            transform: translateZ(0);
         }
 
         /* 1. 意识载体 (The Vessel) */
@@ -23,137 +25,120 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 复合漂流：给整体一个基础的游动感 */
+            /* 使用 GPU 友好的 transform 动画 */
             animation: 
                 drift-x 6s ease-in-out infinite alternate, 
                 drift-y 4s ease-in-out infinite alternate;
+            will-change: transform;
         }
 
-        /* 2. 背景智慧弦 (The Rail) - 保持不变，作为静谧的参考 */
+        /* 2. 背景轨道 (The Rail) */
         .rail {
             position: absolute;
             width: 100%;
             height: 1px;
-            background: #fff;
-            opacity: 0.15;
-            mask-image: linear-gradient(to right, transparent, black 40%, black 60%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 40%, black 60%, transparent);
+            background: rgba(255, 255, 255, 0.15);
+            /* 使用简单的渐变替代昂贵的 mask 动画 */
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 30%, rgba(255,255,255,0.2) 70%, transparent 100%);
         }
 
         /* 3. 意识核心 (The Head) */
         .head {
             position: relative;
-            width: 8px;
-            height: 8px;
-            background-color: #fff;
+            width: 10px; 
+            height: 10px; 
+            background-color: #fff; /* 纯白核心 */
             border-radius: 50%;
-            z-index: 10;
-            /* 光晕呼吸 */
-            animation: pulse-glow 3s infinite alternate; 
+            z-index: 10; /* 关键：在拖尾之上 */
+            
+            /* 
+               光晕优化：
+               使用静态的强大光晕，通过 scale 动画模拟呼吸，
+               避免频繁重绘 box-shadow 属性。
+            */
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.4);
+            animation: pulse-scale 3s ease-in-out infinite alternate;
+            will-change: transform;
         }
 
-        /* 
-           4. 【核心修改】光球残影 (The Afterimage Trail)
-           不再是一根线，而是一束“被拉长、被模糊的光”。
-        */
+        /* 4. 融合拖尾 (The Seamless Trail) */
         .trail {
             position: absolute;
-            right: 50%; /* 锚点在中心 */
+            right: 50%; /* 从中心开始 */
             
             /* 
-               修改点 A: 
-               宽度稍微缩短一点，让它更聚气。
-               高度设为 6px (接近球体大小)，而不再是 1px。
-               这样它就有“体积”了。
+               尺寸调整：
+               高度设为 6px (略小于球体 10px)，
+               这样插入球体时会被球体完美包裹，不会露边。
             */
-            width: 120px; 
             height: 6px; 
-            
-            /* 
-               修改点 B: 
-               利用 mask-image 制造“拖尾变细”的效果。
-               虽然它是矩形，但我们在遮罩上把它切成类似水滴的形状。
-            */
-            background: rgba(255, 255, 255, 0.6);
-            
-            /* 
-               修改点 C: 
-               高斯模糊 (Blur)。
-               这是产生“残影感”的关键。
-               它模糊了边缘，让它看起来像是一团移动得很快的光雾。
-            */
-            filter: blur(3px);
-            
-            /* 稍微向右偏移，插入球体光晕中，无缝衔接 */
-            margin-right: 2px;
-            
-            /* 设置旋转中心在最右侧（靠近球头的位置） */
-            transform-origin: right center;
+            width: 140px; 
 
             /* 
-               修改点 D: 
-               添加“摆动”动画 (tail-sway)。
-               让尾巴不仅仅是跟着跑，还会上下微微摆动，
-               打破“直线”的僵硬感。
+               位置调整（关键）：
+               向右偏移 6px (margin-right)，
+               这意味着它实际上插进了球体中心，
+               从视觉上完全消除了缝隙。
             */
-            animation: 
-                trail-fade 2s ease-in-out infinite alternate, /* 忽明忽暗 */
-                tail-sway 3s ease-in-out infinite alternate;  /* 上下摆动 */
+            margin-right: -5px; 
+
+            /* 
+               颜色融合优化：
+               起始颜色必须是 #FFF (不透明纯白)，
+               这样才能和球体无缝融合。
+               向左渐变到透明。
+            */
+            background: linear-gradient(to left, #fff 10%, rgba(255,255,255,0) 100%);
+            
+            /* 
+               柔光模拟：
+               不用 filter:blur (太卡)。
+               改用 box-shadow 制造柔边。
+            */
+            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.2);
+            
+            border-radius: 100px; /* 圆润头部 */
+            z-index: 5; /* 在球体之下 */
+
+            transform-origin: right center; /* 以连接处为轴摆动 */
+            
+            animation: tail-sway 3s ease-in-out infinite alternate;
+            will-change: transform, opacity;
         }
 
         /* === 动画剧本 === */
 
         @keyframes drift-x {
-            from { transform: translateX(-20px); }
-            to   { transform: translateX(20px); }
+            from { transform: translateX(-25px); }
+            to   { transform: translateX(25px); }
         }
 
         @keyframes drift-y {
-            from { transform: translateY(-3px); }
-            to   { transform: translateY(3px); }
-        }
-
-        @keyframes pulse-glow {
-            0% {
-                box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.4);
-                transform: scale(0.95);
-            }
-            100% {
-                box-shadow: 0 0 20px 4px rgba(255, 255, 255, 0.7);
-                transform: scale(1.05);
-            }
+            from { transform: translateY(-4px); }
+            to   { transform: translateY(4px); }
         }
 
         /* 
-           新动画：尾部摆动 
-           这会让直线的拖尾产生一种“S型”的错觉，
-           看起来像是在水流中飘动的丝带。
+           缩放呼吸：
+           比改变 shadow 性能更好，且视觉上一样。
+        */
+        @keyframes pulse-scale {
+            0%   { transform: scale(0.95); opacity: 0.9; }
+            100% { transform: scale(1.05); opacity: 1.0; }
+        }
+
+        /* 
+           尾部摆动：
+           只用 transform (GPU加速)，不触发布局重排。
         */
         @keyframes tail-sway {
             0% {
-                transform: rotate(2deg) scaleX(0.9);
-                opacity: 0.5;
+                transform: rotate(1.5deg) scaleX(0.95);
+                opacity: 0.7;
             }
             100% {
-                transform: rotate(-2deg) scaleX(1.1);
-                opacity: 0.8;
-            }
-        }
-        
-        /* 
-           新动画：残影渐隐
-           模拟能量的不稳定流逝
-        */
-        @keyframes trail-fade {
-            0% { 
-                /* 稍微透明，并且让mask遮罩更狠一点，尾巴变短 */
-                mask-image: linear-gradient(to left, black 20%, transparent 80%);
-                -webkit-mask-image: linear-gradient(to left, black 20%, transparent 80%);
-            }
-            100% { 
-                /* 稍微实一点，尾巴变长 */
-                mask-image: linear-gradient(to left, black 40%, transparent 100%);
-                -webkit-mask-image: linear-gradient(to left, black 40%, transparent 100%);
+                transform: rotate(-1.5deg) scaleX(1.05);
+                opacity: 0.9;
             }
         }
 
@@ -162,13 +147,9 @@
 <body>
 
     <div class="consciousness-vessel">
-        <!-- 轨道 -->
         <div class="rail"></div>
-        
-        <!-- 残影：注意它的顺序在球后面 -->
+        <!-- 注意：拖尾在球体下层 -->
         <div class="trail"></div>
-        
-        <!-- 核心 -->
         <div class="head"></div>
     </div>
 
