@@ -4,368 +4,261 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LexiCard - UX Case Study</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 您可以继续使用之前的 style.css，但可能需要根据新结构进行调整 -->
+    <link rel="stylesheet" href="style.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <!-- ==================================================== -->
-    <!-- Hero Section -->
+    <!-- 1. HERO & PROJECT OVERVIEW -->
     <!-- ==================================================== -->
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">LexiCard: Integrated Flashcards & Notes</h1>
-            <p class="hero-subtitle">A UX case study on designing a smart learning app that fuses spaced repetition flashcards with deeply integrated notes to boost long-term retention for students and lifelong learners.</p>
+            <h1 class="hero-title">LexiCard: Fusing Notes with Recall</h1>
+            <p class="hero-subtitle">An end-to-end product design case study for an intelligent learning app that seamlessly integrates flashcards and notes to enhance knowledge retention.</p>
         </div>
         <div class="hero-image">
-            <img src="https://placehold.co/1200x600/1E293B/FFFFFF?text=LexiCard+App+Mockup" alt="LexiCard App Hero Image" />
+            <img src="https://placehold.co/1200x600/00a389/FFFFFF?text=LexiCard+Hero+Mockup" alt="LexiCard App Hero Image" />
         </div>
     </section>
 
     <!-- ==================================================== -->
-    <!-- Project Overview -->
-    <!-- ==================================================== -->
-    <section id="overview" class="overview">
-        <div class="container">
-            <div class="section-content">
-                <div class="overview-text">
-                    <h2>Project Overview</h2>
-                    <div class="overview-details">
-                        <div class="detail-item">
-                            <h3>My Role</h3>
-                            <p>Product Designer, UX Researcher</p>
-                        </div>
-                        <div class="detail-item">
-                            <h3>Duration</h3>
-                            <p>12 weeks</p>
-                        </div>
-                        <div class="detail-item">
-                            <h3>Tools</h3>
-                            <p>Figma, Miro, Notion</p>
-                        </div>
-                        <div class="detail-item">
-                            <h3>Project Type</h3>
-                            <p>Personal Portfolio Project</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="overview-image">
-                    <img src="https://placehold.co/600x400/1E293B/FFFFFF?text=Project+Moodboard" alt="Project Moodboard" />
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================================================== -->
-    <!-- Problem Statement -->
+    <!-- 2. THE PROBLEM & OPPORTUNITY -->
     <!-- ==================================================== -->
     <section class="problem">
         <div class="container">
-            <h2>Problem Statement</h2>
-            <p class="problem-text">Modern learners are forced to use separate apps for flashcards (like Anki or Quizlet) and note-taking (like Notion or GoodNotes). This digital fragmentation creates friction, preventing them from building a connected knowledge base where detailed notes directly support memory recall, leading to inefficient study and forgotten context.</p>
+            <h2>The Fragmented Study Workflow</h2>
+            <p class="problem-text">Students and lifelong learners constantly switch between note-taking apps and flashcard tools. This disconnect breaks their study flow, isolates context from recall, and ultimately leads to inefficient learning and knowledge gaps.</p>
         </div>
     </section>
 
     <!-- ==================================================== -->
-    <!-- User Personas -->
+    <!-- 3. RESEARCH - PERSONA, EMPATHY, JOURNEY -->
     <!-- ==================================================== -->
-    <section class="personas">
+    <section id="research">
         <div class="container">
-            <h2>User Personas</h2>
-            <p>Based on initial research, I developed two primary personas to guide the design process: a university student facing heavy academic loads and a professional dedicated to continuous learning.</p>
+            <h2>Understanding the Learner</h2>
             
-            <!-- Persona 1: The Student -->
-            <div class="persona-detailed category-student" style="margin-bottom: 40px;">
-                <img src="https://placehold.co/300x300/F0F9FF/0284C7?text=Chloe" alt="Student Persona Chloe" />
-                <div class="persona-info">
-                    <h3>Chloe, The University Student</h3>
-                    <div class="persona-details">
-                        <div><h4>Demographics</h4><ul><li>Age: 21</li><li>Occupation: Medical Student</li><li>Location: Boston, MA</li></ul></div>
-                        <div><h4>Goals</h4><ul><li>Efficiently memorize vast amounts of information for exams.</li><li>Understand the "why" behind facts, not just rote memorization.</li><li>Keep all study materials for a single subject in one place.</li></ul></div>
-                        <div><h4>Frustrations</h4><ul><li>"I make flashcards in one app, but all my detailed diagrams and lecture notes are in another. I constantly switch between them."</li><li>"When I review a flashcard and forget the context, I have to manually search through my notes, which breaks my study flow."</li><li>"Anki is powerful but ugly and complicated to set up."</li></ul></div>
+            <!-- Virtual Persona -->
+            <article class="research-artifact">
+                <h3>Virtual Persona</h3>
+                <p>Meet Alex, a composite persona representing our target users, crafted from initial interviews and surveys.</p>
+                <div class="persona-detailed">
+                    <img src="https://placehold.co/300x300/e0f5f2/007a65?text=Alex" alt="Persona of Alex" />
+                    <div class="persona-info">
+                        <h3>Alex, The Motivated Learner</h3>
+                        <div class="persona-details">
+                            <div><h4>Bio</h4><ul><li>Age: 22</li><li>Occupation: Grad Student</li><li>Goal: Master complex topics for exams and long-term career.</li></ul></div>
+                            <div><h4>Behaviors</h4><ul><li>Takes detailed notes during lectures.</li><li>Spends hours manually creating flashcards from notes.</li><li>Feels Anki is powerful but clunky.</li><li>Loves Notion for its structure but can't "quiz" himself.</li></ul></div>
+                            <div><h4>Pain Points & Frustrations</h4><ul><li>"When I forget a flashcard's context, I have to stop and search my notes. It's disruptive."</li><li>"Making cards is so time-consuming, I often fall behind."</li><li>"My knowledge feels scattered across too many apps."</li></ul></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- Persona 2: The Lifelong Learner -->
-            <div class="persona-detailed category-professional">
-                <img src="https://placehold.co/300x300/FFFBEB/D97706?text=Mark" alt="Professional Persona Mark" />
-                <div class="persona-info">
-                    <h3>Mark, The Lifelong Learner</h3>
-                    <div class="persona-details">
-                        <div><h4>Demographics</h4><ul><li>Age: 35</li><li>Occupation: Software Engineer</li><li>Location: Remote</li></ul></div>
-                        <div><h4>Goals</h4><ul><li>Learn new programming languages and frameworks for career growth.</li><li>Retain knowledge for the long term, not just for a specific project.</li><li>Easily capture and revisit interesting concepts from articles and books.</li></ul></div>
-                        <div><h4>Frustrations</h4><ul><li>"I have a graveyard of book notes in Notion that I never look at again."</li><li>"Creating flashcards feels like a chore. I wish I could highlight something in my notes and have it automatically become a reviewable item."</li><li>"I want to see how small concepts connect to a larger topic, but my tools don't support this easily."</li></ul></div>
-                    </div>
+            <!-- Empathy Map -->
+            <article class="research-artifact">
+                <h3>Empathy Map</h3>
+                <p>We mapped Alex's experience to build deep, shared understanding of their mindset.</p>
+                <div class="empathy-image">
+                    <img src="https://placehold.co/1200x700/e0f0ff/0067b8?text=Empathy+Map" alt="User Empathy Map" />
                 </div>
-            </div>
-        </div>
-    </section>
+            </article>
 
-    <!-- ==================================================== -->
-    <!-- User Empathy Map -->
-    <!-- ==================================================== -->
-    <section class="empathy-map">
-        <div class="container">
-            <h2>User Empathy Map</h2>
-            <p>To deepen my understanding of the user's mindset, I created an empathy map based on Chloe, the medical student. This helped synthesize research and focus on her core emotional and cognitive needs.</p>
-            <div class="empathy-image">
-                <img src="https://placehold.co/1200x800/E0F2FE/075985?text=Empathy+Map" alt="User Empathy Map" />
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================================================== -->
-    <!-- User Journey Map -->
-    <!-- ==================================================== -->
-    <section class="empathy-map"> <!-- Reusing class for similar styling -->
-        <div class="container">
-            <h2>User Journey Map</h2>
-            <p>I mapped out the journey of a user trying to study for an exam using separate tools. This visualization clearly highlighted the key points of friction and opportunities for improvement that LexiCard could address.</p>
-            <div class="empathy-image">
-                <img src="https://placehold.co/1200x600/F3E8FF/6B21A8?text=User+Journey+Map" alt="User Journey Map" />
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================================================== -->
-    <!-- Competitor Analysis -->
-    <!-- ==================================================== -->
-    <section class="competitors">
-      <div class="container">
-        <h2>Competitor Analysis</h2>
-        <p>The market is divided between powerful but separate tools. No single app seamlessly integrates active recall (flashcards) with knowledge management (notes). This gap is LexiCard's primary opportunity.</p>
-        <div class="competitor-table-wrapper">
-          <table class="competitor-table">
-            <thead>
-              <tr>
-                <th>Competitor</th>
-                <th>Category</th>
-                <th>Strengths</th>
-                <th>Weaknesses</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Anki</strong></td>
-                <td>Flashcards</td>
-                <td>Gold-standard spaced repetition algorithm, highly customizable.</td>
-                <td>Steep learning curve, dated UI, poor note-taking features.</td>
-              </tr>
-              <tr>
-                <td><strong>Quizlet</strong></td>
-                <td>Flashcards</td>
-                <td>User-friendly, social features, multiple study modes.</td>
-                <td>Weaker algorithm, subscription-heavy, very basic notes.</td>
-              </tr>
-              <tr>
-                <td><strong>Notion</strong></td>
-                <td>Notes/PKM</td>
-                <td>Extremely flexible, powerful databases, great for organization.</td>
-                <td>No native spaced repetition system (requires workarounds).</td>
-              </tr>
-              <tr>
-                <td><strong>Obsidian</strong></td>
-                <td>Notes/PKM</td>
-                <td>Local-first, fantastic linking/graph view, extensible with plugins.</td>
-                <td>Flashcard plugins exist but are not core to the experience.</td>
-              </tr>
-              <tr>
-                <td><strong>RemNote</strong></td>
-                <td>Hybrid</td>
-                <td>One of the few apps that tries to integrate both.</td>
-                <td>Complex UI can be overwhelming, less polished than competitors.</td>
-              </tr>
-              <tr>
-                <td><strong>GoodNotes</strong></td>
-                <td>Notes</td>
-                <td>Excellent handwriting/PDF annotation experience.</td>
-                <td>No flashcard or spaced repetition functionality.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-    
-    <!-- ==================================================== -->
-    <!-- MVP & Key Features -->
-    <!-- ==================================================== -->
-    <section class="features">
-        <div class="container">
-            <h2>MVP & Key Features</h2>
-            <p>To address the core problem, the Minimum Viable Product (MVP) focused on four critical features that create a unified learning loop.</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <img src="https://placehold.co/600x400/ECFDF5/059669?text=Feature+1" alt="Integrated Editor" />
-                    <h3>Integrated Note & Card Editor</h3>
-                    <p>Create rich notes with text, images, and lists. Seamlessly highlight any content to instantly convert it into a flashcard without leaving the note.</p>
+            <!-- User Journey Map -->
+            <article class="research-artifact">
+                <h3>User Journey Map: The Disconnected Path</h3>
+                <p>Visualizing the current study process revealed key areas of friction and opportunities for intervention.</p>
+                 <div class="empathy-image">
+                    <img src="https://placehold.co/1200x600/fdf4e7/efa440?text=User+Journey+Map" alt="User Journey Map Highlighting Pain Points" />
                 </div>
-                <div class="feature-card">
-                    <img src="https://placehold.co/600x400/ECFDF5/059669?text=Feature+2" alt="Smart Review System" />
-                    <h3>Smart Review System</h3>
-                    <p>A dedicated review queue, powered by a spaced repetition algorithm, pulls cards from all your notes into a single, daily study session.</p>
-                </div>
-                <div class="feature-card">
-                    <img src="https://placehold.co/600x400/ECFDF5/059669?text=Feature+3" alt="Context Linking" />
-                    <h3>Bi-Directional Context Linking</h3>
-                    <p>Every flashcard is automatically linked back to its source note. When reviewing, tap a button to instantly see the card in its original context, eliminating confusion.</p>
-                </div>
-                <div class="feature-card">
-                    <img src="https://placehold.co/600x400/ECFDF5/059669?text=Feature+4" alt="Knowledge Hub" />
-                    <h3>Organized Knowledge Hub</h3>
-                    <p>Group your notes and card sets into subjects or "Libraries." A clean dashboard provides a high-level view of your learning progress and upcoming reviews.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================================================== -->
-    <!-- Information Architecture -->
-    <!-- ==================================================== -->
-    <section class="empathy-map"> <!-- Reusing class for similar styling -->
-        <div class="container">
-            <h2>Information Architecture</h2>
-            <p>The app's structure was designed to be simple and scalable, centered around a main navigation bar that provides quick access to the four primary user contexts.</p>
-            <div class="empathy-image">
-                <img src="https://placehold.co/1200x700/FEF2F2/991B1B?text=Information+Architecture" alt="Information Architecture Diagram" />
-            </div>
+            </article>
         </div>
     </section>
     
     <!-- ==================================================== -->
-    <!-- Wireframes -->
+    <!-- 4. STRATEGY - BUSINESS & BRAND -->
     <!-- ==================================================== -->
-    <section class="prototype">
+    <section id="strategy" class="overview">
         <div class="container">
-            <h2>Wireframes</h2>
-            <p>Based on the defined features and architecture, I created wireframes for the core screens. These low-fidelity designs focused on layout, user flow, and functionality before any visual styling was applied.</p>
-            <div class="prototype-gallery">
-                <div class="prototype-item">
-                    <img src="https://placehold.co/800x600/F1F5F9/475569?text=Home+Dashboard+Wireframe" alt="Home Dashboard Wireframe" />
-                    <p><strong>Home Dashboard:</strong> Quick access to daily reviews and recently added notes.</p>
+            <h2>Defining the Strategy</h2>
+
+            <!-- Business Plan -->
+            <article class="strategy-section">
+                <h3>Business Plan Summary</h3>
+                <div class="business-plan-grid">
+                    <div class="strategy-item"><h4>Target Audience</h4><p>University students, medical students, language learners, and professionals in certification programs.</p></div>
+                    <div class="strategy-item"><h4>Monetization</h4><p>A freemium model. Core features are free, with a "Pro" subscription unlocking advanced features like AI-powered card creation, unlimited cloud storage, and collaborative libraries.</p></div>
+                    <div class="strategy-item"><h4>Marketing</h4><p>Content marketing via study-help blogs, partnerships with educational influencers, and targeted ads on platforms like Reddit and YouTube.</p></div>
                 </div>
-                <div class="prototype-item">
-                    <img src="https://placehold.co/800x600/F1F5F9/475569?text=Note+Editor+Wireframe" alt="Note Editor Wireframe" />
-                    <p><strong>Note Editor:</strong> The core screen where users write notes and create linked flashcards.</p>
+            </article>
+
+            <!-- Brand Strategy -->
+            <article class="strategy-section">
+                <h3>Brand Strategy</h3>
+                <div class="brand-identity-grid">
+                    <div class="strategy-item"><h4>Vision</h4><p>To be the world's most effective platform for building and retaining knowledge.</p></div>
+                    <div class="strategy-item"><h4>Mission</h4><p>To empower learners by seamlessly integrating deep understanding (notes) with lasting memory (recall).</p></div>
+                    <div class="strategy-item"><h4>Personality</h4><p>Intelligent, encouraging, clear, and calm. A trustworthy partner in learning.</p></div>
+                    <div class="strategy-item"><h4>Design Principles</h4><p>1. Flow over Friction. 2. Clarity over Clutter. 3. Integration over Separation.</p></div>
                 </div>
-                <div class="prototype-item">
-                    <img src="https://placehold.co/800x600/F1F5F9/475569?text=Review+Session+Wireframe" alt="Review Session Wireframe" />
-                    <p><strong>Review Session:</strong> A focused, distraction-free interface for active recall.</p>
+            </article>
+
+            <!-- Competitor Analysis -->
+            <article class="strategy-section">
+                <h3>Competitor Analysis (10 Platforms)</h3>
+                <p>The market is crowded but specialized. LexiCard's opportunity lies in bridging the gap between comprehensive note-takers and powerful spaced repetition systems (SRS).</p>
+                <div class="competitor-table-wrapper">
+                    <table class="competitor-table">
+                        <thead><tr><th>Competitor</th><th>Category</th><th>Key Differentiator</th><th>Weakness</th></tr></thead>
+                        <tbody>
+                            <tr><td>Anki</td><td>SRS Flashcards</td><td>Powerful, customizable SRS algorithm</td><td>Dated UI, steep learning curve</td></tr>
+                            <tr><td>Quizlet</td><td>SRS Flashcards</td><td>User-friendly, social study sets</td><td>Weaker algorithm, subscription-heavy</td></tr>
+                            <tr><td>RemNote</td><td>Hybrid</td><td>Integrated notes and flashcards</td><td>Complex, often overwhelming UI</td></tr>
+                            <tr><td>Notion</td><td>Notes/PKM</td><td>Flexible databases and organization</td><td>No native SRS functionality</td></tr>
+                            <tr><td>Obsidian</td><td>Notes/PKM</td><td>Local-first, graph view, plugins</td><td>SRS is a plugin, not a core feature</td></tr>
+                            <tr><td>GoodNotes</td><td>Handwritten Notes</td><td>Best-in-class digital paper experience</td><td>No flashcard or SRS system</td></tr>
+                            <tr><td>Memrise</td><td>Language Learning</td><td>Gamified, video-based learning</td><td>Niche focus, not for general notes</td></tr>
+                            <tr><td>Brainscape</td><td>SRS Flashcards</td><td>Confidence-based repetition system</td><td>Less flexible card creation</td></tr>
+                            <tr><td>Evernote</td><td>General Notes</td><td>Powerful search and web clipper</td><td>No SRS, bloated with legacy features</td></tr>
+                            <tr><td>SuperMemo</td><td>SRS Flashcards</td><td>The original, scientifically-driven SRS</td><td>Extremely complex, niche user base</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+                <h4>Brand Positioning Analysis</h4>
+                <p>LexiCard will position itself in the top-right quadrant: high on **Integration** and high on **User Experience**. While RemNote is an integrator, it struggles with UX. While Notion and Anki excel at their single purpose, they lack integration.</p>
+                <div class="empathy-image"><img src="https://placehold.co/1000x600/f2f4f7/1a1f24?text=Brand+Positioning+Matrix+(2x2)" alt="Brand Positioning Matrix"></div>
+            </article>
         </div>
     </section>
 
     <!-- ==================================================== -->
-    <!-- Brand & Visual Design -->
+    <!-- 5. DESIGN EXPLORATION - STYLESCAPES -->
     <!-- ==================================================== -->
-    <section class="learnings"> <!-- Reusing class -->
+    <section id="stylescapes">
         <div class="container">
-            <h2>Brand Strategy & Visual Design</h2>
-            <p>The brand identity aims to be clean, trustworthy, and motivating, guided by the "Tech Minimal + Comfortable Learning" philosophy. I explored three distinct visual directions through stylescapes to find the perfect balance.</p>
+            <h2>Design Exploration: Three Brand Directions</h2>
+            <p>To define LexiCard's visual identity, I created three distinct stylescapes. Each explores a unique combination of logo, color, typography, and UI elements, and is applied to the same wireframe to show its real-world impact. <strong>This was the most critical part of the design process.</strong></p>
+
+            <!-- Direction A -->
+            <article class="stylescape-direction">
+                <h3>Direction A: Serene Focus</h3>
+                <p class="stylescape-concept"><strong>Concept:</strong> Calm, academic, trustworthy. A clean and minimal interface that promotes focus and reduces cognitive load. Based on the provided design tokens.</p>
+                <div class="stylescape-content">
+                    <img src="https://placehold.co/1200x500/fcfcfb/1a1f24?text=Stylescape+A:+Logo,+Colors,+Fonts,+UI,+Mood" alt="Stylescape for Direction A: Serene Focus" />
+                    <h4>Application on Wireframe</h4>
+                    <img src="https://placehold.co/1200x800/e0f5f2/007a65?text=Direction+A+Applied+to+Home+Screen" alt="Wireframe styled with Direction A" />
+                </div>
+            </article>
+
+            <!-- Direction B -->
+            <article class="stylescape-direction">
+                <h3>Direction B: Creative Spark</h3>
+                <p class="stylescape-concept"><strong>Concept:</strong> Energetic, creative, approachable. Uses a warmer, more vibrant palette and softer typography to feel inspiring and less clinical. <strong>(Note: No repeated colors or fonts from Direction A).</strong></p>
+                <div class="stylescape-content">
+                    <img src="https://placehold.co/1200x500/FFFBEB/D97706?text=Stylescape+B:+New+Logo,+Colors,+Fonts,+UI,+Mood" alt="Stylescape for Direction B: Creative Spark" />
+                    <h4>Application on Wireframe</h4>
+                    <img src="https://placehold.co/1200x800/FEF3C7/9A3412?text=Direction+B+Applied+to+Home+Screen" alt="Wireframe styled with Direction B" />
+                </div>
+            </article>
+
+            <!-- Direction C -->
+            <article class="stylescape-direction">
+                <h3>Direction C: Modern Power</h3>
+                <p class="stylescape-concept"><strong>Concept:</strong> Dark-mode first, tech-focused, efficient. A high-contrast, bold aesthetic for power users who are motivated by data and performance. <strong>(Note: No repeated colors or fonts from A or B).</strong></p>
+                <div class="stylescape-content">
+                    <img src="https://placehold.co/1200x500/1E1B4B/818CF8?text=Stylescape+C:+New+Logo,+Colors,+Fonts,+UI,+Mood" alt="Stylescape for Direction C: Modern Power" />
+                    <h4>Application on Wireframe</h4>
+                    <img src="https://placehold.co/1200x800/312E81/A5B4FC?text=Direction+C+Applied+to+Home+Screen" alt="Wireframe styled with Direction C" />
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ==================================================== -->
+    <!-- 6. THE SOLUTION - MVP, IA, WIREFRAMES -->
+    <!-- ==================================================== -->
+    <section id="solution" class="overview">
+        <div class="container">
+            <h2>Designing the Solution</h2>
+            <p style="text-align: center; max-width: 800px; margin: -2rem auto 4rem auto;">Based on feedback favoring the clarity of **Direction A (Serene Focus)**, I proceeded to develop the core solution, focusing on a streamlined and intuitive user experience.</p>
             
-            <div class="learnings-grid">
-                <div class="learning-item">
-                    <h3>Vision & Mission</h3>
-                    <p><strong>Vision:</strong> To create the most efficient and integrated platform for building lasting knowledge. <strong>Mission:</strong> To empower learners by seamlessly connecting deep understanding with long-term memory.</p>
+            <!-- MVP Features -->
+            <article class="solution-artifact">
+                <h3>MVP Features</h3>
+                <div class="features-grid">
+                    <div class="feature-card"><h4>Integrated Editor</h4><p>Create notes and instantly turn any piece of text into a linked flashcard.</p></div>
+                    <div class="feature-card"><h4>Smart Review Queue</h4><p>A single, daily review session powered by a spaced repetition algorithm.</p></div>
+                    <div class="feature-card"><h4>Context-Aware Cards</h4><p>Every card links back to its source note, providing instant context during review.</p></div>
+                    <div class="feature-card"><h4>Simple Organization</h4><p>Organize notes and decks into clear, intuitive subjects or "Libraries."</p></div>
                 </div>
-                <div class="learning-item">
-                    <h3>Brand Personality</h3>
-                    <p><strong>Supportive:</strong> A helpful guide for learning. <strong>Intelligent:</strong> Smart and efficient. <strong>Calm:</strong> A focused, low-stress environment. <strong>Minimal:</strong> Uncluttered and straight to the point.</p>
-                </div>
-                <div class="learning-item">
-                    <h3>Design Principles</h3>
-                    <p>Clarity over clutter. Flow over friction. Integration over separation. Consistency over novelty.</p>
-                </div>
-            </div>
-
-            <h3 style="text-align: center; margin-top: 60px; margin-bottom: 20px;">Stylescape Explorations</h3>
-
-            <!-- Stylescape 1 -->
-            <div class="empathy-image" style="margin-bottom: 40px;">
-                <h4>Direction 1: "Focus" - Tech Minimal</h4>
-                <p>This direction uses a monochromatic palette with a single, vibrant accent color (Teal). It prioritizes clarity, legibility, and a calm, scientific feel, inspired by the provided color guidelines.</p>
-                <img src="https://placehold.co/1200x400/F0FDFA/0F766E?text=Stylescape+1:+Focus+(Tech+Minimal)" alt="Stylescape 1" />
-            </div>
-
-            <!-- Stylescape 2 -->
-            <div class="empathy-image" style="margin-bottom: 40px;">
-                <h4>Direction 2: "Growth" - Organic & Approachable</h4>
-                <p>This direction uses a warmer, more organic palette (soft greens, beige). It aims to feel more friendly and encouraging, using rounded corners and softer typography to reduce intimidation.</p>
-                <img src="https://placehold.co/1200x400/F7FEE7/365314?text=Stylescape+2:+Growth+(Organic)" alt="Stylescape 2" />
-            </div>
-
-            <!-- Stylescape 3 -->
-            <div class="empathy-image">
-                <h4>Direction 3: "Momentum" - Dark Mode & Energetic</h4>
-                <p>This direction is built for dark mode first, using high-contrast, energetic accents (bright blues, purples) to create a modern, dynamic feel. It's designed for users who are motivated by progress and data visualization.</p>
-                <img src="https://placehold.co/1200x400/1E1B4B/818CF8?text=Stylescape+3:+Momentum+(Dark+Mode)" alt="Stylescape 3" />
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================================================== -->
-    <!-- Final UI & Prototype -->
-    <!-- ==================================================== -->
-    <section class="prototype">
-        <div class="container">
-            <h2>Final UI & High-Fidelity Prototype</h2>
-            <p>After feedback, I chose the "Focus" (Tech Minimal) direction for its superior clarity and alignment with the brand's core principles. I applied this system to the wireframes to create the final high-fidelity designs and an interactive prototype.</p>
+            </article>
             
-            <div class="prototype-item" style="margin-bottom: 40px;">
-                <video controls poster="https://placehold.co/1200x675/0D9488/FFFFFF?text=Click+to+Play+Prototype+Video">
-                    <!-- <source src="assets/prototype_walkthrough.mp4" type="video/mp4"> -->
-                    Your browser does not support the video tag.
-                </video>
-                <p>A 1-minute video demonstrating the core user flow: creating a note, adding flashcards, and completing a review session.</p>
-            </div>
+            <!-- Information Architecture -->
+            <article class="solution-artifact">
+                <h3>Information Structure</h3>
+                <p>The IA is centered on a simple tab bar, ensuring users are never more than a tap away from their primary tasks: learning, organizing, reviewing, and tracking.</p>
+                <div class="empathy-image"><img src="https://placehold.co/1200x600/f2f4f7/1a1f24?text=Information+Architecture+Diagram" alt="Information Architecture"></div>
+            </article>
 
-            <div class="user-quote">
-                <blockquote>
-                    "Finally, I don't have to choose between good notes and good flashcards. Having the context one click away during a review is a game-changer."
-                </blockquote>
-                <cite>— User Testing Participant</cite>
-            </div>
+            <!-- Wireframes -->
+             <article class="solution-artifact">
+                <h3>Core Screen Wireframes (Incomplete)</h3>
+                <p>Low-fidelity wireframes were created to map out the core user flows before applying the visual style. Here are a few key screens.</p>
+                <div class="prototype-gallery">
+                    <div class="prototype-item"><img src="https://placehold.co/800x600/E2E8F0/475569?text=Home+Dashboard+Wireframe" alt="Home Dashboard Wireframe"><p>Home Dashboard</p></div>
+                    <div class="prototype-item"><img src="https://placehold.co/800x600/E2E8F0/475569?text=Note+Editor+Wireframe" alt="Note Editor Wireframe"><p>Note Editor & Card Creation</p></div>
+                    <div class="prototype-item"><img src="https://placehold.co/800x600/E2E8F0/475569?text=Review+Session+Wireframe" alt="Review Session Wireframe"><p>Active Review Session</p></div>
+                </div>
+            </article>
         </div>
     </section>
 
     <!-- ==================================================== -->
-    <!-- Learnings & Next Steps -->
+    <!-- 7. VALIDATION - TESTING & VIDEO PROTOTYPE -->
     <!-- ==================================================== -->
-    <section class="learnings">
+    <section id="validation">
         <div class="container">
-            <h2>Learnings & Next Steps</h2>
-            <div class="learnings-grid">
-                <div class="learning-item">
-                    <h3>Key Learning</h3>
-                    <p>The biggest challenge was balancing feature richness with simplicity. Early feedback showed users were overwhelmed by too many options. This reinforced the "Clarity over Clutter" principle, leading to a more streamlined UI.</p>
+            <h2>Validation & Final Product</h2>
+
+            <!-- User Testing -->
+            <article class="validation-artifact">
+                <h3>User Testing Interview Insights</h3>
+                <p>I conducted moderated usability tests with 5 target users. The feedback was synthesized into an affinity map, revealing key insights.</p>
+                 <div class="learnings-grid">
+                    <div class="learning-item"><h4>Key Positive</h4><p>"The one-click context link from a flashcard back to the note is a game-changer. This is the feature I've been missing."</p></div>
+                    <div class="learning-item"><h4>Key Opportunity</h4><p>Users wanted a faster way to create simple "term-definition" cards without typing everything out. This led to a "Quick Add" feature being prioritized.</p></div>
+                    <div class="learning-item"><h4>Key Quote</h4><p>"It feels clean. I'm not scared to use it like I am with other 'powerful' study apps. It just makes sense."</p></div>
                 </div>
-                <div class="learning-item">
-                    <h3>Future Feature: Collaboration</h3>
-                    <p>Enable users to share note libraries and flashcard decks with classmates or colleagues, turning solitary study into a collaborative effort.</p>
+            </article>
+            
+            <!-- Video -->
+            <article class="validation-artifact">
+                <h3>Final Prototype Video (~1 min)</h3>
+                <p>This video demonstrates the core loop of creating a note, generating flashcards, and completing a review session in the final high-fidelity prototype.</p>
+                <div class="prototype-item" style="max-width: 900px; margin: 2rem auto 0;">
+                    <video controls poster="https://placehold.co/1200x675/00a389/FFFFFF?text=Play+Prototype+Video">
+                        <!-- <source src="path/to/your/video.mp4" type="video/mp4"> -->
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-                <div class="learning-item">
-                    <h3>Future Feature: AI Assistant</h3>
-                    <p>Integrate AI to automatically suggest flashcards from long-form notes and generate summaries, further reducing the friction of creating study materials.</p>
-                </div>
-            </div>
+            </article>
         </div>
     </section>
 
     <!-- ==================================================== -->
-    <!-- Footer -->
+    <!-- 8. FOOTER -->
     <!-- ==================================================== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <h2>Thank you for reading!</h2>
-                <p>If you'd like to discuss this project further or see the full Figma file, feel free to reach out.</p>
+                <h2>Thank You</h2>
+                <p>This project was a fantastic journey in product thinking and user-centered design. If you have any questions or would like to collaborate, please get in touch.</p>
                 <p>Email: shiruoyu50@gmail.com</p>
-            </div>
-            <div class="footer-image">
-                <img src="https://placehold.co/600x400/0F172A/94A3B8?text=Let's+Connect" alt="Contact Image" />
             </div>
         </div>
     </footer>
+
 </body>
 </html>
