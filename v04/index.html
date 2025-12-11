@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorBridge - UX Case Study</title>
+    <style>
+        /* --- 0. Variables & Reset --- */
+        :root {
+            --bg-body: #0a0a0a;
+            --bg-card: #141414;
+            --bg-card-hover: #1f1f1f;
+            --accent: #6366f1; /* Indigo */
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            
+            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+            --easing: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-display);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- 1. Typography & Utilities --- */
+        h1, h2, h3, h4 { letter-spacing: -0.03em; line-height: 1.1; }
+        
+        .display-text {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 48px;
+            border-left: 4px solid var(--accent);
+            padding-left: 24px;
+        }
+
+        .text-lead { font-size: 1.25rem; color: var(--text-muted); max-width: 60ch; }
+        .tag { 
+            display: inline-block; 
+            padding: 4px 12px; 
+            border-radius: 100px; 
+            background: rgba(255,255,255,0.1); 
+            font-size: 0.85rem; 
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        /* --- 2. Animations --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--easing);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 3. Layout Components --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section { padding: 120px 0; border-bottom: 1px solid var(--border); }
+
+        /* --- 4. Navigation --- */
+        .sidebar-nav {
+            position: fixed;
+            top: 50%;
+            right: 32px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            mix-blend-mode: difference;
+        }
+        
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .nav-dot:hover, .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.5);
+        }
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            white-space: nowrap;
+            color: #fff;
+            font-size: 0.8rem;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .nav-dot:hover::after { opacity: 1; }
+
+        /* --- 5. Hero Section --- */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #000 60%);
+        }
+
+        /* --- 6. Problem & Value Prop (Grid) --- */
+        .pv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 48px;
+        }
+        .statement-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+        }
+        .value-formula {
+            font-family: monospace;
+            color: var(--accent);
+            background: rgba(99, 102, 241, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+
+        /* --- 7. Research (Bento Grid) --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 24px;
+        }
+        .bento-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 24px;
+            transition: transform 0.3s var(--easing);
+        }
+        .bento-item:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .span-2, .span-3 { grid-column: span 1; }
+        }
+
+        /* --- 8. Brand Strategy (Tabs) --- */
+        .tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px 16px;
+            transition: color 0.3s;
+        }
+        .tab-btn.active { color: var(--accent); font-weight: 700; border-bottom: 2px solid var(--accent); }
+        
+        .stylescape-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .stylescape-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .stylescape-card h4 { margin-bottom: 16px; color: var(--text-main); }
+        .color-dots { display: flex; gap: 8px; margin-bottom: 16px; }
+        .dot { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #fff; }
+        
+        /* Specific Stylescape Colors */
+        .v1 .d1 { background: #0F172A; } .v1 .d2 { background: #38BDF8; }
+        .v2 .d1 { background: #18181b; } .v2 .d2 { background: #F43F5E; }
+        .v3 .d1 { background: #ffffff; } .v3 .d2 { background: #10B981; }
+
+        /* --- 9. UX Process & Wireframes --- */
+        .matrix-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .wireflow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 24px;
+        }
+        .wireframe-placeholder {
+            aspect-ratio: 9/16;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border: 1px dashed #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        /* --- 10. User Testing --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        /* --- 11. Final Prototype --- */
+        .prototype-showcase {
+            text-align: center;
+            position: relative;
+        }
+        .phone-mockup {
+            width: 300px;
+            height: 600px;
+            background: #000;
+            border-radius: 40px;
+            border: 8px solid #333;
+            margin: 0 auto;
+            box-shadow: 0 0 50px var(--accent-glow);
+            overflow: hidden;
+            position: relative;
+        }
+        .micro-interaction-list {
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        /* Footer */
+        footer { padding: 48px 0; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav class="sidebar-nav">
+        <div class="nav-dot active" data-target="hero" data-label="Start"></div>
+        <div class="nav-dot" data-target="overview" data-label="Problem & Value"></div>
+        <div class="nav-dot" data-target="research" data-label="Research & Users"></div>
+        <div class="nav-dot" data-target="brand" data-label="Brand Strategy"></div>
+        <div class="nav-dot" data-target="ux-process" data-label="IA & Wireframes"></div>
+        <div class="nav-dot" data-target="testing" data-label="Validation"></div>
+        <div class="nav-dot" data-target="prototype" data-label="Prototype"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container reveal active">
+            <span class="tag">UX Case Study</span>
+            <h1 class="display-text">MentorBridge</h1>
+            <p class="text-lead" style="margin-bottom: 32px;">
+                Bridging the gap between academic theory and career reality through AI-matched mentorships.
+            </p>
+            <div style="display: flex; gap: 16px;">
+                <a href="#prototype" style="background: var(--accent); color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">View Prototype</a>
+                <a href="#overview" style="border: 1px solid var(--border); color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none;">Read Story</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview: Problem & Value -->
+    <section id="overview">
+        <div class="container">
+            <h2 class="section-title reveal">The Challenge</h2>
+            <div class="pv-grid reveal">
+                <div class="statement-card">
+                    <h3>Problem Statement</h3>
+                    <p style="margin-top: 16px; font-size: 1.1rem; color: #d4d4d8;">
+                        How might we allow <strong>college students</strong> to more easily find <strong>mentors</strong> that will help them with their careers?
+                    </p>
+                    <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-muted);">
+                        Students currently rely on awkward networking events or cold-emailing alumni, resulting in low response rates and high anxiety.
+                    </p>
+                </div>
+                <div class="statement-card">
+                    <h3>Value Proposition</h3>
+                    <div class="value-formula">
+                        <strong>MentorBridge</strong> is the <strong>Career Acceleration Platform</strong><br>
+                        that allows <strong>College Students</strong><br>
+                        to <strong>Gain Industry Access & Guidance</strong>.
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 64px;" class="reveal">
+                <h3>Business Plan Summary</h3>
+                <p class="text-lead">Freemium model for students (basic matching) with Premium Subscription for universities to offer "white-label" mentorship programs to their alumni networks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research: Competitors & Personas -->
+    <section id="research">
+        <div class="container">
+            <h2 class="section-title reveal">Discovery & Research</h2>
+            
+            <!-- Bento Grid Layout -->
+            <div class="bento-grid reveal">
+                <!-- Competitors -->
+                <div class="bento-item span-2">
+                    <h4>Competitor Analysis</h4>
+                    <p style="margin-bottom: 16px; color: var(--text-muted);">Analyzed 10+ platforms including LinkedIn, ADPList, and Handshake.</p>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                        <tr style="border-bottom: 1px solid #333;">
+                            <th style="text-align: left; padding: 8px;">Type</th>
+                            <th style="text-align: left; padding: 8px;">Example</th>
+                            <th style="text-align: left; padding: 8px;">Gap</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;">Direct</td>
+                            <td style="padding: 8px;">ADPList</td>
+                            <td style="padding: 8px; color: var(--text-muted);">Too focused on Design/Tech only.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px;">Secondary</td>
+                            <td style="padding: 8px;">LinkedIn</td>
+                            <td style="padding: 8px; color: var(--text-muted);">Intimidating; not mentorship-first.</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Persona 1 -->
+                <div class="bento-item">
+                    <h4>Persona: The Anxious Achiever</h4>
+                    <p style="font-size: 3rem; margin: 8px 0;">🧑‍🎓</p>
+                    <p style="font-size: 0.9rem;"><strong>Goals:</strong> Land an internship at a Big 4 firm.</p>
+                    <p style="font-size: 0.9rem;"><strong>Pain:</strong> Doesn't know "unwritten rules" of corporate.</p>
+                </div>
+
+                <!-- User Journey -->
+                <div class="bento-item span-3">
+                    <h4>User Journey Map (Summary)</h4>
+                    <div style="display: flex; justify-content: space-between; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
+                        <div>
+                            <strong style="color: white;">1. Awareness</strong><br>Feels lost in career path.
+                        </div>
+                        <div>→</div>
+                        <div>
+                            <strong style="color: white;">2. Search</strong><br>Uses MentorBridge filters.
+                        </div>
+                        <div>→</div>
+                        <div>
+                            <strong style="color: white;">3. Connection</strong><br>Books intro session.
+                        </div>
+                        <div>→</div>
+                        <div>
+                            <strong style="color: white;">4. Growth</strong><br>Receives actionable feedback.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Strategy: The Core Requirement -->
+    <section id="brand">
+        <div class="container">
+            <h2 class="section-title reveal">Brand Strategy & Identity</h2>
+            
+            <div class="reveal">
+                <h3 style="margin-bottom: 24px;">Step 1: Brand Foundation</h3>
+                <div class="pv-grid" style="margin-bottom: 48px;">
+                    <div>
+                        <p><strong>Vision:</strong> A world where every student has a champion in their corner.</p>
+                        <p><strong>Mission:</strong> To democratize access to career wisdom.</p>
+                    </div>
+                    <div>
+                        <p><strong>Personality:</strong> Empathetic, Knowledgeable, Ambitious, Transparent.</p>
+                        <p><strong>Design Principles:</strong> Clarity over clutter, Warmth in technology.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h3 style="margin-bottom: 24px;">Step 2: Stylescape Exploration</h3>
+                <p style="margin-bottom: 24px; color: var(--text-muted);">Developed 3 distinct visual directions with unique logos, colors, and typography.</p>
+                
+                <div class="stylescape-container">
+                    <!-- Direction 1 -->
+                    <div class="stylescape-card v1">
+                        <h4>Direction 1: "Corporate Future"</h4>
+                        <div class="color-dots">
+                            <div class="dot d1"></div>
+                            <div class="dot d2"></div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Font:</strong> Helvetica Now</p>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Vibe:</strong> Trust, Professionalism, Serious.</p>
+                        <div style="margin-top: 16px; height: 100px; background: #0F172A; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: bold;">[UI Mockup V1]</span>
+                        </div>
+                    </div>
+
+                    <!-- Direction 2 -->
+                    <div class="stylescape-card v2">
+                        <h4>Direction 2: "Bold Energy"</h4>
+                        <div class="color-dots">
+                            <div class="dot d1"></div>
+                            <div class="dot d2"></div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Font:</strong> Satoshi</p>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Vibe:</strong> Disruptive, Gen-Z, High Contrast.</p>
+                        <div style="margin-top: 16px; height: 100px; background: #18181b; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: #F43F5E; font-weight: 800;">[UI Mockup V2]</span>
+                        </div>
+                    </div>
+
+                    <!-- Direction 3 -->
+                    <div class="stylescape-card v3">
+                        <h4>Direction 3: "Academic Clean"</h4>
+                        <div class="color-dots">
+                            <div class="dot d1"></div>
+                            <div class="dot d2"></div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Font:</strong> Serif / Sans Mix</p>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Vibe:</strong> Institutional, Calm, Growth.</p>
+                        <div style="margin-top: 16px; height: 100px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: #10B981; font-family: serif;">[UI Mockup V3]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UX Process: IA & Wireframes -->
+    <section id="ux-process">
+        <div class="container">
+            <h2 class="section-title reveal">Architecture & Wireframes</h2>
+            
+            <div class="reveal">
+                <h3>MVP Definition (2x2 Matrix)</h3>
+                <div class="matrix-container">
+                    <div style="position: relative; width: 300px; height: 300px; border-left: 2px solid #555; border-bottom: 2px solid #555;">
+                        <span style="position: absolute; top: -25px; left: -10px;">High Value</span>
+                        <span style="position: absolute; bottom: -25px; left: -10px;">Low Value</span>
+                        <span style="position: absolute; bottom: -10px; right: -30px;">Hard</span>
+                        <span style="position: absolute; bottom: -10px; left: -30px;">Easy</span>
+                        
+                        <!-- MVP Features -->
+                        <div style="position: absolute; top: 20%; left: 20%; background: var(--accent); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Profile Setup</div>
+                        <div style="position: absolute; top: 10%; left: 60%; background: var(--accent); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Mentor Matching</div>
+                        <div style="position: absolute; top: 50%; left: 10%; background: #333; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: #888;">Live Chat</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <h3>Wireframe Flows (Mid-Fidelity)</h3>
+                <p style="margin-bottom: 24px; color: var(--text-muted);">4 Key Flows x 4 Screens = 16 Screens Total</p>
+                
+                <!-- Flow 1 -->
+                <h4 style="margin-bottom: 16px; color: var(--accent);">Flow 1: Onboarding & Interest Selection</h4>
+                <div class="wireflow-grid">
+                    <div class="wireframe-placeholder">Screen 1</div>
+                    <div class="wireframe-placeholder">Screen 2</div>
+                    <div class="wireframe-placeholder">Screen 3</div>
+                    <div class="wireframe-placeholder">Screen 4</div>
+                </div>
+                
+                <!-- Flow 2 -->
+                <h4 style="margin-bottom: 16px; color: var(--accent); margin-top: 24px;">Flow 2: Mentor Search & Filter</h4>
+                <div class="wireflow-grid">
+                    <div class="wireframe-placeholder">Screen 5</div>
+                    <div class="wireframe-placeholder">Screen 6</div>
+                    <div class="wireframe-placeholder">Screen 7</div>
+                    <div class="wireframe-placeholder">Screen 8</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Testing -->
+    <section id="testing">
+        <div class="container">
+            <h2 class="section-title reveal">Validation & Testing</h2>
+            
+            <div class="reveal">
+                <div style="display: flex; gap: 24px; margin-bottom: 48px; flex-wrap: wrap;">
+                    <div style="flex: 1; background: var(--bg-card); padding: 24px; border-radius: 12px;">
+                        <h4>Methodology</h4>
+                        <ul style="margin-top: 16px; margin-left: 20px; color: var(--text-muted);">
+                            <li>Interview Discussion Guide created.</li>
+                            <li>Feature Ranking Board exercise.</li>
+                            <li>Moderated User Testing (Recorded).</li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1; background: var(--bg-card); padding: 24px; border-radius: 12px;">
+                        <h4>Key Insights</h4>
+                        <ul style="margin-top: 16px; margin-left: 20px; color: var(--text-muted);">
+                            <li>Users were confused by the "Blind Match" feature.</li>
+                            <li>Video intros increased trust significantly.</li>
+                            <li>Booking flow needed fewer steps.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Session Recordings</h3>
+                <div class="video-grid">
+                    <div class="video-placeholder">User Test #1 (Video)</div>
+                    <div class="video-placeholder">User Test #2 (Video)</div>
+                    <div class="video-placeholder">User Test #3 (Video)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Prototype & Interaction -->
+    <section id="prototype">
+        <div class="container reveal">
+            <h2 class="section-title" style="text-align: center; border: none;">The Solution</h2>
+            <p class="text-lead" style="text-align: center; margin: 0 auto 48px auto;">
+                High-fidelity prototype incorporating "Bold Energy" direction and user feedback.
+            </p>
+
+            <div class="prototype-showcase">
+                <div class="phone-mockup">
+                    <img src="https://via.placeholder.com/300x600/101010/6366f1?text=Hi-Fi+Prototype" alt="App Screen" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+
+            <div class="micro-interaction-list">
+                <span class="tag">✨ 1. Smooth Page Transitions</span>
+                <span class="tag">✨ 2. Like Button Heart Explosion</span>
+                <span class="tag">✨ 3. Mentor Card Hover Lift</span>
+                <span class="tag">✨ 4. Filter Tag Toggle</span>
+                <span class="tag">✨ 5. Loading Skeleton State</span>
+                <span class="tag">✨ 6. Success Modal Pop-up</span>
+                <span class="tag">✨ 7. Tab Switching Animation</span>
+                <span class="tag">✨ 8. Scroll Progress Bar</span>
+                <span class="tag">✨ 9. Notification Badge Pulse</span>
+                <span class="tag">✨ 10. Profile Picture Upload</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 MentorBridge Project. Designed for Senior UX Portfolio.</p>
+    </footer>
+
+    <!-- JS for Scroll Animations & Nav -->
+    <script>
+        // 1. Intersection Observer for Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 2. Navigation Active State on Scroll
+        const sections = document.querySelectorAll('section');
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.dataset.target === current) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+
+        // 3. Smooth Scroll Click
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const target = document.getElementById(dot.dataset.target);
+                window.scrollTo({
+                    top: target.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

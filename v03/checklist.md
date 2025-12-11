@@ -8,7 +8,7 @@ Personas
 Empathy Map
 User Journey
 
-Create a business plan (highlighted in yellow - p.31) 
+Create a business plan
 IA - Highlight MVP features (through 2x2 feature exercise p.45)
 MVP Features - 10-20 wireframes: Create FOUR key feature flows. 4 wireframes per flow in mid-fidelity = 16 wireframes 
 
