@@ -1,462 +1,745 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary App Wireframes</title>
+    <title>SceCards - AI Flashcard App UX Case Study</title>
     <style>
+        /* --- 0. Variables & Reset --- */
         :root {
-            --bg-color: #f0f2f5;
-            --phone-bg: #ffffff;
-            --border-color: #333;
-            --text-main: #333;
-            --text-sub: #666;
-            --accent-gray: #e0e0e0;
+            /* SceCards Palette */
+            --primary-100: #e0f5f2; /* Light Mint - Text Highlight/Bg */
+            --primary-300: #4dcab7; /* Bright Teal - Glow/Accents */
+            --primary-500: #00a389; /* Main Brand Color - Buttons/Links */
+            --primary-700: #007a65; /* Dark Teal - Borders/Deep Backgrounds */
+            
+            /* Dark Theme Setup */
+            --bg-body: #030c0b; /* Very Dark Teal/Black */
+            --bg-card: #081614;
+            --bg-card-hover: #0c1f1c;
+            --border: #007a65; /* Using Primary 700 as subtle border */
+            
+            --text-main: #ffffff;
+            --text-muted: #8baaaa; /* Cool gray with teal tint */
+            
+            --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+            --easing: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
         body {
-            font-family: 'Courier New', Courier, monospace; /* Monospace for wireframe feel */
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 40px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-            font-family: sans-serif;
-        }
-
-        /* Grid Layout for the 8 Screens */
-        .wireframe-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-            justify-items: center;
-        }
-
-        /* Phone Container */
-        .phone-frame {
-            width: 320px;
-            height: 640px;
-            background: var(--phone-bg);
-            border: 4px solid var(--border-color);
-            border-radius: 30px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        /* Label above each phone */
-        .screen-label {
-            position: absolute;
-            top: -30px;
-            left: 0;
-            font-weight: bold;
-            font-family: sans-serif;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .phone-wrapper {
-            position: relative;
-        }
-
-        /* Internal Layout Components */
-        .header {
-            padding: 15px;
-            border-bottom: 2px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fafafa;
-            font-weight: bold;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .footer {
-            padding: 15px;
-            border-top: 2px solid var(--border-color);
-            background: #fafafa;
-        }
-
-        /* Reusable UI Components */
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: var(--text-main);
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            box-sizing: border-box;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--border-color);
+            font-family: var(--font-display);
+            background-color: var(--bg-body);
             color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .input-field {
-            width: 100%;
-            height: 40px;
-            border: 2px solid var(--border-color);
-            background: #fff;
-            margin-bottom: 15px;
-            padding: 5px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            color: #999;
+        /* --- 1. Typography & Utilities --- */
+        h1, h2, h3, h4 { letter-spacing: -0.02em; line-height: 1.1; }
+        
+        .display-text {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            background: linear-gradient(to bottom right, #ffffff, var(--primary-300));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 24px;
         }
 
-        .divider {
-            height: 2px;
-            background: var(--border-color);
-            margin: 20px 0;
-            border: none;
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 48px;
+            border-left: 4px solid var(--primary-500);
+            padding-left: 24px;
         }
 
-        /* Specific Component Styles */
-        .progress-circle {
-            width: 150px;
-            height: 150px;
-            border: 4px solid var(--border-color);
-            border-radius: 50%;
-            margin: 40px auto;
+        .text-lead { font-size: 1.25rem; color: var(--text-muted); max-width: 60ch; }
+        
+        .tag { 
+            display: inline-block; 
+            padding: 6px 16px; 
+            border-radius: 100px; 
+            background: rgba(0, 163, 137, 0.15); 
+            color: var(--primary-300);
+            font-size: 0.85rem; 
+            margin-bottom: 16px;
+            border: 1px solid var(--primary-700);
+            font-weight: 600;
+        }
+
+        /* --- 2. Animations --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--easing);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 3. Layout Components --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section { padding: 120px 0; border-bottom: 1px solid rgba(0, 122, 101, 0.3); }
+
+        /* --- 4. Navigation --- */
+        .sidebar-nav {
+            position: fixed;
+            top: 50%;
+            right: 32px;
+            transform: translateY(-50%);
+            z-index: 1000;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .list-item {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-            cursor: pointer;
+            gap: 16px;
         }
         
-        .list-item h4 { margin: 0 0 5px 0; }
-        .list-item p { margin: 0; color: #666; font-size: 0.9em; }
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--primary-700);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .nav-dot:hover, .nav-dot.active {
+            background: var(--primary-500);
+            box-shadow: 0 0 10px var(--primary-500);
+            transform: scale(1.5);
+        }
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            white-space: nowrap;
+            color: var(--primary-100);
+            font-size: 0.8rem;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .nav-dot:hover::after { opacity: 1; }
 
-        .flashcard {
-            border: 2px solid var(--border-color);
-            padding: 40px 20px;
-            text-align: center;
-            margin: 20px 0;
-            background: #fafafa;
-            box-shadow: 4px 4px 0px #ddd;
+        /* --- 5. Hero Section --- */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at 80% 20%, rgba(0, 163, 137, 0.2) 0%, rgba(3, 12, 11, 0) 60%);
         }
 
-        .keyboard-row {
+        /* --- 6. Problem & Value Prop (Grid) --- */
+        .pv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 48px;
+        }
+        .statement-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            transition: border-color 0.3s;
+        }
+        .statement-card:hover { border-color: var(--primary-500); }
+
+        .value-formula {
+            font-family: 'Courier New', monospace;
+            color: var(--primary-300);
+            background: rgba(0, 163, 137, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+            border-left: 3px solid var(--primary-500);
+        }
+        .highlight-text { color: var(--primary-500); font-weight: 700; }
+
+        /* --- 7. Research (Bento Grid) --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+            gap: 24px;
+        }
+        .bento-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 24px;
+            transition: transform 0.3s var(--easing);
+            position: relative;
+            overflow: hidden;
+        }
+        .bento-item:hover { transform: translateY(-5px); border-color: var(--primary-300); }
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .span-2, .span-3 { grid-column: span 1; }
+        }
+
+        /* --- 8. Brand Strategy (Card Layout) --- */
+        .brand-principle-grid {
+             display: grid;
+             grid-template-columns: 1fr 1fr;
+             gap: 40px;
+             margin-bottom: 60px;
+        }
+
+        .stylescape-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .stylescape-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        .stylescape-card h4 { margin-bottom: 16px; color: var(--text-main); }
+        .color-dots { display: flex; gap: 8px; margin-bottom: 16px; }
+        .dot { width: 24px; height: 24px; border-radius: 50%; }
+        
+        /* Step 2: Stylescape Colors (Example placeholders) */
+        .v1 .d1 { background: #00a389; } .v1 .d2 { background: #000000; }
+        .v2 .d1 { background: #e0f5f2; } .v2 .d2 { background: #ff6b6b; } /* Contrast pop */
+        .v3 .d1 { background: #4dcab7; } .v3 .d2 { background: #ffffff; }
+
+        /* --- 9. UX Process & Wireframes --- */
+        .matrix-container {
             display: flex;
             justify-content: center;
-            gap: 2px;
-            margin-bottom: 4px;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            margin-bottom: 48px;
+            border: 1px solid var(--border);
         }
-        .key {
-            width: 25px;
-            height: 30px;
-            border: 1px solid #333;
-            border-radius: 4px;
+        
+        .wireflow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 24px;
+        }
+        .wireframe-placeholder {
+            aspect-ratio: 9/16;
+            background: #112220;
+            border-radius: 8px;
+            border: 1px dashed var(--primary-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--primary-300);
         }
 
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 100px;
-            margin-top: 20px;
-            border-bottom: 2px solid #333;
+        /* --- 10. User Testing --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
         }
-        .bar {
-            width: 10%;
-            background: #999;
-            border: 1px solid #333;
-            border-bottom: none;
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            position: relative;
+        }
+        .play-icon {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--primary-500);
+            display: flex; align-items: center; justify-content: center;
+            color: white; margin-bottom: 8px;
+        }
+
+        /* --- 11. Final Prototype --- */
+        .prototype-showcase {
+            text-align: center;
+            position: relative;
+            padding: 40px 0;
+        }
+        .phone-mockup {
+            width: 320px;
+            height: 650px;
+            background: #000;
+            border-radius: 40px;
+            border: 8px solid #222;
+            margin: 0 auto;
+            box-shadow: 0 0 60px rgba(0, 163, 137, 0.4); /* Primary 500 Glow */
+            overflow: hidden;
+            position: relative;
+        }
+        .micro-interaction-list {
+            margin-top: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .micro-tag {
+            background: transparent;
+            border: 1px solid var(--primary-500);
+            color: var(--primary-100);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .micro-tag:hover {
+            background: var(--primary-500);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer { padding: 48px 0; text-align: center; color: var(--primary-700); font-size: 0.9rem; }
+
+        /* Button */
+        .btn-primary {
+            background: var(--primary-500);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            background: var(--primary-300);
+            box-shadow: 0 0 20px rgba(77, 202, 183, 0.4);
+        }
+        .btn-outline {
+            border: 1px solid var(--primary-500);
+            color: var(--primary-100);
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 16px;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-outline:hover {
+            background: rgba(0, 163, 137, 0.1);
         }
 
     </style>
 </head>
 <body>
 
-    <h1>Vocabulary App Wireframes (Mid-Fidelity)</h1>
+    <!-- Sticky Navigation -->
+    <nav class="sidebar-nav">
+        <div class="nav-dot active" data-target="hero" data-label="Start"></div>
+        <div class="nav-dot" data-target="overview" data-label="Problem & Value"></div>
+        <div class="nav-dot" data-target="research" data-label="Research & Personas"></div>
+        <div class="nav-dot" data-target="brand" data-label="Brand Strategy"></div>
+        <div class="nav-dot" data-target="ux-process" data-label="MVP & Wireframes"></div>
+        <div class="nav-dot" data-target="testing" data-label="User Testing"></div>
+        <div class="nav-dot" data-target="prototype" data-label="Prototype"></div>
+    </nav>
 
-    <div class="wireframe-gallery">
-
-        <!-- 1. Today's Review -->
-        <div class="phone-wrapper">
-            <div class="screen-label">1. Today's Review (Home)</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>Menu</span>
-                    <span>Profile</span>
-                </div>
-                <div class="content">
-                    <h3>Good Morning, User</h3>
-                    <hr class="divider">
-                    <div style="text-align: center; margin-bottom: 10px;">TODAY'S GOAL</div>
-                    
-                    <div class="progress-circle">
-                        <span style="font-size: 24px; font-weight: bold;">42 / 50</span>
-                        <span style="font-size: 12px;">Words Reviewed</span>
-                    </div>
-                </div>
-                <div class="footer">
-                    <button class="btn">START REVIEW SESSION</button>
-                </div>
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container reveal active">
+            <span class="tag">AI + Education Case Study</span>
+            <h1 class="display-text">SceCards</h1>
+            <p class="text-lead" style="margin-bottom: 32px;">
+                Transforming rote memorization into immersive narratives. <br>
+                <span style="color: var(--primary-300);">AI-driven storytelling for long-term memory retention.</span>
+            </p>
+            <div>
+                <a href="#prototype" class="btn-primary">View Prototype</a>
+                <a href="#overview" class="btn-outline">Read Case Study</a>
             </div>
         </div>
+    </section>
 
-        <!-- 2. Quick Add Word -->
-        <div class="phone-wrapper">
-            <div class="screen-label">2. Quick Add Word</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>&lt; Back</span>
-                    <span>Quick Add</span>
+    <!-- Overview: Problem & Value -->
+    <section id="overview">
+        <div class="container">
+            <h2 class="section-title reveal">The Challenge</h2>
+            <div class="pv-grid reveal">
+                <div class="statement-card">
+                    <h3>Problem Statement</h3>
+                    <p style="margin-top: 16px; font-size: 1.1rem; color: var(--primary-100);">
+                        How might we allow <strong>college students and language learners</strong> to more easily <strong>memorize abstract vocabulary</strong> without the boredom of rote repetition?
+                    </p>
+                    <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-muted);">
+                        Traditional flashcards lack context, leading to high dropout rates and "isolated knowledge" that is quickly forgotten.
+                    </p>
                 </div>
-                <div class="content">
-                    <label>New Word</label>
-                    <div class="input-field">Type word...</div>
-
-                    <label>Meaning (Optional)</label>
-                    <div class="input-field">Definition...</div>
-
-                    <label>Add to Deck:</label>
-                    <div class="input-field" style="justify-content: space-between;">
-                        <span>Daily Deck</span>
-                        <span>▼</span>
+                <div class="statement-card">
+                    <h3>Value Proposition</h3>
+                    <div class="value-formula">
+                        <strong>SceCards</strong> is the <span class="highlight-text">AI Narrative Platform</span><br>
+                        that allows <span class="highlight-text">Students</span><br>
+                        to <span class="highlight-text">Turn Vocab Lists into Stories</span>.
                     </div>
-                </div>
-                <div class="footer">
-                    <button class="btn">ADD NOW</button>
                 </div>
             </div>
+            
+            <div style="margin-top: 64px;" class="reveal">
+                <h3>Business Plan Summary</h3>
+                <p class="text-lead">Freemium model offering basic AI generation (5 stories/day). Premium subscription unlocks unlimited stories, "Style Transfer" (e.g., Horror, Sci-Fi themes), and audio narration features.</p>
+            </div>
         </div>
+    </section>
 
-        <!-- 3. Word List -->
-        <div class="phone-wrapper">
-            <div class="screen-label">3. Word List (Set)</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>&lt; Sets</span>
-                    <span>Exam Set</span>
+    <!-- Research: Competitors & Personas -->
+    <section id="research">
+        <div class="container">
+            <h2 class="section-title reveal">Discovery & Research</h2>
+            
+            <!-- Bento Grid Layout -->
+            <div class="bento-grid reveal">
+                <!-- Competitors -->
+                <div class="bento-item span-2">
+                    <h4>Competitor Feature Analysis</h4>
+                    <p style="margin-bottom: 16px; color: var(--text-muted);">Direct, Secondary, and Indirect analysis.</p>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                        <tr style="border-bottom: 1px solid var(--primary-700);">
+                            <th style="text-align: left; padding: 8px;">Competitor</th>
+                            <th style="text-align: left; padding: 8px;">Type</th>
+                            <th style="text-align: left; padding: 8px;">Key Gap</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: var(--primary-300);">Anki</td>
+                            <td style="padding: 8px;">Direct</td>
+                            <td style="padding: 8px; color: var(--text-muted);">Powerful but ugly UI; no native AI.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: var(--primary-300);">Quizlet</td>
+                            <td style="padding: 8px;">Secondary</td>
+                            <td style="padding: 8px; color: var(--text-muted);">Gamified but lacks narrative depth.</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; color: var(--primary-300);">Duolingo</td>
+                            <td style="padding: 8px;">Indirect</td>
+                            <td style="padding: 8px; color: var(--text-muted);">Rigid curriculum; can't input own words.</td>
+                        </tr>
+                    </table>
                 </div>
-                <div style="padding: 10px; background: #eee; border-bottom: 2px solid #333;">
-                    <div class="input-field" style="margin: 0; height: 30px; font-size: 12px;">🔍 Search words...</div>
-                </div>
-                <div class="content" style="padding-top: 0;">
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 2px solid #333;">
-                        <span>Sort: A-Z ▼</span>
-                        <span>Filter</span>
-                    </div>
 
-                    <div class="list-item">
-                        <div style="display: flex; justify-content: space-between;">
-                            <h4>Ubiquitous</h4>
-                            <span>&gt;</span>
+                <!-- Persona -->
+                <div class="bento-item">
+                    <h4>Persona: Alex</h4>
+                    <p style="font-size: 3rem; margin: 8px 0;">🧠</p>
+                    <p style="font-size: 0.9rem;"><strong>Role:</strong> Med Student</p>
+                    <p style="font-size: 0.9rem;"><strong>Goal:</strong> Pass anatomy exams.</p>
+                    <p style="font-size: 0.9rem; color: var(--primary-300);">"I have 500 terms to memorize. I need a story to connect them."</p>
+                </div>
+
+                <!-- Empathy Map / Journey -->
+                <div class="bento-item span-3">
+                    <h4>User Journey Map & Empathy Summary</h4>
+                    <div style="display: flex; justify-content: space-between; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem;">
+                        <div>
+                            <strong style="color: var(--primary-100);">1. Overwhelm</strong><br>Staring at a list of 50 complex words.
                         </div>
-                        <p>Present, appearing everywhere</p>
-                    </div>
-                    <div class="list-item">
-                        <div style="display: flex; justify-content: space-between;">
-                            <h4>Ephemeral</h4>
-                            <span>&gt;</span>
+                        <div>→</div>
+                        <div>
+                            <strong style="color: var(--primary-100);">2. Creation</strong><br>Inputs words into SceCards AI.
                         </div>
-                        <p>Lasting for a very short time</p>
-                    </div>
-                    <div class="list-item">
-                        <div style="display: flex; justify-content: space-between;">
-                            <h4>Serendipity</h4>
-                            <span>&gt;</span>
+                        <div>→</div>
+                        <div>
+                            <strong style="color: var(--primary-100);">3. Engagement</strong><br>Reads a generated sci-fi story containing terms.
                         </div>
-                        <p>Occurrence of events by chance</p>
-                    </div>
-                </div>
-                <!-- Floating Action Button simulation -->
-                <div style="position: absolute; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #333; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px;">+</div>
-            </div>
-        </div>
-
-        <!-- 4. Word Detail -->
-        <div class="phone-wrapper">
-            <div class="screen-label">4. Word Detail Page</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>&lt; List</span>
-                    <span>Edit</span>
-                </div>
-                <div class="content">
-                    <h2 style="margin-bottom: 5px;">Grandiloquent</h2>
-                    <span style="font-style: italic; color: #666;">(adj.)</span>
-
-                    <hr class="divider">
-                    
-                    <h4>DEFINITION</h4>
-                    <p>Pompous or extravagant in language, style, or manner.</p>
-
-                    <h4>EXAMPLE</h4>
-                    <div style="background: #eee; padding: 10px; border-left: 4px solid #999;">
-                        "The politician's grandiloquent speech failed to impress."
-                    </div>
-
-                    <h4>MY NOTES</h4>
-                    <div class="input-field" style="height: 60px; color: #999;">Tap to add notes...</div>
-                </div>
-                <div class="footer">
-                    <button class="btn btn-outline">Move to Different Set</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. Add Word (Main) -->
-        <div class="phone-wrapper">
-            <div class="screen-label">5. Add Word (Main Flow)</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>Cancel</span>
-                    <span>Save</span>
-                </div>
-                <div class="content">
-                    <label>Target Word</label>
-                    <div class="input-field"></div>
-
-                    <label>Definition</label>
-                    <div class="input-field"></div>
-
-                    <label>Part of Speech</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <span style="border: 2px solid #333; padding: 5px 10px; border-radius: 15px; background: #333; color: white;">Noun</span>
-                        <span style="border: 2px solid #333; padding: 5px 10px; border-radius: 15px;">Verb</span>
-                    </div>
-
-                    <label>Context / Sentence</label>
-                    <div class="input-field" style="height: 60px;"></div>
-
-                    <label>Select Deck</label>
-                    <div class="input-field" style="justify-content: space-between;">
-                        <span>Exam Prep 101</span>
-                        <span>▼</span>
+                        <div>→</div>
+                        <div>
+                            <strong style="color: var(--primary-100);">4. Mastery</strong><br>Recalls terms easily via story plot points.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 6. Review - Flip Mode -->
-        <div class="phone-wrapper">
-            <div class="screen-label">6. Review - Flip Mode</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>[X] Quit</span>
-                    <span>12 / 42</span>
+    <!-- Brand Strategy -->
+    <section id="brand">
+        <div class="container">
+            <h2 class="section-title reveal">Brand Strategy & Identity</h2>
+            
+            <div class="reveal">
+                <h3 style="margin-bottom: 24px;">Step 1: Brand Foundation</h3>
+                <div class="brand-principle-grid">
+                    <div>
+                        <p style="color: var(--primary-300); font-weight: bold;">Vision Statement</p>
+                        <p>To end the era of boring rote memorization forever.</p>
+                    </div>
+                    <div>
+                        <p style="color: var(--primary-300); font-weight: bold;">Mission Statement</p>
+                        <p>Empower learners with AI tools that make knowledge sticky, contextual, and fun.</p>
+                    </div>
+                    <div>
+                        <p style="color: var(--primary-300); font-weight: bold;">Brand Personality</p>
+                        <p>Intelligent, Witty, Minimalist, Reliable.</p>
+                    </div>
+                    <div>
+                        <p style="color: var(--primary-300); font-weight: bold;">Design Principles</p>
+                        <p>Less is More; Content First; Interaction as Delight.</p>
+                    </div>
                 </div>
-                <div class="content" style="justify-content: center;">
-                    
-                    <div class="flashcard" style="height: 200px; display: flex; flex-direction: column; justify-content: center;">
-                        <h2>Epiphany</h2>
+            </div>
+
+            <div class="reveal">
+                <h3 style="margin-bottom: 24px;">Step 2: Stylescape Exploration (3 Versions)</h3>
+                <p style="margin-bottom: 24px; color: var(--text-muted);">We explored 3 distinct visual directions, ensuring no repeated colors, fonts, or layouts between them.</p>
+                
+                <div class="stylescape-container">
+                    <!-- Direction 1 -->
+                    <div class="stylescape-card v1">
+                        <h4>Direction 1: "Neon Neural"</h4>
+                        <div class="color-dots">
+                            <div class="dot d1"></div>
+                            <div class="dot d2"></div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Font:</strong> Roboto Mono</p>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Vibe:</strong> Cyberpunk, Data-heavy.</p>
+                        <div style="margin-top: 16px; height: 100px; background: #000; border: 1px solid var(--primary-500); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--primary-500);">UI Concept 1</span>
+                        </div>
                     </div>
 
-                    <p style="text-align: center; color: #666; margin-top: 20px;">( Tap card to flip )</p>
-                </div>
-                <div class="footer">
-                    <!-- Showing what it looks like AFTER flip -->
-                    <div style="display: flex; gap: 5px;">
-                        <button class="btn" style="background: #d32f2f;">AGAIN</button>
-                        <button class="btn" style="background: #fbc02d; color: black;">HARD</button>
-                        <button class="btn" style="background: #388e3c;">GOOD</button>
+                    <!-- Direction 2 -->
+                    <div class="stylescape-card v2">
+                        <h4>Direction 2: "Playful Pop"</h4>
+                        <div class="color-dots">
+                            <div class="dot d1"></div>
+                            <div class="dot d2"></div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Font:</strong> Poppins Rounded</p>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Vibe:</strong> Gamified, Friendly, High Contrast.</p>
+                        <div style="margin-top: 16px; height: 100px; background: #e0f5f2; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: #000; font-weight: 800;">UI Concept 2</span>
+                        </div>
+                    </div>
+
+                    <!-- Direction 3 -->
+                    <div class="stylescape-card v3">
+                        <h4>Direction 3: "Minimal Zen" (Selected)</h4>
+                        <div class="color-dots">
+                            <div class="dot d1" style="background: #00a389;"></div>
+                            <div class="dot d2" style="background: #e0f5f2;"></div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Font:</strong> Inter</p>
+                        <p style="font-size: 0.85rem; color: #aaa;"><strong>Vibe:</strong> Clean, Focused, Teal-Accented.</p>
+                        <div style="margin-top: 16px; height: 100px; background: #081614; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: var(--primary-300);">UI Concept 3</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 7. Review - Typing Mode -->
-        <div class="phone-wrapper">
-            <div class="screen-label">7. Review - Typing Mode</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>[X] Quit</span>
-                    <span>5 / 10</span>
+    <!-- UX Process: IA & Wireframes -->
+    <section id="ux-process">
+        <div class="container">
+            <h2 class="section-title reveal">Architecture & Wireframes</h2>
+            
+            <div class="reveal">
+                <h3>MVP Definition (2x2 Matrix)</h3>
+                <p style="color: var(--text-muted); margin-bottom: 24px;">Prioritizing High Value / Low Effort features.</p>
+                <div class="matrix-container">
+                    <div style="position: relative; width: 300px; height: 300px; border-left: 2px solid var(--primary-700); border-bottom: 2px solid var(--primary-700);">
+                        <!-- Labels -->
+                        <span style="position: absolute; top: -25px; left: -10px; color: var(--primary-100);">High Value</span>
+                        <span style="position: absolute; bottom: -10px; right: -30px; color: var(--primary-100);">Hard</span>
+                        
+                        <!-- MVP Features Dots -->
+                        <div style="position: absolute; top: 15%; left: 15%; background: var(--primary-500); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">AI Story Gen</div>
+                        <div style="position: absolute; top: 10%; left: 60%; background: var(--primary-500); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Spaced Repetition</div>
+                        <div style="position: absolute; top: 80%; left: 80%; background: #333; color: #888; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Social Sharing</div>
+                    </div>
                 </div>
-                <div class="content">
-                    <h4>PROMPT</h4>
-                    <p style="font-size: 18px; margin-top: 0;">"A person who dislikes humankind"</p>
+            </div>
 
-                    <h4 style="margin-top: 40px;">YOUR ANSWER</h4>
-                    <div class="input-field" style="border: 2px solid #333; font-weight: bold; color: #333;">Misanthr_</div>
-
-                    <button class="btn" style="margin-top: 10px;">CHECK ANSWER</button>
+            <div class="reveal">
+                <h3>Wireframes (16 Screens / 4 Flows)</h3>
+                <p style="margin-bottom: 24px; color: var(--text-muted);">Mid-fidelity flows focusing on the "Story Generation" core loop.</p>
+                
+                <!-- Flow 1 -->
+                <h4 style="margin-bottom: 16px; color: var(--primary-300);">Flow 1: Input & Generation</h4>
+                <div class="wireflow-grid">
+                    <div class="wireframe-placeholder">Home / Add</div>
+                    <div class="wireframe-placeholder">Input Words</div>
+                    <div class="wireframe-placeholder">Select Genre</div>
+                    <div class="wireframe-placeholder">Loading AI</div>
                 </div>
-                <div style="background: #ccc; padding: 10px;">
-                    <!-- Keyboard Representation -->
-                    <div class="keyboard-row">
-                        <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div>
-                    </div>
-                    <div class="keyboard-row">
-                        <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div>
-                    </div>
-                    <div class="keyboard-row">
-                        <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div>
-                    </div>
-                    <div style="text-align: center; margin-top: 5px;">[ Space ]</div>
+                
+                <!-- Flow 2 -->
+                <h4 style="margin-bottom: 16px; color: var(--primary-300); margin-top: 24px;">Flow 2: Story Review & Quiz</h4>
+                <div class="wireflow-grid">
+                    <div class="wireframe-placeholder">Story View</div>
+                    <div class="wireframe-placeholder">Highlight Terms</div>
+                    <div class="wireframe-placeholder">Quiz Mode</div>
+                    <div class="wireframe-placeholder">Score/Result</div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 8. Stats & Progress -->
-        <div class="phone-wrapper">
-            <div class="screen-label">8. Stats & Progress</div>
-            <div class="phone-frame">
-                <div class="header">
-                    <span>&lt; Back</span>
-                    <span>Stats</span>
-                </div>
-                <div class="content">
-                    <h2 style="text-align: center; font-size: 36px; margin: 10px 0;">1,240</h2>
-                    <p style="text-align: center; margin: 0 0 30px 0; color: #666;">Total Words Learned</p>
-
-                    <h4>MASTERY BREAKDOWN</h4>
-                    <div style="border: 2px solid #333; padding: 10px;">
-                        <div style="margin-bottom: 5px;"><strong>Mastered:</strong> ████████ 80%</div>
-                        <div style="margin-bottom: 5px;"><strong>Learning:</strong> ███▒▒▒▒▒ 15%</div>
-                        <div><strong>Weak:</strong> █▒▒▒▒▒▒▒ 5%</div>
+    <!-- User Testing -->
+    <section id="testing">
+        <div class="container">
+            <h2 class="section-title reveal">User Testing & Validation</h2>
+            
+            <div class="reveal">
+                <div style="display: flex; gap: 24px; margin-bottom: 48px; flex-wrap: wrap;">
+                    <div style="flex: 1; background: var(--bg-card); padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
+                        <h4 style="color: var(--primary-300);">Materials Created</h4>
+                        <ul style="margin-top: 16px; margin-left: 20px; color: var(--text-muted);">
+                            <li>Interview Discussion Guide</li>
+                            <li>Feature Ranking Board</li>
+                            <li>High-Fidelity Prototype (Clickable)</li>
+                        </ul>
                     </div>
-
-                    <h4>WEEKLY ACTIVITY</h4>
-                    <div class="bar-chart">
-                        <div class="bar" style="height: 40%;"></div>
-                        <div class="bar" style="height: 60%;"></div>
-                        <div class="bar" style="height: 30%;"></div>
-                        <div class="bar" style="height: 80%;"></div>
-                        <div class="bar" style="height: 50%;"></div>
-                        <div class="bar" style="height: 20%;"></div>
-                        <div class="bar" style="height: 10%;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 5px;">
-                        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                    <div style="flex: 1; background: var(--bg-card); padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
+                        <h4 style="color: var(--primary-300);">Feedback Summary</h4>
+                        <ul style="margin-top: 16px; margin-left: 20px; color: var(--text-muted);">
+                            <li>"The story loaded too fast, I missed the transition." (Fixed)</li>
+                            <li>"I want to edit the AI story manually." (Added to backlog)</li>
+                            <li>"The color teal helps me focus." (Validated)</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="footer">
-                    <button class="btn btn-outline">Share Progress</button>
+
+                <h3>Session Recordings</h3>
+                <div class="video-grid">
+                    <div class="video-placeholder">
+                        <div class="play-icon">▶</div>
+                        User Test #1
+                    </div>
+                    <div class="video-placeholder">
+                        <div class="play-icon">▶</div>
+                        User Test #2
+                    </div>
+                    <div class="video-placeholder">
+                        <div class="play-icon">▶</div>
+                        User Test #3
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-    </div>
+    <!-- Final Prototype & Interaction -->
+    <section id="prototype">
+        <div class="container reveal">
+            <h2 class="section-title" style="text-align: center; border: none;">The Solution</h2>
+            <p class="text-lead" style="text-align: center; margin: 0 auto 48px auto;">
+                Interactive prototype demonstrating the selected "Minimal Zen" stylescape.
+            </p>
 
+            <div class="prototype-showcase">
+                <div class="phone-mockup">
+                    <img src="https://via.placeholder.com/320x650/00221f/00a389?text=SceCards+App+UI" alt="SceCards App Screen" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;">
+                </div>
+            </div>
+
+            <div class="micro-interaction-list">
+                <div class="micro-tag">✨ 1. AI Loading Sparkles</div>
+                <div class="micro-tag">✨ 2. Card Flip Animation</div>
+                <div class="micro-tag">✨ 3. Progress Ring Fill</div>
+                <div class="micro-tag">✨ 4. Success Confetti</div>
+                <div class="micro-tag">✨ 5. Swipe Gestures (Tinder-style)</div>
+                <div class="micro-tag">✨ 6. Dark/Light Mode Toggle</div>
+                <div class="micro-tag">✨ 7. Story Text Fade-in</div>
+                <div class="micro-tag">✨ 8. Haptic Feedback Visuals</div>
+                <div class="micro-tag">✨ 9. Sticky Header Transition</div>
+                <div class="micro-tag">✨ 10. Voice Input Pulse</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 SceCards. Designed for Senior UX Portfolio.</p>
+    </footer>
+
+    <!-- JS for Scroll Animations & Nav -->
+    <script>
+        // 1. Intersection Observer for Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 2. Navigation Active State on Scroll
+        const sections = document.querySelectorAll('section');
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.dataset.target === current) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+
+        // 3. Smooth Scroll Click
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const target = document.getElementById(dot.dataset.target);
+                window.scrollTo({
+                    top: target.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
