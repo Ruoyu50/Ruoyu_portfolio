@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary App Wireframes</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --phone-bg: #ffffff;
+            --border-color: #333;
+            --text-main: #333;
+            --text-sub: #666;
+            --accent-gray: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Monospace for wireframe feel */
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-family: sans-serif;
+        }
+
+        /* Grid Layout for the 8 Screens */
+        .wireframe-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            justify-items: center;
+        }
+
+        /* Phone Container */
+        .phone-frame {
+            width: 320px;
+            height: 640px;
+            background: var(--phone-bg);
+            border: 4px solid var(--border-color);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Label above each phone */
+        .screen-label {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            font-weight: bold;
+            font-family: sans-serif;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .phone-wrapper {
+            position: relative;
+        }
+
+        /* Internal Layout Components */
+        .header {
+            padding: 15px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+            font-weight: bold;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer {
+            padding: 15px;
+            border-top: 2px solid var(--border-color);
+            background: #fafafa;
+        }
+
+        /* Reusable UI Components */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--text-main);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .input-field {
+            width: 100%;
+            height: 40px;
+            border: 2px solid var(--border-color);
+            background: #fff;
+            margin-bottom: 15px;
+            padding: 5px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            color: #999;
+        }
+
+        .divider {
+            height: 2px;
+            background: var(--border-color);
+            margin: 20px 0;
+            border: none;
+        }
+
+        /* Specific Component Styles */
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            border: 4px solid var(--border-color);
+            border-radius: 50%;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .list-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+        
+        .list-item h4 { margin: 0 0 5px 0; }
+        .list-item p { margin: 0; color: #666; font-size: 0.9em; }
+
+        .flashcard {
+            border: 2px solid var(--border-color);
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px 0;
+            background: #fafafa;
+            box-shadow: 4px 4px 0px #ddd;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 4px;
+        }
+        .key {
+            width: 25px;
+            height: 30px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 100px;
+            margin-top: 20px;
+            border-bottom: 2px solid #333;
+        }
+        .bar {
+            width: 10%;
+            background: #999;
+            border: 1px solid #333;
+            border-bottom: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Vocabulary App Wireframes (Mid-Fidelity)</h1>
+
+    <div class="wireframe-gallery">
+
+        <!-- 1. Today's Review -->
+        <div class="phone-wrapper">
+            <div class="screen-label">1. Today's Review (Home)</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>Menu</span>
+                    <span>Profile</span>
+                </div>
+                <div class="content">
+                    <h3>Good Morning, User</h3>
+                    <hr class="divider">
+                    <div style="text-align: center; margin-bottom: 10px;">TODAY'S GOAL</div>
+                    
+                    <div class="progress-circle">
+                        <span style="font-size: 24px; font-weight: bold;">42 / 50</span>
+                        <span style="font-size: 12px;">Words Reviewed</span>
+                    </div>
+                </div>
+                <div class="footer">
+                    <button class="btn">START REVIEW SESSION</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Quick Add Word -->
+        <div class="phone-wrapper">
+            <div class="screen-label">2. Quick Add Word</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>&lt; Back</span>
+                    <span>Quick Add</span>
+                </div>
+                <div class="content">
+                    <label>New Word</label>
+                    <div class="input-field">Type word...</div>
+
+                    <label>Meaning (Optional)</label>
+                    <div class="input-field">Definition...</div>
+
+                    <label>Add to Deck:</label>
+                    <div class="input-field" style="justify-content: space-between;">
+                        <span>Daily Deck</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+                <div class="footer">
+                    <button class="btn">ADD NOW</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Word List -->
+        <div class="phone-wrapper">
+            <div class="screen-label">3. Word List (Set)</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>&lt; Sets</span>
+                    <span>Exam Set</span>
+                </div>
+                <div style="padding: 10px; background: #eee; border-bottom: 2px solid #333;">
+                    <div class="input-field" style="margin: 0; height: 30px; font-size: 12px;">🔍 Search words...</div>
+                </div>
+                <div class="content" style="padding-top: 0;">
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 2px solid #333;">
+                        <span>Sort: A-Z ▼</span>
+                        <span>Filter</span>
+                    </div>
+
+                    <div class="list-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Ubiquitous</h4>
+                            <span>&gt;</span>
+                        </div>
+                        <p>Present, appearing everywhere</p>
+                    </div>
+                    <div class="list-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Ephemeral</h4>
+                            <span>&gt;</span>
+                        </div>
+                        <p>Lasting for a very short time</p>
+                    </div>
+                    <div class="list-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Serendipity</h4>
+                            <span>&gt;</span>
+                        </div>
+                        <p>Occurrence of events by chance</p>
+                    </div>
+                </div>
+                <!-- Floating Action Button simulation -->
+                <div style="position: absolute; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #333; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px;">+</div>
+            </div>
+        </div>
+
+        <!-- 4. Word Detail -->
+        <div class="phone-wrapper">
+            <div class="screen-label">4. Word Detail Page</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>&lt; List</span>
+                    <span>Edit</span>
+                </div>
+                <div class="content">
+                    <h2 style="margin-bottom: 5px;">Grandiloquent</h2>
+                    <span style="font-style: italic; color: #666;">(adj.)</span>
+
+                    <hr class="divider">
+                    
+                    <h4>DEFINITION</h4>
+                    <p>Pompous or extravagant in language, style, or manner.</p>
+
+                    <h4>EXAMPLE</h4>
+                    <div style="background: #eee; padding: 10px; border-left: 4px solid #999;">
+                        "The politician's grandiloquent speech failed to impress."
+                    </div>
+
+                    <h4>MY NOTES</h4>
+                    <div class="input-field" style="height: 60px; color: #999;">Tap to add notes...</div>
+                </div>
+                <div class="footer">
+                    <button class="btn btn-outline">Move to Different Set</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Add Word (Main) -->
+        <div class="phone-wrapper">
+            <div class="screen-label">5. Add Word (Main Flow)</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>Cancel</span>
+                    <span>Save</span>
+                </div>
+                <div class="content">
+                    <label>Target Word</label>
+                    <div class="input-field"></div>
+
+                    <label>Definition</label>
+                    <div class="input-field"></div>
+
+                    <label>Part of Speech</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <span style="border: 2px solid #333; padding: 5px 10px; border-radius: 15px; background: #333; color: white;">Noun</span>
+                        <span style="border: 2px solid #333; padding: 5px 10px; border-radius: 15px;">Verb</span>
+                    </div>
+
+                    <label>Context / Sentence</label>
+                    <div class="input-field" style="height: 60px;"></div>
+
+                    <label>Select Deck</label>
+                    <div class="input-field" style="justify-content: space-between;">
+                        <span>Exam Prep 101</span>
+                        <span>▼</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Review - Flip Mode -->
+        <div class="phone-wrapper">
+            <div class="screen-label">6. Review - Flip Mode</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>[X] Quit</span>
+                    <span>12 / 42</span>
+                </div>
+                <div class="content" style="justify-content: center;">
+                    
+                    <div class="flashcard" style="height: 200px; display: flex; flex-direction: column; justify-content: center;">
+                        <h2>Epiphany</h2>
+                    </div>
+
+                    <p style="text-align: center; color: #666; margin-top: 20px;">( Tap card to flip )</p>
+                </div>
+                <div class="footer">
+                    <!-- Showing what it looks like AFTER flip -->
+                    <div style="display: flex; gap: 5px;">
+                        <button class="btn" style="background: #d32f2f;">AGAIN</button>
+                        <button class="btn" style="background: #fbc02d; color: black;">HARD</button>
+                        <button class="btn" style="background: #388e3c;">GOOD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Review - Typing Mode -->
+        <div class="phone-wrapper">
+            <div class="screen-label">7. Review - Typing Mode</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>[X] Quit</span>
+                    <span>5 / 10</span>
+                </div>
+                <div class="content">
+                    <h4>PROMPT</h4>
+                    <p style="font-size: 18px; margin-top: 0;">"A person who dislikes humankind"</p>
+
+                    <h4 style="margin-top: 40px;">YOUR ANSWER</h4>
+                    <div class="input-field" style="border: 2px solid #333; font-weight: bold; color: #333;">Misanthr_</div>
+
+                    <button class="btn" style="margin-top: 10px;">CHECK ANSWER</button>
+                </div>
+                <div style="background: #ccc; padding: 10px;">
+                    <!-- Keyboard Representation -->
+                    <div class="keyboard-row">
+                        <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div>
+                    </div>
+                    <div class="keyboard-row">
+                        <div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 5px;">[ Space ]</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Stats & Progress -->
+        <div class="phone-wrapper">
+            <div class="screen-label">8. Stats & Progress</div>
+            <div class="phone-frame">
+                <div class="header">
+                    <span>&lt; Back</span>
+                    <span>Stats</span>
+                </div>
+                <div class="content">
+                    <h2 style="text-align: center; font-size: 36px; margin: 10px 0;">1,240</h2>
+                    <p style="text-align: center; margin: 0 0 30px 0; color: #666;">Total Words Learned</p>
+
+                    <h4>MASTERY BREAKDOWN</h4>
+                    <div style="border: 2px solid #333; padding: 10px;">
+                        <div style="margin-bottom: 5px;"><strong>Mastered:</strong> ████████ 80%</div>
+                        <div style="margin-bottom: 5px;"><strong>Learning:</strong> ███▒▒▒▒▒ 15%</div>
+                        <div><strong>Weak:</strong> █▒▒▒▒▒▒▒ 5%</div>
+                    </div>
+
+                    <h4>WEEKLY ACTIVITY</h4>
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 40%;"></div>
+                        <div class="bar" style="height: 60%;"></div>
+                        <div class="bar" style="height: 30%;"></div>
+                        <div class="bar" style="height: 80%;"></div>
+                        <div class="bar" style="height: 50%;"></div>
+                        <div class="bar" style="height: 20%;"></div>
+                        <div class="bar" style="height: 10%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 5px;">
+                        <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                    </div>
+                </div>
+                <div class="footer">
+                    <button class="btn btn-outline">Share Progress</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
