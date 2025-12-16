@@ -3,104 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary App - Contextual & Narrative Learning</title>
+    <title>The Weave - Narrative Vocabulary Prototype</title>
     <style>
-        /* --- DESIGN TOKENS (Teal Palette) --- */
+        /* --- DESIGN SYSTEM --- */
         :root {
+            /* Palette - Teal & Paper */
             --primary-50:  #f0fafa;
             --primary-100: #e0f5f2;
             --primary-500: #00a389;
             --primary-700: #007a65;
             --primary-900: #004d40;
-
-            --bg-app: #fcfcfb;
-            --surface-card: #ffffff;
-            --surface-paper: #fdfbf7; /* Warm white for story mode */
             
-            --border-light: #e4e5e7;
+            --accent-error: #d32f2f;
+            --accent-success: #388e3c;
+
+            --bg-app: #f2f4f6;
+            --surface-card: #ffffff;
+            --surface-paper: #fcfbf9; /* Warm paper tone */
+
             --text-main: #1a1f24;
             --text-sub: #5a6470;
             --text-muted: #9ca4ac;
 
-            --nav-height: 70px;
-            --header-height: 56px;
+            --border-light: #e4e5e7;
             --radius-md: 12px;
-            --radius-lg: 16px;
+            --radius-lg: 20px;
+            
+            --nav-height: 70px;
+            --header-height: 60px;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #e8eaed;
             margin: 0;
-            padding: 40px;
-            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        h1 { text-align: center; font-weight: 600; margin-bottom: 50px; }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 60px;
-            justify-items: center;
-        }
-
-        .phone {
-            width: 360px;
-            height: 780px;
+        /* --- PHONE CONTAINER --- */
+        #phone-frame {
+            width: 375px;
+            height: 812px;
             background: var(--bg-app);
-            border: 12px solid #222;
+            border: 12px solid #1a1a1a;
             border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            position: relative;
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2);
         }
 
-        .screen-label {
+        /* --- LAYOUT UTILS --- */
+        .screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-app);
             position: absolute;
-            top: -40px;
-            left: 0;
-            font-weight: 700;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 14px;
+            top: 0; left: 0; right: 0; bottom: var(--nav-height);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(10px);
         }
 
-        /* --- CONSISTENT COMPONENTS --- */
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        /* Full screen overlay mode (Story) */
+        .screen.fullscreen {
+            bottom: 0;
+            z-index: 20;
+        }
+
         .header {
             height: var(--header-height);
+            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
             background: var(--bg-app);
-            border-bottom: 1px solid var(--border-light);
             flex-shrink: 0;
-            z-index: 10;
-        }
-        .header-title { font-weight: 600; font-size: 17px; }
-        .icon-btn { background: none; border: none; padding: 8px; cursor: pointer; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
-
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
         }
 
-        .nav {
-            height: var(--nav-height);
+        .header-title { font-weight: 700; font-size: 18px; color: var(--text-main); }
+        .scroll-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 80px; }
+
+        /* --- COMPONENTS --- */
+        .card {
             background: var(--surface-card);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 16px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        /* Story Card Style */
+        .paper-card {
+            background: var(--surface-paper);
+            padding: 24px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-300);
+            font-family: "Georgia", serif;
+            line-height: 1.6;
+            font-size: 17px;
+            color: #333;
+            box-shadow: 2px 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: var(--primary-500); color: white; box-shadow: 0 4px 12px rgba(0, 163, 137, 0.3); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary-500); color: var(--primary-700); }
+        .btn-ghost { background: transparent; color: var(--text-sub); }
+
+        /* Inputs */
+        .input-group { margin-bottom: 20px; }
+        .label { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .input-field {
+            width: 100%; box-sizing: border-box; padding: 16px;
+            border: 2px solid var(--border-light); border-radius: 12px;
+            font-size: 16px; outline: none; transition: 0.2s;
+            background: white;
+        }
+        .input-field:focus { border-color: var(--primary-500); background: var(--primary-50); }
+
+        /* Interactive Text */
+        .interactive-word {
+            color: var(--primary-700);
+            font-weight: 600;
+            background: var(--primary-100);
+            padding: 2px 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            border-bottom: 1px dashed var(--primary-500);
+        }
+        .interactive-word:hover { background: var(--primary-500); color: white; }
+
+        /* Tags */
+        .tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { font-size: 12px; padding: 6px 12px; background: white; border: 1px solid var(--border-light); border-radius: 20px; color: var(--text-sub); }
+
+        /* --- BOTTOM NAV --- */
+        .nav-bar {
+            height: var(--nav-height);
+            background: white;
             border-top: 1px solid var(--border-light);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding-bottom: 10px;
-            flex-shrink: 0;
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 50;
         }
         .nav-item {
             display: flex;
@@ -109,438 +189,383 @@
             gap: 4px;
             color: var(--text-muted);
             font-size: 10px;
-            font-weight: 500;
+            font-weight: 600;
             width: 60px;
             cursor: pointer;
+            transition: 0.2s;
         }
+        .nav-item svg { width: 24px; height: 24px; stroke-width: 2; transition: 0.2s; }
         .nav-item.active { color: var(--primary-500); }
-        .nav-item svg { width: 24px; height: 24px; stroke-width: 2px; }
+        .nav-item.active svg { transform: translateY(-2px); }
 
-        /* --- UI ELEMENTS --- */
-        .card {
-            background: var(--surface-card);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            margin-bottom: 16px;
-        }
-
-        /* The Story Paper Look */
-        .story-card {
-            background: var(--surface-paper);
-            border: 1px solid #e0dbce;
-            padding: 24px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-family: "Georgia", serif; /* Serif for reading mode */
-            line-height: 1.6;
-            color: #333;
-            box-shadow: 2px 2px 0 rgba(0,0,0,0.05);
-        }
-
-        .highlight-word {
-            background-color: var(--primary-100);
-            color: var(--primary-900);
-            padding: 0 4px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .input {
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-light);
-            background: #f4f5f7;
-            font-size: 16px;
-            box-sizing: border-box;
-            margin-bottom: 16px;
-            color: var(--text-main);
-            outline: none;
-        }
-        .input:focus { background: #fff; border-color: var(--primary-500); box-shadow: 0 0 0 2px var(--primary-100); }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius-lg);
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-primary { background: var(--primary-500); color: white; }
+        /* --- ANIMATIONS & UTILS --- */
+        .hidden { display: none !important; }
         
-        .tag {
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            background: var(--primary-50);
-            color: var(--primary-700);
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-right: 4px;
+        /* Toast Notification */
+        #toast {
+            position: absolute;
+            top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: #333; color: white;
+            padding: 12px 24px; border-radius: 30px;
+            font-size: 14px; font-weight: 600;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            pointer-events: none;
+            opacity: 0;
         }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* Helper Icons */
+        /* Definition Popover */
+        #def-popover {
+            position: absolute;
+            bottom: 100px; left: 20px; right: 20px;
+            background: #222; color: white;
+            padding: 16px; border-radius: 12px;
+            font-size: 14px; line-height: 1.4;
+            opacity: 0; pointer-events: none;
+            transform: translateY(10px);
+            transition: 0.2s;
+            z-index: 60;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        #def-popover.show { opacity: 1; transform: translateY(0); }
+        
+        /* Icons */
         svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
 
     </style>
 </head>
 <body>
 
-    <h1>Vocabulary App: The "Connections" Approach</h1>
+    <div id="phone-frame">
+        
+        <!-- === GLOBAL ELEMENTS === -->
+        <div id="toast">Saved Successfully!</div>
+        <div id="def-popover">
+            <strong style="color: #4dcab7; display:block; margin-bottom:4px;" id="pop-word">Word</strong>
+            <span id="pop-def">Definition goes here.</span>
+        </div>
 
-    <div class="gallery">
-
-        <!-- 1. HOME: NARRATIVE DASHBOARD -->
-        <!-- Focus: "Today's Story" instead of "Cards Reviewed" -->
-        <div class="phone">
-            <div class="screen-label">1. Home (Narrative Dashboard)</div>
+        <!-- === SCREEN 1: HOME (DASHBOARD) === -->
+        <div id="screen-home" class="screen active">
             <div class="header">
-                <button class="icon-btn"><svg width="24" height="24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+                <svg width="24" height="24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                 <div class="header-title">My Journey</div>
-                <button class="icon-btn"><svg width="24" height="24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
+                <div style="width:32px; height:32px; background:var(--primary-100); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary-700); font-weight:bold;">JD</div>
             </div>
-            <div class="content">
-                <h2 style="font-size: 24px; margin-bottom: 8px;">Morning, Scholar.</h2>
+            
+            <div class="scroll-content">
+                <h2 style="margin-bottom: 8px;">Morning, Scholar.</h2>
                 <p style="color: var(--text-sub); margin-bottom: 24px;">Your 12 review words have been woven into a new story.</p>
-                
-                <!-- The Primary Action is Reading, not flipping -->
-                <div class="card" style="background: var(--primary-500); color: white; border: none;">
+
+                <!-- Primary Story Card -->
+                <div class="card" style="background: var(--primary-500); color: white; border: none; cursor: pointer;" onclick="navTo('screen-story')">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
                         <div>
-                            <div style="font-size: 12px; opacity: 0.9; text-transform: uppercase; font-weight: 600;">Today's Context</div>
+                            <div style="font-size: 11px; opacity: 0.8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Today's Context</div>
                             <h3 style="margin: 4px 0 0 0; font-size: 22px;">The Architect's Dilemma</h3>
                         </div>
-                        <svg width="32" height="32" style="opacity:0.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        <svg width="28" height="28" style="opacity:0.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     </div>
                     <div style="margin-bottom: 20px; font-size: 14px; line-height: 1.5; opacity: 0.9;">
-                        Includes: Structure, Facade, Juxtaposition, Ornament, Durable...
+                        Keywords: Structure, Facade, Juxtaposition, Ornament, Durable...
                     </div>
-                    <button class="btn" style="background: white; color: var(--primary-900);">Read & Review</button>
+                    <div class="btn" style="background: white; color: var(--primary-900); padding: 12px;">Read & Review</div>
                 </div>
 
-                <div style="font-weight: 600; margin: 16px 0 8px 0;">Recent Connections</div>
+                <div class="label" style="margin-top: 20px;">Knowledge Clusters</div>
                 <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px;">
-                    <div class="card" style="min-width: 120px; margin:0;">
-                        <div style="font-size: 24px;">🏛️</div>
-                        <div style="font-weight: 600; margin-top: 8px;">History</div>
-                        <div style="font-size: 12px; color: var(--text-sub);">8 words</div>
+                    <div class="card" style="min-width: 110px; margin:0; text-align:center;">
+                        <div style="font-size: 28px;">🏛️</div>
+                        <div style="font-weight: 600; margin-top: 8px;">Arch.</div>
                     </div>
-                     <div class="card" style="min-width: 120px; margin:0;">
-                        <div style="font-size: 24px;">🧬</div>
-                        <div style="font-weight: 600; margin-top: 8px;">Biology</div>
-                        <div style="font-size: 12px; color: var(--text-sub);">12 words</div>
+                    <div class="card" style="min-width: 110px; margin:0; text-align:center;">
+                        <div style="font-size: 28px;">🧬</div>
+                        <div style="font-weight: 600; margin-top: 8px;">Bio</div>
+                    </div>
+                    <div class="card" style="min-width: 110px; margin:0; text-align:center;">
+                        <div style="font-size: 28px;">⚖️</div>
+                        <div style="font-weight: 600; margin-top: 8px;">Law</div>
                     </div>
                 </div>
-            </div>
-            <!-- Nav Bar Consistent -->
-            <div class="nav">
-                <div class="nav-item active"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
-                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
-                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
-                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Weave</div>
-                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
-        <!-- 2. SMART ADD: CONNECTION PROMPT -->
-        <!-- Focus: Forcing the user to create a link immediately -->
-        <div class="phone">
-            <div class="screen-label">2. Smart Add (Connection Prompt)</div>
+        <!-- === SCREEN 2: SMART ADD === -->
+        <div id="screen-add" class="screen">
             <div class="header">
-                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <div class="header-title">New Concept</div>
+                <div style="width: 24px;"></div>
+                <div class="header-title">New Connection</div>
+                <div style="width: 24px;"></div>
+            </div>
+            <div class="scroll-content">
+                <div class="input-group">
+                    <label class="label">The Word</label>
+                    <input class="input-field" id="input-word" placeholder="e.g. Ephemeral" value="Ephemeral">
+                </div>
+                
+                <div class="input-group">
+                    <label class="label">Definition</label>
+                    <textarea class="input-field" style="height: 80px; resize: none;">Lasting for a very short time.</textarea>
+                </div>
+
+                <!-- AI Feature -->
+                <div class="card" style="background: var(--primary-50); border: 1px dashed var(--primary-500);">
+                    <div class="label" style="color: var(--primary-700); display: flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14"><path d="M12 2a10 10 0 1 0 10 10"></path></svg> AI Connection Assistant
+                    </div>
+                    <p style="font-size: 14px; color: var(--text-sub); margin: 0 0 12px 0;" id="ai-hint-text">Connect this word to something you already know.</p>
+                    <button class="btn-outline btn" style="font-size: 14px; padding: 10px;" onclick="generateAiHint()">
+                        ✨ Generate AI Hint
+                    </button>
+                    <div id="ai-result" class="hidden" style="margin-top: 12px; font-size: 14px; font-weight: 500; color: var(--text-main);">
+                        "Think of: A Snapchat message, cherry blossoms, or morning dew."
+                    </div>
+                </div>
+
+                <button class="btn-primary btn" style="margin-top: 20px;" onclick="saveWord()">Save Connection</button>
+            </div>
+        </div>
+
+        <!-- === SCREEN 3: LIST === -->
+        <div id="screen-list" class="screen">
+            <div class="header">
+                <div class="header-title">My Concepts</div>
+                <svg width="24" height="24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <div class="scroll-content">
+                <div class="input-group">
+                    <input class="input-field" placeholder="Search your web..." style="padding: 10px 16px; font-size: 14px;">
+                </div>
+                
+                <div class="label">Recent</div>
+                
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="navTo('screen-detail')">
+                    <div>
+                        <div style="font-weight: 700; font-size: 16px;">Juxtaposition</div>
+                        <div style="font-size: 13px; color: var(--text-sub); margin-top: 4px;">Placed close together for contrast</div>
+                    </div>
+                    <svg width="20" height="20" color="#ccc"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 16px;">Structure</div>
+                        <div style="font-size: 13px; color: var(--text-sub); margin-top: 4px;">Arrangement of parts</div>
+                    </div>
+                    <svg width="20" height="20" color="#ccc"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+
+                 <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 16px;">Facade</div>
+                        <div style="font-size: 13px; color: var(--text-sub); margin-top: 4px;">Face of a building</div>
+                    </div>
+                    <svg width="20" height="20" color="#ccc"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- === SCREEN 5: STORY MODE (FULLSCREEN) === -->
+        <div id="screen-story" class="screen fullscreen">
+            <div class="header" style="border: none;">
+                <button class="btn-ghost" style="width: auto; padding: 0;" onclick="navTo('screen-home')">Close</button>
+                <div class="header-title" style="font-size: 14px; opacity: 0.7;">The Architect's Dilemma</div>
                 <div style="width: 40px;"></div>
             </div>
-            <div class="content">
-                <label style="font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: 600;">The Word</label>
-                <input class="input" value="Juxtaposition" style="font-weight: 600; font-size: 18px;">
-
-                <label style="font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: 600;">Definition</label>
-                <div class="input" style="font-size: 14px; color: var(--text-sub);">The fact of two things being seen or placed close together with contrasting effect.</div>
-
-                <!-- THE KEY FEATURE: Making a connection immediately -->
-                <div class="card" style="background: var(--primary-50); border: 1px dashed var(--primary-500);">
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px; color: var(--primary-900); font-weight: 600; font-size: 14px;">
-                        <svg width="18" height="18"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                        Make a Connection
-                    </div>
-                    <p style="font-size: 13px; color: var(--text-sub); margin: 0 0 12px 0;">What does this remind you of?</p>
-                    <div style="display: flex; gap: 8px;">
-                        <span class="tag" style="background: white; border: 1px solid var(--border-light);">Contrast</span>
-                        <span class="tag" style="background: white; border: 1px solid var(--border-light);">Art Class</span>
-                        <span class="tag" style="background: white; border: 1px dashed var(--primary-500); color: var(--text-muted);">+ Add Tag</span>
-                    </div>
-                </div>
-
-                <div style="flex:1"></div>
-                <button class="btn btn-primary">Save Connection</button>
-            </div>
-            <div class="nav">
-                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
-                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
-                <div class="nav-item active"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
-                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Weave</div>
-                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
-            </div>
-        </div>
-
-        <!-- 3. WORD LIST: CLUSTERS -->
-        <!-- Focus: Words grouped by Topic/Story, not Alphabetical -->
-        <div class="phone">
-            <div class="screen-label">3. Concept Clusters</div>
-            <div class="header">
-                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <div class="header-title">My Concepts</div>
-                <button class="icon-btn"><svg width="24" height="24"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
-            </div>
-            <div class="content" style="padding-top: 10px;">
-                
-                <h3 style="font-size: 14px; color: var(--text-muted); text-transform: uppercase;">Recent Clusters</h3>
-
-                <!-- Cluster 1 -->
-                <div class="card">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <div style="font-weight: 700; font-size: 16px;">🏛️ Architecture</div>
-                        <span class="tag">4 words</span>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span class="tag" style="background: var(--bg-app);">Facade</span>
-                        <span class="tag" style="background: var(--bg-app);">Structure</span>
-                        <span class="tag" style="background: var(--bg-app);">Column</span>
-                        <span class="tag" style="background: var(--bg-app);">Juxtaposition</span>
-                    </div>
-                </div>
-
-                <!-- Cluster 2 -->
-                <div class="card">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <div style="font-weight: 700; font-size: 16px;">🌿 Nature & Growth</div>
-                        <span class="tag">3 words</span>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span class="tag" style="background: var(--bg-app);">Ephemeral</span>
-                        <span class="tag" style="background: var(--bg-app);">Bloom</span>
-                        <span class="tag" style="background: var(--bg-app);">Decay</span>
-                    </div>
-                </div>
-
-                <button class="btn" style="background: white; border: 1px solid var(--border-light); color: var(--text-sub); margin-top: 10px;">
-                    + Create New Cluster
-                </button>
-            </div>
-            <div class="nav">
-                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
-                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
-                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
-                <div class="nav-item active"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Weave</div>
-                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
-            </div>
-        </div>
-
-        <!-- 4. DETAIL: VISUAL CONNECTION -->
-        <!-- Focus: Showing the "Family Tree" of the word -->
-        <div class="phone">
-            <div class="screen-label">4. Connection Detail</div>
-            <div class="header">
-                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <div class="header-title">Juxtaposition</div>
-                <button class="icon-btn" style="color: var(--primary-500);">Edit</button>
-            </div>
-            <div class="content">
-                <div class="card" style="text-align: center; padding: 24px;">
-                    <h2 style="font-size: 28px;">Juxtaposition</h2>
-                    <p style="color: var(--text-sub); font-style: italic;">noun</p>
-                    <p>Two things being seen or placed close together with contrasting effect.</p>
-                </div>
-
-                <!-- CONNECTION MAP UI -->
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    <svg width="16" height="16" style="color: var(--primary-500);"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                    <span style="font-weight: 600; font-size: 14px;">Connection Web</span>
-                </div>
-
-                <div class="card" style="background: var(--bg-app); border: none; display: flex; flex-direction: column; gap: 12px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px; border-radius: 8px; border: 1px solid var(--border-light);">
-                        <div>
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Similar To</span>
-                            <div style="font-weight: 500;">Contrast</div>
-                        </div>
-                        <svg width="20" color="#ccc"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px; border-radius: 8px; border: 1px solid var(--border-light);">
-                         <div>
-                            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Found In</span>
-                            <div style="font-weight: 500;">"The Architect's Dilemma"</div>
-                        </div>
-                        <svg width="20" color="#ccc"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                    </div>
-                </div>
-            </div>
-            <div class="nav">
-                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
-                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
-                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
-                <div class="nav-item active"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Weave</div>
-                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
-            </div>
-        </div>
-
-        <!-- 5. THE "WEAVE" (STORY MODE) -->
-        <!-- Focus: Priming the brain with context before testing -->
-        <div class="phone">
-            <div class="screen-label">5. The "Weave" (Story Mode)</div>
-            <div class="header">
-                <button class="icon-btn"><span style="font-size:14px; color: var(--text-sub);">Close</span></button>
-                <div class="header-title">The Architect's Dilemma</div>
-                <button class="icon-btn"><svg width="24" height="24"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
-            </div>
-            <div class="content">
-                <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 20px;">
-                    Read today's story to see your words in action.
+            <div class="scroll-content" style="padding-top: 0;">
+                <p style="color: var(--text-sub); font-size: 14px; text-align: center; margin-bottom: 20px;">
+                    Tap highlighted words to reveal context.
                 </p>
 
-                <!-- THE NARRATIVE CARD -->
-                <div class="story-card">
+                <div class="paper-card">
                     <p style="margin-top: 0;">
-                        The old library was famous for its <span class="highlight-word">structure</span>, a towering mix of steel and glass.
+                        The old library was famous for its <span class="interactive-word" onclick="showDef(this, 'Arrangement of and relations between parts', 'Structure')">structure</span>, a towering mix of steel and glass that dominated the skyline.
                     </p>
                     <p>
-                        However, the true beauty lay in the <span class="highlight-word">juxtaposition</span> of the modern <span class="highlight-word">facade</span> against the ancient brickwork of the town hall next door. 
+                        However, the true beauty lay in the <span class="interactive-word" onclick="showDef(this, 'Two things placed together for contrasting effect', 'Juxtaposition')">juxtaposition</span> of the modern <span class="interactive-word" onclick="showDef(this, 'The face of a building', 'Facade')">facade</span> against the ancient brickwork of the town hall next door.
                     </p>
                     <p>
-                        Critics called it a mere <span class="highlight-word">ornament</span> to the city, but the architect insisted it would prove <span class="highlight-word">durable</span> against the tests of time and weather...
+                        Critics called it a mere <span class="interactive-word" onclick="showDef(this, 'A thing used to make something look more attractive', 'Ornament')">ornament</span> to the city, but the architect insisted it would prove <span class="interactive-word" onclick="showDef(this, 'Able to withstand wear, pressure, or damage', 'Durable')">durable</span> against the tests of time.
                     </p>
                 </div>
 
-                <div style="flex:1"></div>
-                <button class="btn btn-primary">Start Context Quiz</button>
+                <button class="btn-primary btn" onclick="navTo('screen-quiz')">Start Context Quiz</button>
             </div>
-            <!-- No Nav here, it's a focused mode -->
-            <div style="height: 20px; background: var(--bg-app);"></div>
         </div>
 
-        <!-- 6. CONTEXTUAL REVIEW -->
-        <!-- Focus: Test the word IN THE SENTENCE -->
-        <div class="phone">
-            <div class="screen-label">6. Contextual Review</div>
-            <div class="header">
-                <button class="icon-btn"><span style="font-size:14px; color: var(--text-sub);">Quit</span></button>
+        <!-- === SCREEN 7: QUIZ (FILL GAP) === -->
+        <div id="screen-quiz" class="screen fullscreen">
+            <div class="header" style="border: none;">
+                <button class="btn-ghost" style="width: auto; padding: 0;" onclick="navTo('screen-story')">Back</button>
                 <div class="header-title">1 / 5</div>
                 <div style="width: 40px;"></div>
             </div>
-            <div class="content">
-                
-                <!-- The Flashcard is a snippet of the story -->
-                <div class="story-card" style="margin-top: 40px; text-align: center; padding: 40px 24px;">
-                    <p style="font-size: 18px; color: #555;">
-                        "However, the true beauty lay in the..."
-                    </p>
-                    <h2 style="font-size: 32px; color: var(--primary-700); margin: 20px 0;">[ Juxtaposition ]</h2>
-                    <p style="font-size: 18px; color: #555;">
-                        "...of the modern facade against the ancient brickwork."
-                    </p>
+            <div class="scroll-content">
+                <div class="paper-card" style="font-size: 20px; text-align: center; padding: 40px 20px;">
+                    "Critics called it a mere ______ to the city, but the architect insisted it would be useful."
                 </div>
 
-                <div style="text-align: center; color: var(--text-sub); margin-bottom: 20px;">
-                    Tap to reveal meaning & connection
+                <div class="input-group">
+                    <label class="label">Missing Word</label>
+                    <input class="input-field" id="quiz-input" placeholder="Type here..." autocomplete="off">
                 </div>
 
-                <!-- Grading (Visible after tap, simulated here) -->
-                 <div style="display: flex; gap: 10px; margin-top: auto;">
-                    <button class="btn" style="background: white; border: 1px solid var(--border-light); color: var(--text-sub); flex: 1;">Forgot</button>
-                    <button class="btn" style="background: white; border: 1px solid var(--primary-500); color: var(--primary-700); flex: 1;">Recalled</button>
-                </div>
-            </div>
-            <div style="height: 20px; background: var(--bg-app);"></div>
-        </div>
+                <div id="quiz-feedback" class="hidden" style="text-align: center; margin-bottom: 20px; font-weight: bold;"></div>
 
-        <!-- 7. FILL THE GAP (QUIZ) -->
-        <!-- Focus: Active Recall via Story Completion -->
-        <div class="phone">
-            <div class="screen-label">7. Story Completion</div>
-            <div class="header">
-                <button class="icon-btn"><span style="font-size:14px; color: var(--text-sub);">Quit</span></button>
-                <div class="header-title">Fill the Gap</div>
-                <div style="width: 40px;"></div>
-            </div>
-            <div class="content">
-                <div class="story-card">
-                    <p>
-                        Critics called it a mere ________ to the city, but the architect insisted it would prove durable...
-                    </p>
-                </div>
-
-                <label class="label">Missing Word</label>
-                <input class="input" value="Ornam" style="border-color: var(--primary-500);">
-
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
-                    <div style="font-size: 12px; color: var(--text-sub);">Hint:</div>
+                <div class="tag-container" style="justify-content: center; margin-bottom: 30px;">
+                    <span style="font-size: 12px; color: var(--text-sub); align-self: center;">Hint:</span>
                     <span class="tag">Decoration</span>
                     <span class="tag">Accessory</span>
                 </div>
 
-                <div style="margin-top: auto; height: 200px; background: #e0e0e0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888;">
+                <button class="btn-primary btn" onclick="checkAnswer()">Check Answer</button>
+                
+                <!-- Simulated Keyboard Area -->
+                <div style="margin-top: auto; height: 220px; background: #dcdde0; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: center; color: #888; margin-left: -20px; margin-right: -20px; margin-bottom: -80px;">
                     [ KEYBOARD ]
                 </div>
             </div>
-            <div style="height: 20px; background: var(--bg-app);"></div>
         </div>
 
-        <!-- 8. STATS: KNOWLEDGE WEB -->
-        <!-- Focus: Visualizing connections, not just bars -->
-        <div class="phone">
-            <div class="screen-label">8. Knowledge Web</div>
+        <!-- === SCREEN 8: STATS === -->
+        <div id="screen-stats" class="screen">
             <div class="header">
-                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <div class="header-title">Your Network</div>
-                <button class="icon-btn"><svg width="24" height="24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
+                 <div class="header-title">Your Web</div>
+                 <div style="width: 24px;"></div>
             </div>
-            <div class="content">
-                <div class="card" style="text-align: center; padding: 24px;">
-                    <div style="font-size: 12px; text-transform: uppercase; color: var(--text-sub); margin-bottom: 8px;">Connectivity Score</div>
-                    <h2 style="font-size: 48px; color: var(--primary-700); margin: 0;">84%</h2>
-                    <p style="font-size: 14px; margin-top: 8px;">Most of your words are linked to stories.</p>
+            <div class="scroll-content">
+                <div class="card" style="text-align: center; padding: 30px;">
+                    <div class="label">Connectivity Score</div>
+                    <h2 style="font-size: 56px; color: var(--primary-700); margin: 0;">84%</h2>
+                    <p style="font-size: 14px; margin-top: 8px; color: var(--text-sub);">Most of your words are linked to stories.</p>
                 </div>
 
-                <h3 style="font-size: 16px; margin: 16px 0 12px 0;">Knowledge Clusters</h3>
+                <h3 style="font-size: 16px; margin: 20px 0 12px 0;">Knowledge Clusters</h3>
                 
-                <!-- Visualizing Clusters instead of Lists -->
-                <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                    <div style="width: 100px; height: 100px; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 10px;">
-                        <span style="font-size: 20px;">🏛️</span>
-                        <span style="font-size: 12px; font-weight: 600;">Arch.</span>
-                    </div>
-                     <div style="width: 80px; height: 80px; background: var(--surface-card); border: 1px solid var(--border-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center;">
-                        <span style="font-size: 16px;">🧬</span>
-                        <span style="font-size: 10px; font-weight: 600;">Bio</span>
-                    </div>
-                    <div style="width: 90px; height: 90px; background: var(--surface-card); border: 1px solid var(--border-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center;">
-                        <span style="font-size: 18px;">⚖️</span>
-                        <span style="font-size: 11px; font-weight: 600;">Law</span>
-                    </div>
+                <!-- Visual Nodes -->
+                <div style="height: 200px; position: relative; border: 1px dashed var(--border-light); border-radius: 20px;">
+                    <!-- Node 1 -->
+                    <div style="position: absolute; top: 30%; left: 20%; width: 60px; height: 60px; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">🏛️</div>
+                    <!-- Node 2 -->
+                    <div style="position: absolute; top: 50%; right: 20%; width: 50px; height: 50px; background: white; border: 2px solid var(--primary-500); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">⚖️</div>
+                    <!-- Node 3 -->
+                    <div style="position: absolute; bottom: 20%; left: 40%; width: 50px; height: 50px; background: white; border: 1px solid var(--text-muted); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">🧬</div>
+                    
+                    <!-- SVG Lines (Simulated with absolute divs for prototype) -->
+                    <div style="position: absolute; top: 45%; left: 35%; width: 80px; height: 2px; background: var(--primary-100); transform: rotate(20deg);"></div>
                 </div>
-
             </div>
-             <div class="nav">
-                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
-                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
-                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
-                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Weave</div>
-                <div class="nav-item active"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
+        </div>
+
+
+        <!-- === BOTTOM NAVIGATION === -->
+        <div class="nav-bar">
+            <div class="nav-item active" onclick="navTo('screen-home')" id="nav-home">
+                <svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home
+            </div>
+            <div class="nav-item" onclick="navTo('screen-list')" id="nav-list">
+                <svg><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>Concepts
+            </div>
+            <div class="nav-item" onclick="navTo('screen-add')" id="nav-add">
+                <div style="background: var(--primary-500); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                    <svg style="color: white;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </div>
+            </div>
+            <div class="nav-item" onclick="navTo('screen-stats')" id="nav-stats">
+                <svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Web
             </div>
         </div>
 
     </div>
 
+    <script>
+        // --- NAVIGATION LOGIC ---
+        function navTo(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show target
+            document.getElementById(screenId).classList.add('active');
+
+            // Handle Bottom Nav State
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            // Update Active Nav Icon based on screen
+            if(screenId === 'screen-home') document.getElementById('nav-home').classList.add('active');
+            if(screenId === 'screen-list') document.getElementById('nav-list').classList.add('active');
+            if(screenId === 'screen-add') document.getElementById('nav-add').classList.add('active');
+            if(screenId === 'screen-stats') document.getElementById('nav-stats').classList.add('active');
+            
+            // Hide Popover if open
+            document.getElementById('def-popover').classList.remove('show');
+        }
+
+        // --- STORY MODE INTERACTION ---
+        function showDef(element, definition, word) {
+            const popover = document.getElementById('def-popover');
+            document.getElementById('pop-word').innerText = word;
+            document.getElementById('pop-def').innerText = definition;
+            popover.classList.add('show');
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                popover.classList.remove('show');
+            }, 3500);
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAnswer() {
+            const input = document.getElementById('quiz-input');
+            const feedback = document.getElementById('quiz-feedback');
+            const answer = "Ornament";
+            
+            if (input.value.toLowerCase() === answer.toLowerCase()) {
+                input.style.borderColor = "var(--accent-success)";
+                input.style.backgroundColor = "#e8f5e9";
+                feedback.innerText = "Correct! It fits the context.";
+                feedback.style.color = "var(--accent-success)";
+                feedback.classList.remove('hidden');
+            } else {
+                input.style.borderColor = "var(--accent-error)";
+                input.style.backgroundColor = "#ffebee";
+                input.classList.add('shake');
+                feedback.innerText = "Try again. Think about 'decoration'.";
+                feedback.style.color = "var(--accent-error)";
+                feedback.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    input.style.borderColor = "var(--border-light)";
+                    input.style.backgroundColor = "white";
+                }, 1000);
+            }
+        }
+
+        // --- SMART ADD LOGIC ---
+        function generateAiHint() {
+            const hint = document.getElementById('ai-result');
+            const btn = document.querySelector('#screen-add .btn-outline');
+            
+            btn.innerText = "Generating...";
+            
+            setTimeout(() => {
+                hint.classList.remove('hidden');
+                btn.innerText = "✨ Regenerate";
+            }, 800);
+        }
+
+        function saveWord() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                navTo('screen-home'); // Go back home after save
+            }, 1500);
+        }
+
+    </script>
 </body>
 </html>
