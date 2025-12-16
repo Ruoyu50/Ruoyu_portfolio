@@ -3,107 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocabulary App - Monochromatic System</title>
+    <title>Vocabulary App - Professional SRS Design</title>
     <style>
-        /* --- DESIGN TOKENS (Single Primary System) --- */
+        /* --- DESIGN TOKENS (Teal Palette) --- */
         :root {
-            /* Core Primary (Teal) */
+            /* Primary Brand */
+            --primary-50:  #f0fafa;
             --primary-100: #e0f5f2;
-            --primary-300: #4dcab7;
             --primary-500: #00a389;
             --primary-700: #007a65;
+            --primary-900: #004d40;
 
-            /* Neutral Background */
-            --bg-base: #fcfcfb;
-            --bg-subtle: #f2f4f7;
+            /* Neutrals */
+            --bg-app: #fcfcfb;
+            --surface-card: #ffffff;
+            --border-light: #e4e5e7;
+            --text-main: #1a1f24;
+            --text-sub: #5a6470;
+            --text-muted: #9ca4ac;
 
-            /* Neutral Surface */
-            --surface-0: #ffffff;
-            --surface-1: #ebecec;
-            --surface-2: #dcdde0;
-
-            /* Neutral Border */
-            --border-subtle: #e4e5e7;
-            --border-default: #c4c7cc;
-            --border-strong: #1a1f24;
-
-            /* Text */
-            --text-primary: #1a1f24;
-            --text-secondary: #5a6470;
-            --text-tertiary: #9ca4ac;
-            --text-onPrimary: #ffffff;
-
-            /* Component - Nav */
-            --nav-bg: #fcfcfb;
-            --nav-border: #e4e5e7;
-            --nav-text-active: #00a389;
-            --nav-text-inactive: #5a6470;
+            /* Dimensions */
+            --nav-height: 70px;
+            --header-height: 56px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
         }
 
         /* --- GLOBAL RESET --- */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #eef1f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #e8eaed;
             margin: 0;
             padding: 40px;
-            color: var(--text-primary);
+            color: var(--text-main);
         }
 
-        h1 {
-            text-align: center;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 40px;
-        }
+        h1 { text-align: center; font-weight: 600; margin-bottom: 50px; }
 
-        /* --- GALLERY GRID --- */
-        .wireframe-gallery {
+        /* --- LAYOUT GRID --- */
+        .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 60px;
             justify-items: center;
         }
 
-        /* --- PHONE CONTAINER --- */
-        .phone-container {
-            position: relative;
-        }
-
-        .screen-label {
-            position: absolute;
-            top: -30px;
-            left: 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .phone-frame {
+        /* --- PHONE FRAME --- */
+        .phone {
             width: 360px;
-            height: 740px;
-            background-color: var(--bg-base);
-            border: 8px solid #1a1f24;
+            height: 780px;
+            background: var(--bg-app);
+            border: 12px solid #222;
             border-radius: 40px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             position: relative;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2);
         }
 
-        /* --- LAYOUT STRUCTURE --- */
-        .header-bar {
-            height: 60px;
+        .screen-label {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+
+        /* --- COMPONENT: HEADER (Fixed Top) --- */
+        .header {
+            height: var(--header-height);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
-            background-color: var(--bg-base);
+            padding: 0 16px;
+            background: var(--bg-app);
+            border-bottom: 1px solid var(--border-light);
             flex-shrink: 0;
-            z-index: 10;
+        }
+        .header-title { font-weight: 600; font-size: 17px; }
+        .icon-btn {
+            background: none; border: none; padding: 8px; cursor: pointer; color: var(--text-main);
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .main-content {
+        /* --- COMPONENT: CONTENT (Scrollable) --- */
+        .content {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
@@ -111,449 +99,418 @@
             flex-direction: column;
         }
 
-        .nav-bar {
-            height: 70px;
-            background-color: var(--nav-bg);
-            border-top: 1px solid var(--nav-border);
+        /* --- COMPONENT: NAV BAR (Fixed Bottom) --- */
+        .nav {
+            height: var(--nav-height);
+            background: var(--surface-card);
+            border-top: 1px solid var(--border-light);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            flex-shrink: 0;
             padding-bottom: 10px;
+            flex-shrink: 0;
         }
-
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            cursor: pointer;
-            width: 50px;
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .nav-item.active {
-            color: var(--nav-text-active);
-        }
-
-        /* --- UI COMPONENTS --- */
-        .icon {
-            width: 24px;
-            height: 24px;
-            display: block;
-        }
-        
-        h2 { font-size: 24px; font-weight: 700; margin: 0 0 8px 0; }
-        h4 { font-size: 12px; font-weight: 700; color: var(--text-secondary); margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 1px; }
-        p { line-height: 1.5; margin-bottom: 16px; color: var(--text-secondary); font-size: 15px; }
-
-        .input-group { margin-bottom: 20px; }
-        .input-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-tertiary); margin-bottom: 6px; }
-        
-        .text-input {
-            width: 100%;
-            padding: 14px 16px;
-            background-color: var(--surface-1);
-            border: 1px solid transparent;
-            border-radius: 8px;
-            font-size: 16px;
-            color: var(--text-primary);
-            box-sizing: border-box;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-        .text-input:focus {
-            background-color: var(--primary-100);
-            border-color: var(--primary-500);
-            color: var(--primary-700);
-        }
-
-        .select-input-wrapper { position: relative; }
-        .select-input-wrapper::after {
-            content: "▼";
+            gap: 4px;
+            color: var(--text-muted);
             font-size: 10px;
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-primary);
+            font-weight: 500;
+            width: 60px;
+            cursor: pointer;
+        }
+        .nav-item.active { color: var(--primary-500); }
+        .nav-item svg { width: 24px; height: 24px; stroke-width: 2px; }
+
+        /* --- UI ELEMENTS --- */
+        .card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            margin-bottom: 16px;
         }
 
-        /* Buttons - Hierarchy System */
+        .input {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            background: #f4f5f7;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+            color: var(--text-main);
+            outline: none;
+        }
+        .input:focus {
+            background: #fff;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 2px var(--primary-100);
+        }
+
         .btn {
             width: 100%;
             padding: 14px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
+            border-radius: var(--radius-lg);
             border: none;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+        .btn-primary { background: var(--primary-500); color: white; }
+        .btn-ghost { background: transparent; color: var(--text-sub); }
+
+        /* Typography */
+        h2 { font-size: 28px; margin: 0 0 8px 0; font-weight: 700; }
+        .label { font-size: 12px; font-weight: 600; color: var(--text-sub); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .text-body { line-height: 1.5; color: var(--text-sub); margin: 0; }
+
+        /* --- SCREEN SPECIFICS --- */
         
-        /* Primary Action (Solid) */
-        .btn-primary {
-            background-color: var(--primary-500);
-            color: var(--text-onPrimary);
-        }
-        
-        /* Secondary Action (Outline) */
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid var(--primary-500);
-            color: var(--primary-500);
-        }
-
-        /* Tertiary Action (Subtle/Ghost) */
-        .btn-tertiary {
-            background-color: var(--surface-2);
-            color: var(--text-secondary);
-        }
-
-        /* Lists */
-        .list-row {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-        .list-row-title { font-weight: 600; font-size: 16px; color: var(--text-primary); margin-bottom: 4px; }
-        .list-row-desc { font-size: 13px; color: var(--text-tertiary); }
-
-        /* --- SCREEN SPECIFIC --- */
-
         /* Home Progress */
-        .progress-circle {
+        .progress-ring {
             width: 180px;
             height: 180px;
             border-radius: 50%;
-            /* Using Primary-500 for the ring to show "Active State" */
-            border: 6px solid var(--primary-500); 
+            border: 10px solid var(--primary-100);
+            border-top-color: var(--primary-500);
+            border-right-color: var(--primary-500);
+            margin: 30px auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: var(--bg-base);
+            justify-content: center;
         }
-        
-        /* Stats Visuals - Monochromatic */
-        .stats-bar-container { margin-bottom: 12px; }
-        .stats-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; font-weight: 500; }
-        .progress-track { height: 10px; background: var(--surface-1); border-radius: 5px; overflow: hidden; }
-        
-        /* Mastery Levels using Opacity/Shades of Primary */
-        .fill-mastered { background: var(--primary-700); } /* Darkest/Dense */
-        .fill-learning { background: var(--primary-500); } /* Medium */
-        .fill-weak { background: var(--primary-300); }     /* Lightest */
 
-        /* Review Actions */
-        .review-actions {
+        /* ANKI STYLE GRADING BAR (Screen 6) */
+        .grading-bar {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             margin-top: auto;
+            padding-top: 20px;
         }
-        /* Flex grow to make buttons equal width or weighted */
-        .review-actions .btn { flex: 1; margin-top: 0; font-size: 14px; }
+        .grade-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 4px;
+            background: var(--surface-card);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .grade-btn:active { background: var(--primary-50); border-color: var(--primary-500); }
+        .grade-time { font-size: 10px; color: var(--text-sub); margin-top: 4px; font-weight: 500; }
+        .grade-label { font-size: 13px; font-weight: 600; color: var(--text-main); }
+
+        /* Stats Bars */
+        .bar-group { margin-bottom: 12px; }
+        .bar-bg { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+        .bar-fill { height: 100%; background: var(--primary-500); }
+
+        /* Icons Helper */
+        svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
 
     </style>
 </head>
 <body>
 
-    <h1>Vocabulary App (Single Primary System)</h1>
+    <h1>Vocabulary App: Pro Wireframes</h1>
 
-    <div class="wireframe-gallery">
+    <div class="gallery">
 
-        <!-- SCREEN 1: HOME -->
-        <div class="phone-container">
-            <div class="screen-label">1. Today's Review (Home)</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    <svg class="icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/></path></svg>
-                </div>
-
-                <div class="main-content">
-                    <h2 style="font-size: 20px;">Good Morning, User</h2>
-                    <div style="height: 1px; background: var(--border-subtle); width: 100%; margin: 20px 0;"></div>
-                    
-                    <div style="text-align: center; color: var(--text-tertiary); font-weight: 600; font-size: 12px; letter-spacing: 1px;">TODAY'S GOAL</div>
-
-                    <div style="display: flex; justify-content: center; margin: 40px 0;">
-                        <div class="progress-circle">
-                            <span style="font-size: 36px; font-weight: 700; color: var(--text-primary);">40 / 50</span>
-                            <span style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Words Reviewed</span>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-primary" style="margin-top: auto;">START SESSION</button>
-                </div>
-
-                <div class="nav-bar">
-                    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2"></rect><rect x="9" y="6" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2" style="opacity:0.5"></rect></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-                </div>
+        <!-- 1. HOME -->
+        <div class="phone">
+            <div class="screen-label">1. Home (Dashboard)</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+                <div class="header-title">Dashboard</div>
+                <button class="icon-btn"><svg width="24" height="24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
             </div>
-        </div>
-
-        <!-- SCREEN 2: QUICK ADD -->
-        <div class="phone-container">
-            <div class="screen-label">2. Quick Add Word</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <div style="display:flex; align-items:center; gap: 5px; cursor: pointer;">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
-                        <span style="font-weight: 500;">Back</span>
-                    </div>
-                </div>
-
-                <div class="main-content">
-                    <div class="input-group">
-                        <label class="input-label">New Word</label>
-                        <input type="text" class="text-input" placeholder="Type word...">
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Meaning (Optional)</label>
-                        <input type="text" class="text-input" placeholder="Definition..">
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Add to Deck</label>
-                        <div class="select-input-wrapper">
-                            <input type="text" class="text-input" value="Daily Deck" readonly style="color: var(--primary-500); font-weight: 600;">
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-primary" style="margin-top: 20px;">ADD NOW</button>
+            <div class="content">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="margin:0;">Good Morning</h3>
+                    <span style="color: var(--text-sub); font-size: 14px;">You have 10 cards due today</span>
                 </div>
                 
-                <div class="nav-bar">
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
-                    <div class="nav-item active"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2"></rect><rect x="9" y="6" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2" style="opacity:0.5"></rect></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                <div class="progress-ring">
+                    <span style="font-size: 40px; font-weight: 700;">40</span>
+                    <span style="font-size: 12px; color: var(--text-sub);">Cards Reviewed</span>
                 </div>
+
+                <div style="flex:1"></div>
+                <button class="btn btn-primary">Start Review Session</button>
+            </div>
+            <!-- Standard Nav -->
+            <div class="nav">
+                <div class="nav-item active"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
-        <!-- SCREEN 3: LIST -->
-        <div class="phone-container">
-            <div class="screen-label">3. Word List (Set)</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <div style="display:flex; align-items:center; gap: 5px;">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
-                        <span style="font-weight: 500;">Sets</span>
-                    </div>
-                </div>
+        <!-- 2. QUICK ADD -->
+        <div class="phone">
+            <div class="screen-label">2. Quick Add</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <div class="header-title">Quick Add</div>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="content">
+                <label class="label">Term</label>
+                <input class="input" type="text" placeholder="Word or phrase">
 
-                <div class="main-content">
-                    <div class="select-input-wrapper" style="margin-bottom: 10px;">
-                        <input type="text" class="text-input" placeholder="Search words..." style="background: var(--surface-1); padding-left: 30px;">
-                        <svg style="position:absolute; left: 10px; top: 12px; width: 16px; color: var(--text-tertiary);" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    </div>
+                <label class="label">Definition (Optional)</label>
+                <input class="input" type="text" placeholder="Meaning">
 
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 15px; border-bottom: 2px solid var(--border-default); padding-bottom: 8px;">
-                        <span>Sort: A-Z</span>
-                        <span style="color: var(--primary-500);">Filter ▼</span>
-                    </div>
-
-                    <div class="list-row">
-                        <div class="list-row-title">Ubiquitous</div>
-                        <div class="list-row-desc">Present, appearing everywhere</div>
-                    </div>
-                    <div class="list-row">
-                        <div class="list-row-title">Ephemeral</div>
-                        <div class="list-row-desc">Lasting for a very short time</div>
-                    </div>
-                    <div class="list-row">
-                        <div class="list-row-title">Serendipity</div>
-                        <div class="list-row-desc">Occurrence of events by chance</div>
-                    </div>
-                </div>
-
-                <div class="nav-bar">
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2"></rect><rect x="9" y="6" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2" style="opacity:0.5"></rect></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-                </div>
+                <div style="flex:1"></div>
+                <button class="btn btn-primary">Save to "Daily Deck"</button>
+            </div>
+            <div class="nav">
+                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item active"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
-        <!-- SCREEN 4: DETAIL -->
-        <div class="phone-container">
-            <div class="screen-label">4. Word Detail Page</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <div style="display:flex; align-items:center; gap: 5px;">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
-                        <span style="font-weight: 500;">List</span>
-                    </div>
-                    <svg class="icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        <!-- 3. WORD LIST -->
+        <div class="phone">
+            <div class="screen-label">3. Word List</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <div class="header-title">My Collection</div>
+                <button class="icon-btn"><svg width="24" height="24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg></button>
+            </div>
+            <div class="content" style="padding-top: 0;">
+                <!-- Search Bar inside content -->
+                <div style="background: var(--bg-app); padding: 16px 0; position: sticky; top: 0;">
+                    <input class="input" style="margin:0;" placeholder="Search words...">
                 </div>
 
-                <div class="main-content">
-                    <h2 style="font-size: 28px; margin-bottom: 4px;">Grandiloquent</h2>
-                    <span style="color: var(--text-tertiary); font-style: italic; font-weight: 500;">(adj.)</span>
-
-                    <h4>DEFINITION</h4>
-                    <p style="color: var(--text-primary);">Pompous or extravagant in language, style, or manner.</p>
-
-                    <h4>EXAMPLE</h4>
-                    <div style="background-color: var(--primary-100); padding: 16px; border-radius: 4px; font-style: italic; color: var(--primary-700); border-left: 4px solid var(--primary-500);">
-                        "The politician's grandiloquent speech failed to impress."
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div>
+                        <div style="font-weight: 600;">Ephemeral</div>
+                        <div style="font-size: 13px; color: var(--text-sub);">Lasting for a very short time</div>
                     </div>
-
-                    <h4>MY NOTES</h4>
-                    <div class="select-input-wrapper">
-                        <input type="text" class="text-input" placeholder="Tap to add notes...">
+                    <svg width="20" color="#ccc"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div>
+                        <div style="font-weight: 600;">Serendipity</div>
+                        <div style="font-size: 13px; color: var(--text-sub);">Occurrence of events by chance</div>
                     </div>
+                    <svg width="20" color="#ccc"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </div>
-                
-                <div class="nav-bar">
-                    <!-- Nav items same as list -->
-                     <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2"></rect><rect x="9" y="6" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2" style="opacity:0.5"></rect></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-                </div>
+            </div>
+            <div class="nav">
+                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item active"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
-        <!-- SCREEN 6: REVIEW (FLIP) -->
-        <div class="phone-container">
-            <div class="screen-label">6. Review - Flip Mode</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    <span style="font-weight: 600;">12 / 42</span>
+        <!-- 4. DETAIL -->
+        <div class="phone">
+            <div class="screen-label">4. Card Detail</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <div class="header-title">Detail</div>
+                <button class="icon-btn" style="color: var(--primary-500); font-weight: 600; font-size: 14px;">Edit</button>
+            </div>
+            <div class="content">
+                <h2 style="font-size: 32px;">Serendipity</h2>
+                <span style="font-family: monospace; color: var(--text-muted); margin-bottom: 24px;">noun</span>
+
+                <div class="card">
+                    <label class="label">Definition</label>
+                    <p class="text-body" style="color: var(--text-main); font-size: 18px;">The occurrence and development of events by chance in a happy or beneficial way.</p>
                 </div>
 
-                <div class="main-content" style="display: flex; flex-direction: column;">
-                    
-                    <div style="flex: 1; border: 2px solid var(--border-subtle); background: var(--surface-0); border-radius: 16px; margin: 20px 0; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 0 var(--border-default);">
-                        <h2 style="font-size: 32px;">Epiphany</h2>
-                    </div>
-
-                    <p style="text-align: center; font-size: 14px; margin-bottom: 20px;">( Tap card to flip )</p>
-
-                    <!-- NEW SRS BUTTONS: Hierarchy based, no traffic light colors -->
-                    <div class="review-actions">
-                        <!-- Again = Reset (Neutral/Low Priority visual) -->
-                        <button class="btn btn-tertiary">Again<br><span style="font-size: 10px; font-weight: normal;">&lt; 1m</span></button>
-                        
-                        <!-- Hard = Effort required (Outline/Secondary visual) -->
-                        <button class="btn btn-secondary">Hard<br><span style="font-size: 10px; font-weight: normal;">2d</span></button>
-                        
-                        <!-- Good = Success state (Solid Primary/High Priority visual) -->
-                        <button class="btn btn-primary">Good<br><span style="font-size: 10px; font-weight: normal;">4d</span></button>
-                    </div>
+                <div class="card" style="background: var(--primary-50); border-color: var(--primary-100);">
+                    <label class="label" style="color: var(--primary-900);">Example</label>
+                    <p class="text-body" style="color: var(--primary-900); font-style: italic;">"It was pure serendipity that we met at the coffee shop."</p>
                 </div>
+            </div>
+            <div class="nav">
+                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item active"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
-        <!-- SCREEN 7: TYPING -->
-        <div class="phone-container">
-            <div class="screen-label">7. Review - Typing Mode</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    <span style="font-weight: 600;">5 / 10</span>
-                </div>
+        <!-- 5. FULL ADD FLOW -->
+        <div class="phone">
+            <div class="screen-label">5. Add Card (Full)</div>
+            <div class="header">
+                <button class="icon-btn" style="font-size: 14px; font-weight: 500;">Cancel</button>
+                <div class="header-title">New Card</div>
+                <button class="icon-btn" style="color: var(--primary-500); font-weight: 600; font-size: 14px;">Done</button>
+            </div>
+            <div class="content">
+                <label class="label">Front</label>
+                <input class="input" value="Serendipity">
 
-                <div class="main-content">
-                    <h4>PROMPT</h4>
-                    <p style="font-size: 18px; color: var(--text-primary); margin-top: 0;">"A person who dislikes humankind"</p>
+                <label class="label">Back</label>
+                <textarea class="input" style="height: 100px; resize: none; font-family: sans-serif;">The occurrence and development of events by chance.</textarea>
 
-                    <h4>YOUR ANSWER</h4>
-                    <!-- Input focused state uses Primary Color -->
-                    <input type="text" class="text-input" value="Misanthr" style="border: 2px solid var(--primary-500); background: var(--primary-100); color: var(--text-primary); font-weight: bold;">
-                    
-                    <button class="btn btn-primary" style="margin-top: 20px;">CHECK ANSWER</button>
+                <label class="label">Deck</label>
+                <div class="input" style="background: white; display: flex; align-items: center; justify-content: space-between;">
+                    <span>General Knowledge</span>
+                    <svg width="16"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </div>
-                
-                <div style="height: 220px; background: #dcdde0; display: flex; align-items: center; justify-content: center; color: #999;">
-                    [ Keyboard Area ]
-                </div>
+            </div>
+            <div class="nav">
+                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item active"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
-        <!-- SCREEN 8: STATS -->
-        <div class="phone-container">
-            <div class="screen-label">8. Stats & Progress</div>
-            <div class="phone-frame">
-                <div class="header-bar">
-                    <div style="display:flex; align-items:center; gap: 5px;">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
-                        <span style="font-weight: 500;">Back</span>
-                    </div>
-                    <span style="font-weight: 600;">Stats</span>
-                    <div style="width: 24px;"></div>
+        <!-- 6. REVIEW (ANKI STYLE) -->
+        <div class="phone">
+            <div class="screen-label">6. Review Mode</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <div class="header-title">12 / 50</div>
+                <button class="icon-btn"><svg width="24" height="24"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+            </div>
+            <div class="content">
+                <!-- Flashcard -->
+                <div class="card" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-bottom: 4px solid var(--border-light);">
+                    <h2 style="font-size: 32px; margin-bottom: 20px;">Serendipity</h2>
+                    <div style="width: 100%; height: 1px; background: var(--border-light); margin: 20px 0;"></div>
+                    <p class="text-body" style="font-size: 18px;">The occurrence and development of events by chance.</p>
                 </div>
 
-                <div class="main-content">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h2 style="font-size: 40px; color: var(--primary-500); margin: 0;">1,240</h2>
-                        <span style="color: var(--text-secondary);">Total Words Learned</span>
+                <!-- NEW: PRO GRADING BAR -->
+                <!-- No more confusing hierarchy. This is a control panel. -->
+                <div class="grading-bar">
+                    <div class="grade-btn">
+                        <span class="grade-label" style="color: var(--primary-900);">Again</span>
+                        <span class="grade-time">1m</span>
                     </div>
+                    <div class="grade-btn">
+                        <span class="grade-label" style="color: var(--primary-900);">Hard</span>
+                        <span class="grade-time">2d</span>
+                    </div>
+                    <div class="grade-btn">
+                        <span class="grade-label" style="color: var(--primary-900);">Good</span>
+                        <span class="grade-time">4d</span>
+                    </div>
+                    <div class="grade-btn">
+                        <span class="grade-label" style="color: var(--primary-500);">Easy</span>
+                        <span class="grade-time">7d</span>
+                    </div>
+                </div>
+            </div>
+            <div class="nav">
+                <div class="nav-item active"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
+            </div>
+        </div>
 
-                    <h4>MASTERY BREAKDOWN</h4>
-                    <div style="background: var(--surface-0); padding: 16px; border-radius: 12px; border: 1px solid var(--border-subtle);">
-                        
-                        <!-- Mastered: Darkest Shade (Primary 700) -->
-                        <div class="stats-bar-container">
-                            <div class="stats-label"><span>Mastered</span><span>80%</span></div>
-                            <div class="progress-track"><div class="progress-fill fill-mastered" style="width: 80%;"></div></div>
+        <!-- 7. TYPING MODE -->
+        <div class="phone">
+            <div class="screen-label">7. Typing Mode</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <div class="header-title">Quiz</div>
+                <div style="width: 40px;"></div>
+            </div>
+            <div class="content">
+                <label class="label">Definition</label>
+                <p class="text-body" style="font-size: 18px; color: var(--text-main); margin-bottom: 40px;">
+                    "The occurrence and development of events by chance."
+                </p>
+
+                <label class="label">Your Answer</label>
+                <input class="input" value="Seren" style="border-color: var(--primary-500); background: #fff; box-shadow: 0 0 0 2px var(--primary-100);">
+
+                <button class="btn btn-primary">Check Answer</button>
+
+                <div style="margin-top: auto; height: 200px; background: #dcdde0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888;">
+                    [ KEYBOARD ]
+                </div>
+            </div>
+            <div class="nav">
+                <div class="nav-item active"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
+            </div>
+        </div>
+
+        <!-- 8. STATS -->
+        <div class="phone">
+            <div class="screen-label">8. Stats</div>
+            <div class="header">
+                <button class="icon-btn"><svg width="24" height="24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <div class="header-title">Statistics</div>
+                <button class="icon-btn"><svg width="24" height="24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
+            </div>
+            <div class="content">
+                <div class="card" style="text-align: center; padding: 30px;">
+                    <h2 style="font-size: 48px; color: var(--primary-700);">1,240</h2>
+                    <span class="label">Total Cards Learned</span>
+                </div>
+
+                <h3 style="margin-bottom: 16px;">Mastery Breakdown</h3>
+                <div class="card">
+                    <div class="bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                            <span>Mature</span>
+                            <span>80%</span>
                         </div>
-
-                        <!-- Learning: Medium Shade (Primary 500) -->
-                        <div class="stats-bar-container">
-                            <div class="stats-label"><span>Learning</span><span>15%</span></div>
-                            <div class="progress-track"><div class="progress-fill fill-learning" style="width: 15%;"></div></div>
-                        </div>
-
-                        <!-- Weak: Lightest Shade (Primary 300) -->
-                        <div class="stats-bar-container">
-                            <div class="stats-label"><span>Weak</span><span>5%</span></div>
-                            <div class="progress-track"><div class="progress-fill fill-weak" style="width: 5%;"></div></div>
-                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 80%; background: var(--primary-900);"></div></div>
                     </div>
-
-                    <h4>Activity</h4>
-                    <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 100px; margin-top: 10px; padding: 0 10px;">
-                        <!-- Bars use Primary-300 for normal, Primary-500 for high activity -->
-                        <div style="width: 8px; background: var(--surface-2); height: 40%; border-radius: 4px;"></div>
-                        <div style="width: 8px; background: var(--surface-2); height: 60%; border-radius: 4px;"></div>
-                        <div style="width: 8px; background: var(--primary-300); height: 80%; border-radius: 4px;"></div>
-                        <div style="width: 8px; background: var(--primary-500); height: 100%; border-radius: 4px;"></div>
-                        <div style="width: 8px; background: var(--surface-2); height: 30%; border-radius: 4px;"></div>
-                        <div style="width: 8px; background: var(--surface-2); height: 50%; border-radius: 4px;"></div>
-                        <div style="width: 8px; background: var(--surface-2); height: 20%; border-radius: 4px;"></div>
+                    <div class="bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                            <span>Learning</span>
+                            <span>15%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 15%; background: var(--primary-500);"></div></div>
+                    </div>
+                    <div class="bar-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                            <span>New</span>
+                            <span>5%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 5%; background: var(--primary-100);"></div></div>
                     </div>
                 </div>
-
-                <div class="nav-bar">
-                   <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
-                    <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2"></rect><rect x="9" y="6" width="12" height="16" rx="2" ry="2" fill="none" stroke-width="2" style="opacity:0.5"></rect></svg></div>
-                    <div class="nav-item active"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-                </div>
+            </div>
+            <div class="nav">
+                <div class="nav-item"><svg><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>Home</div>
+                <div class="nav-item"><svg><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</div>
+                <div class="nav-item"><svg><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>Add</div>
+                <div class="nav-item"><svg><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>Decks</div>
+                <div class="nav-item active"><svg><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Stats</div>
             </div>
         </div>
 
