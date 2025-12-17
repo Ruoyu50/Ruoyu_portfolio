@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as THREE from "three";
 import './App.css'; // 保留之前 Vue 的 CSS
 
@@ -27,7 +27,7 @@ function NavBar({ currentScreen, setScreen }) {
 }
 
 // ======== Home Screen ========
-function Home({ setScreen }) {
+function Home({ setScreen, sendMessage, messages }) {
   return (
     <div className="screen">
       <div className="header">
@@ -45,6 +45,17 @@ function Home({ setScreen }) {
           <button className="btn" style={{ background: 'white', color: '#004d40' }} onClick={() => setScreen('story')}>
             <i className="ph-fill ph-book-open"></i> Read & Review
           </button>
+        </div>
+
+        {/* 消息展示区 */}
+        <div style={{ marginTop: 20 }}>
+          <h3 style={{ color: '#fff' }}>Messages:</h3>
+          <ul style={{ color: '#fff' }}>
+            {messages.map((m, idx) => (
+              <li key={idx}>{m.message}</li>
+            ))}
+          </ul>
+          <button onClick={() => sendMessage("Hello from Home!")}>Send Hello</button>
         </div>
       </div>
     </div>
@@ -129,10 +140,34 @@ const Placeholder = ({ title }) => (
 // ======== App.jsx ========
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState("home");
+  const [messages, setMessages] = useState([]);
+  const ws = useRef(null);
+
+  // 初始化 WebSocket
+  useEffect(() => {
+    ws.current = new WebSocket('ws://localhost:3001');
+
+    ws.current.onopen = () => console.log('WS connected');
+    ws.current.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('收到消息:', data);
+      setMessages(prev => [...prev, data]);
+    };
+    ws.current.onclose = () => console.log('WS closed');
+    ws.current.onerror = (err) => console.error('WS error:', err);
+
+    return () => ws.current.close();
+  }, []);
+
+  const sendMessage = (msg) => {
+    if(ws.current && ws.current.readyState === WebSocket.OPEN){
+      ws.current.send(JSON.stringify({ message: msg }));
+    }
+  };
 
   return (
     <div id="app">
-      {currentScreen === 'home' && <Home setScreen={setCurrentScreen} />}
+      {currentScreen === 'home' && <Home setScreen={setCurrentScreen} sendMessage={sendMessage} messages={messages} />}
       {currentScreen === 'explore' && <Placeholder title="Explore" />}
       {currentScreen === 'add' && <Placeholder title="Add" />}
       {currentScreen === 'library' && <Placeholder title="Library" />}
