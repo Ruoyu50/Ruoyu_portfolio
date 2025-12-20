@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scenes - UX Case Study</title>
+    <title>单词卡 App - UX Case Study</title>
     <style>
-        /* --- 1. Reset & Variables --- */
         :root {
-            /* Scenes Identity */
-            --primary: #00a389;       /* Teal 500 */
-            --primary-dark: #007a65;  /* Teal 700 */
+            --primary: #00a389;
+            --primary-dark: #007a65;
             --accent-glow: rgba(0, 163, 137, 0.15);
-            
-            /* Typography & Canvas */
-            --bg-canvas: #ffffff;     /* Unified White Background */
-            --text-main: #111827;     /* Almost Black */
-            --text-body: #374151;     /* Dark Gray */
-            --text-muted: #9ca3af;    /* Light Gray */
-            
-            --spacing-section: 160px; /* Generous spacing between major sections */
-            --spacing-block: 80px;    /* Spacing between vertical checklist items */
-            --container-width: 800px; /* Reading-optimized width */
-            
+            --bg-canvas: #ffffff;
+            --text-main: #111827;
+            --text-body: #374151;
+            --text-muted: #9ca3af;
+            --spacing-section: 160px;
+            --spacing-block: 80px;
+            --container-width: 800px;
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --anim-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -29,9 +23,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html { scroll-behavior: smooth; }
-        
         body {
             font-family: var(--font-sans);
             background-color: var(--bg-canvas);
@@ -40,496 +32,305 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- 2. Typography --- */
-        h1, h2, h3, h4 { 
-            color: var(--text-main); 
-            font-weight: 700; 
-            letter-spacing: -0.03em;
-            line-height: 1.2;
-        }
-
-        h1 { font-size: 4rem; margin-bottom: 24px; }
-        h2 { font-size: 2.5rem; margin-bottom: 40px; }
-        h3 { font-size: 1.75rem; margin-bottom: 16px; color: var(--primary-dark); }
-        h4 { font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; color: var(--text-muted); }
-        
-        p { margin-bottom: 24px; font-size: 1.125rem; }
-        
-        /* Highlight for Value Prop Formula */
-        .highlight { color: var(--primary); font-weight: 600; border-bottom: 2px solid var(--accent-glow); }
-
-        /* --- 3. Animation Classes --- */
-        .reveal-block {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s var(--anim-ease);
-        }
-        
-        .reveal-block.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- 4. Layout --- */
-        .container {
-            max-width: var(--container-width);
-            margin: 0 auto;
-            padding: 0 32px;
-        }
-
-        /* All sections share the exact same background (transparent/white) */
-        section {
-            padding: var(--spacing-section) 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05); /* Very subtle divider */
-        }
-        section:last-child { border-bottom: none; }
-
-        /* Vertical Block Wrapper for Checklist Items */
-        .content-block {
-            margin-bottom: var(--spacing-block);
-        }
-        .content-block:last-child { margin-bottom: 0; }
-
-        /* --- 5. Components (Placeholders & UI) --- */
-        
-        /* Figma Embed Placeholder - Cleaner Look */
-        .figma-embed {
-            width: 100%;
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #9ca3af;
-            font-size: 0.9rem;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s;
-        }
-        .figma-embed:hover { border-color: var(--primary); }
-        .embed-hero { height: 500px; }
-        .embed-large { height: 600px; }
-        .embed-medium { height: 400px; }
-        .embed-small { height: 250px; }
-        .embed-video { aspect-ratio: 16/9; height: auto; background: #111; color: #fff; }
-
-        /* Tables (Minimalist) */
-        .minimal-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-        .minimal-table th { text-align: left; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid #e5e7eb; padding: 12px 0; }
-        .minimal-table td { padding: 16px 0; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
-        .minimal-table strong { color: var(--text-main); }
-
-        /* Buttons */
-        .btn-primary {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 16px 32px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-        .btn-primary:hover { transform: translateY(-2px); }
-
-        /* Navigation */
-        .nav-float {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            z-index: 1000;
-        }
-        .nav-list {
-            list-style: none;
-            background: rgba(255,255,255,0.9);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        .nav-list a {
-            display: block;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            transition: color 0.3s;
-        }
-        .nav-list a:hover { color: var(--primary); }
-        .nav-list a:last-child { margin-bottom: 0; }
-
-        /* Stylescapes & Wireframes Grid (Internal grids are okay, but sections are stacked) */
-        .grid-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-            margin-top: 24px;
-        }
-        
+        h1,h2,h3,h4{color: var(--text-main); font-weight:700; letter-spacing:-0.03em; line-height:1.2;}
+        h1{font-size:4rem;margin-bottom:24px;}
+        h2{font-size:2.5rem;margin-bottom:40px;}
+        h3{font-size:1.75rem;margin-bottom:16px;color:var(--primary-dark);}
+        h4{font-size:1.1rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;color:var(--text-muted);}
+        p{margin-bottom:24px;font-size:1.125rem;}
+        .highlight{color:var(--primary); font-weight:600; border-bottom:2px solid var(--accent-glow);}
+        .reveal-block{opacity:0;transform:translateY(40px);transition:all 1s var(--anim-ease);}
+        .reveal-block.is-visible{opacity:1;transform:translateY(0);}
+        .container{max-width:var(--container-width);margin:0 auto;padding:0 32px;}
+        section{padding:var(--spacing-section) 0;border-bottom:1px solid rgba(0,0,0,0.05);}
+        section:last-child{border-bottom:none;}
+        .content-block{margin-bottom:var(--spacing-block);}
+        .content-block:last-child{margin-bottom:0;}
+        .figma-embed{width:100%;background-color:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:0.9rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
+        .figma-embed:hover{border-color:var(--primary);}
+        .embed-hero{height:500px;}
+        .embed-large{height:600px;}
+        .embed-medium{height:400px;}
+        .embed-small{height:250px;}
+        .embed-video{aspect-ratio:16/9;height:auto;background:#111;color:#fff;}
+        .minimal-table{width:100%;border-collapse:collapse;margin-top:16px;}
+        .minimal-table th{text-align:left;font-size:0.85rem;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid #e5e7eb;padding:12px 0;}
+        .minimal-table td{padding:16px 0;border-bottom:1px solid #f3f4f6;vertical-align:top;}
+        .minimal-table strong{color:var(--text-main);}
+        .btn-primary{display:inline-block;background-color:var(--primary);color:white;padding:16px 32px;border-radius:50px;text-decoration:none;font-weight:600;transition: transform 0.2s;}
+        .btn-primary:hover{transform:translateY(-2px);}
+        .nav-float{position:fixed;top:24px;right:24px;z-index:1000;}
+        .nav-list{list-style:none;background:rgba(255,255,255,0.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:16px;border-radius:12px;border:1px solid rgba(0,0,0,0.05);box-shadow:0 10px 30px rgba(0,0,0,0.05);}
+        .nav-list a{display:block;text-decoration:none;color:var(--text-muted);font-size:0.85rem;margin-bottom:8px;transition: color 0.3s;}
+        .nav-list a:hover{color:var(--primary);}
+        .nav-list a:last-child{margin-bottom:0;}
+        .grid-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:24px;}
     </style>
 </head>
 <body>
 
-    <!-- Floating Navigation (Subtle) -->
-    <nav class="nav-float">
-        <ul class="nav-list">
-            <li><a href="#hero">Top</a></li>
-            <li><a href="#problem">Problem</a></li>
-            <li><a href="#research">Research</a></li>
-            <li><a href="#strategy">Strategy</a></li>
-            <li><a href="#brand">Brand</a></li>
-            <li><a href="#process">Process</a></li>
-            <li><a href="#validation">Validation</a></li>
-            <li><a href="#final">Prototype</a></li>
-        </ul>
-    </nav>
+<nav class="nav-float">
+    <ul class="nav-list">
+        <li><a href="#hero">Top</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#strategy">Strategy</a></li>
+        <li><a href="#brand">Brand</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#validation">Validation</a></li>
+        <li><a href="#final">Prototype</a></li>
+    </ul>
+</nav>
 
-    <!-- 1. Hero Section -->
-    <section id="hero" style="padding-top: 100px; min-height: 90vh; display: flex; align-items: center;">
-        <div class="container reveal-block">
-            <h4 style="color: var(--primary);">Senior UX Portfolio Project</h4>
-            <h1>Scenes</h1>
-            <p style="font-size: 1.5rem; color: var(--text-muted); max-width: 600px;">
-                An AI-driven narrative platform designed to help college students memorize abstract concepts through storytelling.
-            </p>
-            <div style="margin-top: 48px;">
-                <div class="figma-embed embed-hero">
-                    [Placeholder: High-Fidelity Hero Device Mockup]
+<section id="hero" style="padding-top:100px;min-height:90vh;display:flex;align-items:center;">
+    <div class="container reveal-block">
+        <h4 style="color:var(--primary);">UX Portfolio Project</h4>
+        <h1>单词卡 App</h1>
+        <p style="font-size:1.5rem;color:var(--text-muted);max-width:600px;">
+            一个帮助大学生通过生活情境自然接触和内化单词的语言体验平台。
+        </p>
+        <div style="margin-top:48px;">
+            <div class="figma-embed embed-hero">[占位：高保真设备原型]</div>
+        </div>
+    </div>
+</section>
+
+<section id="problem">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>Problem Statement</h4>
+            <h3>挑战</h3>
+            <p>大学生在传统单词学习中容易疲劳，因为死记硬背缺乏情境和体验感。</p>
+            <p><strong>我们如何帮助大学生以更自然、有情境、且低消耗意志力的方式接触单词？</strong></p>
+        </div>
+        <div class="content-block reveal-block">
+            <h4>Value Proposition</h4>
+            <h3>解决方案</h3>
+            <div style="padding:32px;background:#fafafa;border-left:4px solid var(--primary);border-radius:0 12px 12px 0;">
+                <p style="font-family:'Georgia',serif;font-size:1.35rem;margin:0;line-height:1.8;">
+                    <span class="highlight">Contextual Flashcards</span> 是 <span class="highlight">语言体验平台</span>，
+                    让 <span class="highlight">大学生</span> 
+                    在 <span class="highlight">不断变化的生活情境中自然遇见并内化单词</span>。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="research">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>Competitors</h4>
+            <h3>竞品分析</h3>
+            <table class="minimal-table">
+                <tr>
+                    <th>产品</th>
+                    <th>学习方式</th>
+                    <th>情境</th>
+                    <th>重复机制</th>
+                    <th>情感压力</th>
+                    <th>总结</th>
+                </tr>
+                <tr><td><strong>Anki</strong></td><td>强制回忆</td><td>❌</td><td>高</td><td>中</td><td>高效但消耗意志力</td></tr>
+                <tr><td><strong>Quizlet</strong></td><td>测试型</td><td>❌</td><td>高</td><td>中</td><td>偏应试</td></tr>
+                <tr><td><strong>Duolingo</strong></td><td>游戏化</td><td>伪情境</td><td>高</td><td>高</td><td>易焦虑</td></tr>
+                <tr><td><strong>看美剧</strong></td><td>自然接触</td><td>✅</td><td>低</td><td>低</td><td>无结构引导</td></tr>
+                <tr><td><strong>本产品</strong></td><td>情境体验</td><td>✅</td><td>低</td><td>低</td><td>平衡结构与自然性</td></tr>
+            </table>
+        </div>
+
+        <div class="content-block reveal-block">
+            <h4>Persona</h4>
+            <h3>大学生示例</h3>
+            <p>年龄19-24，非母语环境学习者，不喜欢机械背单词，容易产生心理疲劳。</p>
+            <div class="figma-embed embed-medium">[占位：Persona Layout]</div>
+        </div>
+
+        <div class="content-block reveal-block">
+            <h4>Empathy Map</h4>
+            <h3>用户情绪</h3>
+            <div class="figma-embed embed-medium">[占位：Empathy Map]</div>
+        </div>
+
+        <div class="content-block reveal-block">
+            <h4>User Journey</h4>
+            <h3>高层流程</h3>
+            <div class="figma-embed embed-medium">[占位：User Journey]</div>
+        </div>
+    </div>
+</section>
+
+<section id="strategy">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>Business Plan</h4>
+            <h3>产品策略</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+                <div><strong style="color:var(--primary);">Freemium</strong><p>基础情境体验</p></div>
+                <div><strong style="color:var(--primary);">Premium</strong><p>更多情境类型与叙事</p></div>
+            </div>
+        </div>
+        <div class="content-block reveal-block">
+            <h4>IA</h4>
+            <h3>信息架构</h3>
+            <div class="figma-embed embed-small">[占位：信息架构]</div>
+        </div>
+        <div class="content-block reveal-block">
+            <h4>MVP Prioritization</h4>
+            <h3>2x2 矩阵</h3>
+            <div class="figma-embed embed-medium">[占位：MVP Matrix]</div>
+        </div>
+    </div>
+</section>
+
+<section id="brand">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>Brand Strategy</h4>
+            <h3>品牌核心</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;">
+                <div>
+                    <p><strong>Vision:</strong><br>让语言融入日常生活，而非任务。</p>
+                    <p><strong>Mission:</strong><br>设计一个平静、非指令式空间，自然接触语言。</p>
+                </div>
+                <div>
+                    <p><strong>Personality:</strong><br>Calm, Observational, Human, Non-instructional</p>
+                    <p><strong>Design Principles:</strong><br>No scores, Language as atmosphere, Minimal guidance</p>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- 2. Problem Definition Section -->
-    <section id="problem">
-        <div class="container">
-            <!-- Item 1: Problem Statement -->
-            <div class="content-block reveal-block">
-                <h4>Problem Definition</h4>
-                <h3>The Challenge</h3>
-                <p>College students struggle to retain abstract vocabulary because traditional flashcards utilize rote memorization without context. This leads to disengagement and a rapid "forgetting curve."</p>
-                <p><strong>How might we allow students to more easily memorize complex terms by embedding them into generated narratives?</strong></p>
-            </div>
-
-            <!-- Item 2: Value Proposition -->
-            <div class="content-block reveal-block">
-                <h4>Value Proposition</h4>
-                <h3>The Solution Formula</h3>
-                <div style="padding: 32px; background: #fafafa; border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0;">
-                    <p style="font-family: 'Georgia', serif; font-size: 1.35rem; margin: 0; line-height: 1.8;">
-                        <span class="highlight">Scenes</span> is the <span class="highlight">narrative learning engine</span> 
-                        that allows <span class="highlight">college students</span> 
-                        to <span class="highlight">transform isolated terms into memorable stories</span>.
-                    </p>
-                </div>
+        <div class="content-block reveal-block">
+            <h4>Visual Direction</h4>
+            <h3>Stylescape Exploration</h3>
+            <div style="margin-top:32px;">
+                <strong>Direction A – Quiet Minimal</strong>
+                <div class="figma-embed embed-small" style="margin-bottom:24px;">[占位：灰白/米色]</div>
+                <strong>Direction B – Narrative Editorial</strong>
+                <div class="figma-embed embed-small" style="margin-bottom:24px;">[占位：深绿/暖灰]</div>
+                <strong>Direction C – Contemporary Academic (Chosen)</strong>
+                <div class="figma-embed embed-small">[占位：酒红/奶油]</div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- 3. Research Section -->
-    <section id="research">
-        <div class="container">
-            <!-- Item 3: Competitors -->
-            <div class="content-block reveal-block">
-                <h4>Market Research</h4>
-                <h3>Competitor Landscape</h3>
-                <p>We analyzed the market to identify gaps in narrative-based learning tools.</p>
-                <table class="minimal-table">
-                    <tr>
-                        <th>Product</th>
-                        <th>Category</th>
-                        <th>Analysis</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Anki</strong></td>
-                        <td>Direct</td>
-                        <td>Powerful algorithms (spaced repetition) but extremely poor UI and zero narrative context.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Quizlet</strong></td>
-                        <td>Secondary</td>
-                        <td>Gamified and social, but relies heavily on flipping cards without deeper connection.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Duolingo</strong></td>
-                        <td>Indirect</td>
-                        <td>Great engagement loop, but rigid curriculum doesn't allow custom study decks.</td>
-                    </tr>
-                </table>
-            </div>
+<section id="process">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>Design Process</h4>
+            <h3>Wireframe Flows</h3>
+        </div>
 
-            <!-- Item 4: Persona -->
-            <div class="content-block reveal-block">
-                <h4>User Persona</h4>
-                <h3>Meet Alex</h3>
-                <p>The "Anxious Achiever" who needs to memorize 500 anatomy terms for finals.</p>
-                <div class="figma-embed embed-medium">
-                    [Placeholder: Persona Layout]
-                </div>
-            </div>
-
-            <!-- Item 5: Empathy Map -->
-            <div class="content-block reveal-block">
-                <h4>Empathy Map</h4>
-                <h3>Understanding the Mindset</h3>
-                <div class="figma-embed embed-medium">
-                    [Placeholder: Empathy Map Diagram]
-                </div>
-            </div>
-
-            <!-- Item 6: Journey Map -->
-            <div class="content-block reveal-block">
-                <h4>User Journey</h4>
-                <h3>The Current Struggle</h3>
-                <div class="figma-embed embed-medium">
-                    [Placeholder: As-Is User Journey Map]
-                </div>
+        <div class="content-block reveal-block">
+            <strong>Flow 1: Onboarding</strong>
+            <div class="grid-gallery">
+                <div class="figma-embed embed-small">[Screen 1]</div>
+                <div class="figma-embed embed-small">[Screen 2]</div>
+                <div class="figma-embed embed-small">[Screen 3]</div>
+                <div class="figma-embed embed-small">[Screen 4]</div>
             </div>
         </div>
-    </section>
 
-    <!-- 4. Strategy Section -->
-    <section id="strategy">
-        <div class="container">
-            <!-- Item 7: Business Plan -->
-            <div class="content-block reveal-block">
-                <h4>Product Strategy</h4>
-                <h3>Business Model</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                    <div>
-                        <strong style="color: var(--primary);">Freemium</strong>
-                        <p>Basic AI story generation (5 per day). Standard spaced repetition.</p>
-                    </div>
-                    <div>
-                        <strong style="color: var(--primary);">Premium Subscription</strong>
-                        <p>Unlimited generation. Audio narration. Custom genres (Horror, Sci-Fi). Class sharing.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 8: IA -->
-            <div class="content-block reveal-block">
-                <h4>Structure</h4>
-                <h3>Information Architecture</h3>
-                <div class="figma-embed embed-small">
-                    [Placeholder: IA / Site Map Tree]
-                </div>
-            </div>
-
-            <!-- Item 9: MVP Matrix -->
-            <div class="content-block reveal-block">
-                <h4>Prioritization</h4>
-                <h3>MVP Matrix (Value vs. Effort)</h3>
-                <p>We prioritized features that deliver high user value with manageable technical effort.</p>
-                <div class="figma-embed embed-medium">
-                    [Placeholder: 2x2 Feature Matrix Chart]
-                </div>
+        <div class="content-block reveal-block">
+            <strong>Flow 2: New Deck</strong>
+            <div class="grid-gallery">
+                <div class="figma-embed embed-small">[Screen 1]</div>
+                <div class="figma-embed embed-small">[Screen 2]</div>
+                <div class="figma-embed embed-small">[Screen 3]</div>
+                <div class="figma-embed embed-small">[Screen 4]</div>
             </div>
         </div>
-    </section>
 
-    <!-- 5. Brand Strategy Section -->
-    <section id="brand">
-        <div class="container">
-            <!-- Item 10: Brand Core -->
-            <div class="content-block reveal-block">
-                <h4>Brand Identity</h4>
-                <h3>Core Principles</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 24px;">
-                    <div>
-                        <p><strong>Vision:</strong><br>To make rote memorization obsolete.</p>
-                        <p><strong>Mission:</strong><br>Empower learners by connecting isolated data points into meaningful stories.</p>
-                    </div>
-                    <div>
-                        <p><strong>Personality:</strong><br>Witty, Intelligent, Minimalist, Reliable.</p>
-                        <p><strong>Design Principles:</strong><br>Content-First, Calm aesthetic, Interaction as delight.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 11: Stylescapes -->
-            <div class="content-block reveal-block">
-                <h4>Visual Direction</h4>
-                <h3>Stylescape Exploration</h3>
-                <p>We explored three distinct visual directions before converging on the final design.</p>
-                
-                <div style="margin-top: 32px;">
-                    <strong>Direction 1: Neon Neural</strong>
-                    <div class="figma-embed embed-small" style="margin-bottom: 24px;">[Placeholder: Dark Mode / Cyberpunk Style]</div>
-                    
-                    <strong>Direction 2: Playful Pop</strong>
-                    <div class="figma-embed embed-small" style="margin-bottom: 24px;">[Placeholder: Gamified / Bright Colors]</div>
-                    
-                    <strong>Direction 3: Minimal Zen (Chosen)</strong>
-                    <div class="figma-embed embed-small">[Placeholder: Clean / Teal / Academic]</div>
-                </div>
+        <div class="content-block reveal-block">
+            <strong>Flow 3: AI Story</strong>
+            <div class="grid-gallery">
+                <div class="figma-embed embed-small">[Screen 1]</div>
+                <div class="figma-embed embed-small">[Screen 2]</div>
+                <div class="figma-embed embed-small">[Screen 3]</div>
+                <div class="figma-embed embed-small">[Screen 4]</div>
             </div>
         </div>
-    </section>
 
-    <!-- 6. Design Process Section -->
-    <section id="process">
-        <div class="container">
-            <div class="content-block reveal-block">
-                <h4>UX Design</h4>
-                <h3>Wireframe Flows</h3>
-                <p>Mid-fidelity iterations of the four key user flows.</p>
-            </div>
-
-            <!-- Item 12: Flow 1 -->
-            <div class="content-block reveal-block">
-                <strong>Flow 1: Onboarding & Setup</strong>
-                <div class="grid-gallery">
-                    <div class="figma-embed embed-small">[Screen 1]</div>
-                    <div class="figma-embed embed-small">[Screen 2]</div>
-                    <div class="figma-embed embed-small">[Screen 3]</div>
-                    <div class="figma-embed embed-small">[Screen 4]</div>
-                </div>
-            </div>
-
-            <!-- Item 13: Flow 2 -->
-            <div class="content-block reveal-block">
-                <strong>Flow 2: Creating a New Deck</strong>
-                <div class="grid-gallery">
-                    <div class="figma-embed embed-small">[Screen 1]</div>
-                    <div class="figma-embed embed-small">[Screen 2]</div>
-                    <div class="figma-embed embed-small">[Screen 3]</div>
-                    <div class="figma-embed embed-small">[Screen 4]</div>
-                </div>
-            </div>
-
-            <!-- Item 14: Flow 3 -->
-            <div class="content-block reveal-block">
-                <strong>Flow 3: AI Story Generation</strong>
-                <div class="grid-gallery">
-                    <div class="figma-embed embed-small">[Screen 1]</div>
-                    <div class="figma-embed embed-small">[Screen 2]</div>
-                    <div class="figma-embed embed-small">[Screen 3]</div>
-                    <div class="figma-embed embed-small">[Screen 4]</div>
-                </div>
-            </div>
-
-            <!-- Item 15: Flow 4 -->
-            <div class="content-block reveal-block">
-                <strong>Flow 4: Review & Quiz</strong>
-                <div class="grid-gallery">
-                    <div class="figma-embed embed-small">[Screen 1]</div>
-                    <div class="figma-embed embed-small">[Screen 2]</div>
-                    <div class="figma-embed embed-small">[Screen 3]</div>
-                    <div class="figma-embed embed-small">[Screen 4]</div>
-                </div>
+        <div class="content-block reveal-block">
+            <strong>Flow 4: Review</strong>
+            <div class="grid-gallery">
+                <div class="figma-embed embed-small">[Screen 1]</div>
+                <div class="figma-embed embed-small">[Screen 2]</div>
+                <div class="figma-embed embed-small">[Screen 3]</div>
+                <div class="figma-embed embed-small">[Screen 4]</div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- 7. Validation Section -->
-    <section id="validation">
-        <div class="container">
-            <!-- Item 16: Materials -->
-            <div class="content-block reveal-block">
-                <h4>Validation</h4>
-                <h3>Testing Methodology</h3>
-                <p>We conducted moderated remote testing sessions using the "Think Aloud" protocol.</p>
-                <div style="display: flex; gap: 24px; margin-top: 24px;">
-                    <div class="figma-embed embed-small" style="flex: 1;">[Placeholder: Interview Discussion Guide PDF]</div>
-                    <div class="figma-embed embed-small" style="flex: 1;">[Placeholder: Feature Ranking Board]</div>
-                </div>
-            </div>
-
-            <!-- Item 17: Videos -->
-            <div class="content-block reveal-block">
-                <h3>User Testing Sessions</h3>
-                <p>Recordings of users interacting with the mid-fidelity prototype.</p>
-                <div class="grid-gallery">
-                    <div class="figma-embed embed-video">[User Video 1]</div>
-                    <div class="figma-embed embed-video">[User Video 2]</div>
-                    <div class="figma-embed embed-video">[User Video 3]</div>
-                </div>
-            </div>
-
-            <!-- Item 18: Insights -->
-            <div class="content-block reveal-block">
-                <h3>Key Learnings</h3>
-                <ul style="list-style: none; padding-left: 0; margin-top: 24px;">
-                    <li style="margin-bottom: 16px; border-left: 3px solid var(--primary); padding-left: 16px;">
-                        <strong>Insight 1:</strong> Users found the "Deck" metaphor confusing initially; renamed to "Story Packs."
-                    </li>
-                    <li style="margin-bottom: 16px; border-left: 3px solid var(--primary); padding-left: 16px;">
-                        <strong>Insight 2:</strong> Participants wanted manual control to edit the AI-generated story if it didn't make sense.
-                    </li>
-                    <li style="margin-bottom: 16px; border-left: 3px solid var(--primary); padding-left: 16px;">
-                        <strong>Insight 3:</strong> The loading animation was too static; users didn't know if the AI was working.
-                    </li>
-                </ul>
+<section id="validation">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>Validation</h4>
+            <h3>测试方法</h3>
+            <div style="display:flex;gap:24px;margin-top:24px;">
+                <div class="figma-embed embed-small" style="flex:1;">[占位：讨论指南]</div>
+                <div class="figma-embed embed-small" style="flex:1;">[占位：Feature Ranking]</div>
             </div>
         </div>
-    </section>
+        <div class="content-block reveal-block">
+            <h3>Key Learnings</h3>
+            <ul style="list-style:none;padding-left:0;margin-top:24px;">
+                <li style="margin-bottom:16px;border-left:3px solid var(--primary);padding-left:16px;">
+                    <strong>用户发现 Deck 难懂</strong> → 改名为 Story Packs
+                </li>
+                <li style="margin-bottom:16px;border-left:3px solid var(--primary);padding-left:16px;">
+                    <strong>用户希望手动编辑 AI 故事</strong>
+                </li>
+                <li style="margin-bottom:16px;border-left:3px solid var(--primary);padding-left:16px;">
+                    <strong>加载动画过于静态</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
 
-    <!-- 8. Final Prototype Section -->
-    <section id="final">
-        <div class="container">
-            <!-- Item 19: Prototype -->
-            <div class="content-block reveal-block">
-                <h4>The Solution</h4>
-                <h3>High-Fidelity Prototype</h3>
-                <div class="figma-embed embed-large" style="border: 2px solid var(--primary);">
-                    [Placeholder: Interactive Figma Prototype Embed]
-                </div>
-            </div>
-
-            <!-- Item 20: Microinteractions -->
-            <div class="content-block reveal-block">
-                <h3>Microinteractions</h3>
-                <p>10 key moments of delight added to the final build:</p>
-                <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">1. AI Sparkle Loader</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">2. Card Flip</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">3. Success Confetti</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">4. Swipe Gestures</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">5. Input Field Glow</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">6. Button Press State</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">7. Progress Bar Fill</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">8. Tab Switching</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">9. Toast Notification</span>
-                    <span style="border: 1px solid #e5e7eb; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;">10. Accordion Expand</span>
-                </div>
+<section id="final">
+    <div class="container">
+        <div class="content-block reveal-block">
+            <h4>The Solution</h4>
+            <h3>High-Fidelity Prototype</h3>
+            <div class="figma-embed embed-large" style="border:2px solid var(--primary);">[占位：交互原型]</div>
+        </div>
+        <div class="content-block reveal-block">
+            <h3>Microinteractions</h3>
+            <p>10 key moments of delight:</p>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;">
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">1. AI Sparkle Loader</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">2. Card Flip</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">3. Success Confetti</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">4. Swipe Gestures</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">5. Input Field Glow</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">6. Button Press State</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">7. Progress Bar Fill</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">8. Tab Switching</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">9. Toast Notification</span>
+                <span style="border:1px solid #e5e7eb;padding:6px 16px;border-radius:20px;font-size:0.9rem;">10. Accordion Expand</span>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer style="padding: 80px 0; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
-        <p>Created for Senior UX Portfolio Course • Fall 2025</p>
-    </footer>
+<footer style="padding:80px 0;text-align:center;color:var(--text-muted);font-size:0.9rem;">
+    <p>Created for Senior UX Portfolio Course • Fall 2025</p>
+</footer>
 
-    <!-- JavaScript for Reveal on Scroll (Fixed: Repeatable & Bidirectional) -->
-    <script>
-        // Setup Intersection Observer
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1 // Trigger when 10% of the element is visible
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // When element enters viewport, add class to animate in
-                    entry.target.classList.add('is-visible');
-                } else {
-                    // When element leaves viewport, remove class to reset animation
-                    entry.target.classList.remove('is-visible');
-                }
-            });
-        }, observerOptions);
-
-        // Target all elements with class 'reveal-block'
-        document.querySelectorAll('.reveal-block').forEach(element => {
-            observer.observe(element);
+<script>
+    const observerOptions = {root:null,rootMargin:'0px',threshold:0.1};
+    const observer = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+            if(entry.isIntersecting){entry.target.classList.add('is-visible');}
+            else{entry.target.classList.remove('is-visible');}
         });
-    </script>
+    },observerOptions);
+    document.querySelectorAll('.reveal-block').forEach(el=>observer.observe(el));
+</script>
 
 </body>
 </html>
