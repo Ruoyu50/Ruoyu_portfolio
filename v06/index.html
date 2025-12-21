@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>单词卡 App - UX Case Study</title>
+    <title>Scenes App - UX Case Study</title>
     <style>
         :root {
             --primary: #00a389;
@@ -46,6 +46,7 @@
         section:last-child{border-bottom:none;}
         .content-block{margin-bottom:var(--spacing-block);}
         .content-block:last-child{margin-bottom:0;}
+        .high-fidelity-card {border-radius: 40px; width:375px; height:812px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15)}
         .figma-embed{width:100%;background-color:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:0.9rem;position:relative;overflow:hidden;transition:border-color 0.3s;}
         .figma-embed:hover{border-color:var(--primary);}
         .embed-hero{height:500px;}
@@ -85,13 +86,22 @@
 <section id="hero" style="padding-top:100px;min-height:90vh;display:flex;align-items:center;">
     <div class="container reveal-block">
         <h4 style="color:var(--primary);">UX Portfolio Project</h4>
-        <h1>单词卡 App</h1>
+        <h1>Scenes App</h1>
         <p style="font-size:1.5rem;color:var(--text-muted);max-width:600px;">
-            一个帮助大学生通过生活情境自然接触和内化单词的语言体验平台。
+            A language experience platform that helps college students naturally encounter and internalize vocabulary in everyday life contexts.
         </p>
-        <div style="margin-top:48px;">
-            <div class="figma-embed embed-hero">[占位：高保真设备原型]</div>
+        <!-- <div style="margin-top:48px;">
+            <div class="figma-embed embed-hero">[Placeholder: High-Fidelity Prototype]</div>
+        </div> -->
+        <div class="high-fidelity-card">
+            <iframe src="prototype.html"
+                    width=100%
+                    height=100%
+                    frameborder="0" 
+                    allowfullscreen>
+            </iframe>
         </div>
+
     </div>
 </section>
 
@@ -99,18 +109,18 @@
     <div class="container">
         <div class="content-block reveal-block">
             <h4>Problem Statement</h4>
-            <h3>挑战</h3>
-            <p>大学生在传统单词学习中容易疲劳，因为死记硬背缺乏情境和体验感。</p>
-            <p><strong>我们如何帮助大学生以更自然、有情境、且低消耗意志力的方式接触单词？</strong></p>
+            <h3>Challenge</h3>
+            <p>College students often get fatigued in traditional vocabulary learning due to rote memorization lacking context and engagement.</p>
+            <p><strong>How might we help college students encounter words more naturally, in context, and with minimal willpower?</strong></p>
         </div>
         <div class="content-block reveal-block">
             <h4>Value Proposition</h4>
-            <h3>解决方案</h3>
+            <h3>Solution</h3>
             <div style="padding:32px;background:#fafafa;border-left:4px solid var(--primary);border-radius:0 12px 12px 0;">
                 <p style="font-family:'Georgia',serif;font-size:1.35rem;margin:0;line-height:1.8;">
-                    <span class="highlight">Contextual Flashcards</span> 是 <span class="highlight">语言体验平台</span>，
-                    让 <span class="highlight">大学生</span> 
-                    在 <span class="highlight">不断变化的生活情境中自然遇见并内化单词</span>。
+                    <span class="highlight">Contextual Flashcards</span> is a <span class="highlight">language experience platform</span>
+                    that allows <span class="highlight">college students</span> 
+                    to naturally encounter and internalize words in <span class="highlight">ever-changing life contexts</span>.
                 </p>
             </div>
         </div>
@@ -121,41 +131,27 @@
     <div class="container">
         <div class="content-block reveal-block">
             <h4>Competitors</h4>
-            <h3>竞品分析</h3>
-            <table class="minimal-table">
-                <tr>
-                    <th>产品</th>
-                    <th>学习方式</th>
-                    <th>情境</th>
-                    <th>重复机制</th>
-                    <th>情感压力</th>
-                    <th>总结</th>
-                </tr>
-                <tr><td><strong>Anki</strong></td><td>强制回忆</td><td>❌</td><td>高</td><td>中</td><td>高效但消耗意志力</td></tr>
-                <tr><td><strong>Quizlet</strong></td><td>测试型</td><td>❌</td><td>高</td><td>中</td><td>偏应试</td></tr>
-                <tr><td><strong>Duolingo</strong></td><td>游戏化</td><td>伪情境</td><td>高</td><td>高</td><td>易焦虑</td></tr>
-                <tr><td><strong>看美剧</strong></td><td>自然接触</td><td>✅</td><td>低</td><td>低</td><td>无结构引导</td></tr>
-                <tr><td><strong>本产品</strong></td><td>情境体验</td><td>✅</td><td>低</td><td>低</td><td>平衡结构与自然性</td></tr>
-            </table>
+            <h3>Competitive Analysis</h3>
+            <div class="figma-embed embed-medium">[Placeholder: Competitor Analysis]</div>
         </div>
 
         <div class="content-block reveal-block">
             <h4>Persona</h4>
-            <h3>大学生示例</h3>
-            <p>年龄19-24，非母语环境学习者，不喜欢机械背单词，容易产生心理疲劳。</p>
-            <div class="figma-embed embed-medium">[占位：Persona Layout]</div>
+            <h3>Sample College Student</h3>
+            <p>Aged 19-24, non-native environment learners, dislike rote memorization, prone to cognitive fatigue.</p>
+            <div class="figma-embed embed-medium">[Placeholder: Persona Layout]</div>
         </div>
 
         <div class="content-block reveal-block">
             <h4>Empathy Map</h4>
-            <h3>用户情绪</h3>
-            <div class="figma-embed embed-medium">[占位：Empathy Map]</div>
+            <h3>User Feelings</h3>
+            <div class="figma-embed embed-medium">[Placeholder: Empathy Map]</div>
         </div>
 
         <div class="content-block reveal-block">
             <h4>User Journey</h4>
-            <h3>高层流程</h3>
-            <div class="figma-embed embed-medium">[占位：User Journey]</div>
+            <h3>High-Level Flow</h3>
+            <div class="figma-embed embed-medium">[Placeholder: User Journey]</div>
         </div>
     </div>
 </section>
@@ -164,21 +160,21 @@
     <div class="container">
         <div class="content-block reveal-block">
             <h4>Business Plan</h4>
-            <h3>产品策略</h3>
+            <h3>Product Strategy</h3>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
-                <div><strong style="color:var(--primary);">Freemium</strong><p>基础情境体验</p></div>
-                <div><strong style="color:var(--primary);">Premium</strong><p>更多情境类型与叙事</p></div>
+                <div><strong style="color:var(--primary);">Freemium</strong><p>Basic contextual experiences</p></div>
+                <div><strong style="color:var(--primary);">Premium</strong><p>Additional context types and narratives</p></div>
             </div>
         </div>
         <div class="content-block reveal-block">
             <h4>IA</h4>
-            <h3>信息架构</h3>
-            <div class="figma-embed embed-small">[占位：信息架构]</div>
+            <h3>Information Architecture</h3>
+            <div class="figma-embed embed-small">[Placeholder: Information Architecture]</div>
         </div>
         <div class="content-block reveal-block">
             <h4>MVP Prioritization</h4>
-            <h3>2x2 矩阵</h3>
-            <div class="figma-embed embed-medium">[占位：MVP Matrix]</div>
+            <h3>2x2 Matrix</h3>
+            <div class="figma-embed embed-medium">[Placeholder: MVP Matrix]</div>
         </div>
     </div>
 </section>
@@ -187,11 +183,11 @@
     <div class="container">
         <div class="content-block reveal-block">
             <h4>Brand Strategy</h4>
-            <h3>品牌核心</h3>
+            <h3>Brand Core</h3>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;">
                 <div>
-                    <p><strong>Vision:</strong><br>让语言融入日常生活，而非任务。</p>
-                    <p><strong>Mission:</strong><br>设计一个平静、非指令式空间，自然接触语言。</p>
+                    <p><strong>Vision:</strong><br>Integrate language into daily life, not as a task.</p>
+                    <p><strong>Mission:</strong><br>Create a calm, non-instructional space for natural language exposure.</p>
                 </div>
                 <div>
                     <p><strong>Personality:</strong><br>Calm, Observational, Human, Non-instructional</p>
@@ -205,11 +201,11 @@
             <h3>Stylescape Exploration</h3>
             <div style="margin-top:32px;">
                 <strong>Direction A – Quiet Minimal</strong>
-                <div class="figma-embed embed-small" style="margin-bottom:24px;">[占位：灰白/米色]</div>
+                <div class="figma-embed embed-small" style="margin-bottom:24px;">[Placeholder: Gray/Beige]</div>
                 <strong>Direction B – Narrative Editorial</strong>
-                <div class="figma-embed embed-small" style="margin-bottom:24px;">[占位：深绿/暖灰]</div>
+                <div class="figma-embed embed-small" style="margin-bottom:24px;">[Placeholder: Deep Green/Warm Gray]</div>
                 <strong>Direction C – Contemporary Academic (Chosen)</strong>
-                <div class="figma-embed embed-small">[占位：酒红/奶油]</div>
+                <div class="figma-embed embed-small">[Placeholder: Burgundy/Cream]</div>
             </div>
         </div>
     </div>
@@ -268,23 +264,23 @@
     <div class="container">
         <div class="content-block reveal-block">
             <h4>Validation</h4>
-            <h3>测试方法</h3>
+            <h3>Testing Methods</h3>
             <div style="display:flex;gap:24px;margin-top:24px;">
-                <div class="figma-embed embed-small" style="flex:1;">[占位：讨论指南]</div>
-                <div class="figma-embed embed-small" style="flex:1;">[占位：Feature Ranking]</div>
+                <div class="figma-embed embed-small" style="flex:1;">[Placeholder: Discussion Guide]</div>
+                <div class="figma-embed embed-small" style="flex:1;">[Placeholder: Feature Ranking]</div>
             </div>
         </div>
         <div class="content-block reveal-block">
             <h3>Key Learnings</h3>
             <ul style="list-style:none;padding-left:0;margin-top:24px;">
                 <li style="margin-bottom:16px;border-left:3px solid var(--primary);padding-left:16px;">
-                    <strong>用户发现 Deck 难懂</strong> → 改名为 Story Packs
+                    <strong>Users found Decks confusing</strong> → Renamed to Story Packs
                 </li>
                 <li style="margin-bottom:16px;border-left:3px solid var(--primary);padding-left:16px;">
-                    <strong>用户希望手动编辑 AI 故事</strong>
+                    <strong>Users wanted to manually edit AI Stories</strong>
                 </li>
                 <li style="margin-bottom:16px;border-left:3px solid var(--primary);padding-left:16px;">
-                    <strong>加载动画过于静态</strong>
+                    <strong>Loading animation felt static</strong>
                 </li>
             </ul>
         </div>
@@ -296,7 +292,7 @@
         <div class="content-block reveal-block">
             <h4>The Solution</h4>
             <h3>High-Fidelity Prototype</h3>
-            <div class="figma-embed embed-large" style="border:2px solid var(--primary);">[占位：交互原型]</div>
+            <div class="figma-embed embed-large" style="border:2px solid var(--primary);">[Placeholder: Interactive Prototype]</div>
         </div>
         <div class="content-block reveal-block">
             <h3>Microinteractions</h3>

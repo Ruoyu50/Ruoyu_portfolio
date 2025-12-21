@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contextual Flashcards - Day 1</title>
+    <style>
+        /* --- Visual Style: Calm, Editorial, Non-Gamified --- */
+        :root {
+            --bg-color: #FDFCF8; /* Warm Beige / Paper */
+            --text-primary: #2C2C2C; /* Soft Black */
+            --text-secondary: #666666; /* Warm Gray */
+            --accent-highlight: #E3E1D5; /* Subtle marker color */
+            --font-serif: 'Georgia', 'Times New Roman', serif;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #ECEBE4; /* Outer background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: var(--font-sans);
+        }
+
+        /* Phone Container */
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: var(--bg-color);
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-serif);
+            font-weight: normal;
+            font-size: 1.8rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 00:00 Intro Screen */
+        #screen-intro {
+            text-align: center;
+        }
+        
+        .fade-btn {
+            margin-top: 40px;
+            background: none;
+            border: 1px solid #ccc;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: pulse 3s infinite;
+        }
+        .fade-btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* 00:30 Scene Screen */
+        #screen-scene {
+            justify-content: space-between;
+            padding-top: 120px;
+            padding-bottom: 80px;
+        }
+
+        .visual-ambiance {
+            width: 100%;
+            height: 200px;
+            background: radial-gradient(circle, #f0efe9 0%, transparent 70%);
+            border-radius: 50%;
+            margin-bottom: auto;
+            opacity: 0.6;
+            filter: blur(20px);
+            transition: background 3s ease;
+        }
+
+        .subtitle-container {
+            min-height: 150px;
+            transition: opacity 0.5s;
+        }
+
+        .dialogue-line {
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s ease-out;
+        }
+        .dialogue-line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .target-lang {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .native-lang {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: #999;
+            display: block;
+            font-weight: 300;
+        }
+
+        /* Interactive Word */
+        .interactive-word {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dashed #ccc;
+            transition: background 0.2s;
+        }
+
+        .interactive-word:active, .interactive-word:hover {
+            background-color: var(--accent-highlight);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            bottom: 140%; 
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            padding: 12px 16px;
+            width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .interactive-word:hover .tooltip,
+        .interactive-word:active .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* End Screen */
+        #screen-end {
+            text-align: center;
+        }
+        .summary-note {
+            position: absolute;
+            bottom: 40px;
+            right: 32px;
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #aaa;
+            opacity: 0;
+            transition: opacity 2s 1s;
+        }
+        .summary-note.show { opacity: 1; }
+
+        /* Navigation UI (Simulated) */
+        .nav-bar {
+            position: absolute;
+            top: 20px; left: 0; width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 24px;
+            opacity: 0.3;
+        }
+        .nav-icon { width: 24px; height: 4px; background: #ccc; border-radius: 2px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <!-- Top Nav (Decorative) -->
+        <div class="nav-bar">
+            <div class="nav-icon" style="width: 40px;"></div>
+            <div class="nav-icon" style="width: 10px; border-radius: 50%; height: 10px;"></div>
+        </div>
+
+        <!-- SCREEN 1: INTRO (00:00) -->
+        <div class="screen active" id="screen-intro">
+            <h1>“It’s late.<br>You’re not sure if you should stay.”</h1>
+            <button class="fade-btn" onclick="startExperience()">continue</button>
+        </div>
+
+        <!-- SCREEN 2: SCENE (00:30 - 02:30) -->
+        <div class="screen" id="screen-scene">
+            <div class="visual-ambiance" id="visuals"></div>
+            
+            <div class="subtitle-container">
+                <!-- Line 1 -->
+                <div class="dialogue-line" id="line-1">
+                    <span class="target-lang">“I thought you were coming earlier.”</span>
+                    <span class="native-lang">“我以为你会早点来的。”</span>
+                </div>
+
+                <!-- Line 2 (Interactive) -->
+                <div class="dialogue-line" id="line-2">
+                    <span class="target-lang">
+                        “Yeah... I said I 
+                        <span class="interactive-word">
+                            might
+                            <span class="tooltip">used when something is possible but not certain</span>
+                        </span>.”
+                    </span>
+                    <span class="native-lang">“是啊……我说过我可能会早到。”</span>
+                </div>
+
+                 <!-- Line 3 (Ending) -->
+                 <div class="dialogue-line" id="line-3">
+                    <span class="target-lang">“Anyway, it’s getting late.”</span>
+                    <span class="native-lang">“不管怎样，天色已晚。”</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: END (02:30+) -->
+        <div class="screen" id="screen-end">
+            <h1>That’s all for today.</h1>
+            <div class="summary-note" id="summary">Today, you encountered 3 unfamiliar words.</div>
+        </div>
+    </div>
+
+    <script>
+        // Use browser's built-in TTS
+        const synth = window.speechSynthesis;
+
+        function speak(text, delay = 0) {
+            setTimeout(() => {
+                // Cancel previous to avoid overlap
+                synth.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US'; // Target Language
+                utterance.rate = 0.85; // Slightly slower for clarity
+                utterance.pitch = 1;
+                synth.speak(utterance);
+            }, delay);
+        }
+
+        function startExperience() {
+            // 1. Transition Screens
+            document.getElementById('screen-intro').classList.remove('active');
+            document.getElementById('screen-scene').classList.add('active');
+
+            // 2. Play Audio & Show Text Sequence (Simulated Timeline)
+            
+            // --- 00:30 Logic (Accelerated for prototype) ---
+            // Visual shift
+            setTimeout(() => {
+                document.getElementById('visuals').style.background = 'radial-gradient(circle, #d6d3c9 0%, transparent 70%)';
+            }, 500);
+
+            // Line 1: "I thought you were coming earlier."
+            setTimeout(() => {
+                document.getElementById('line-1').classList.add('visible');
+                speak("I thought you were coming earlier.");
+            }, 1000);
+
+            // Line 2: "Yeah... I said I might."
+            setTimeout(() => {
+                // Hide Line 1 for focus (optional, usually keeping context is better, let's keep it)
+                document.getElementById('line-1').style.opacity = '0.4'; 
+                
+                document.getElementById('line-2').classList.add('visible');
+                speak("Yeah... I said I might.");
+            }, 5000);
+
+            // Line 3: "Anyway, it's getting late."
+            setTimeout(() => {
+                document.getElementById('line-2').style.opacity = '0.4';
+                
+                document.getElementById('line-3').classList.add('visible');
+                speak("Anyway, it's getting late.");
+            }, 9000);
+
+            // --- 02:30 Logic (End Scenario) ---
+            setTimeout(() => {
+                document.getElementById('screen-scene').classList.remove('active');
+                document.getElementById('screen-end').classList.add('active');
+            }, 13000);
+
+            // --- 03:30 Summary Fade in ---
+            setTimeout(() => {
+                document.getElementById('summary').classList.add('show');
+            }, 14500);
+        }
+    </script>
+</body>
+</html>
