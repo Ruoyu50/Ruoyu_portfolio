@@ -45,7 +45,7 @@
         .embed-hero{height:500px;}
         .embed-large{height:600px;}
         /* .embed-medium{height:400px;} */
-        .embed-small{height:250px;}
+        /* .embed-small{height:250px;} */
         .embed-video{aspect-ratio:16/9;height:auto;background:#111;color:#fff;}
         .minimal-table{width:100%;border-collapse:collapse;margin-top:16px;}
         .minimal-table th{text-align:left;font-size:0.85rem;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid #e5e7eb;padding:12px 0;}
